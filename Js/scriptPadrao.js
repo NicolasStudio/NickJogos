@@ -13,3 +13,7 @@ function abrirJogoMemoria(){
 function abrirJogoMusica(){
     window.location.href = "adivinhaMusica.html";
 }
+
+function abrirJogoSenha(){
+    window.location.href = "jogoSenha.html";
+}

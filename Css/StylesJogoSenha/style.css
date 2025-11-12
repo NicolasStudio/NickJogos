@@ -1,0 +1,393 @@
+* {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.boxMaster {
+    background: linear-gradient(135deg, #1a1a2e, #16213e);
+    color: #00ffff;
+    min-height: 80vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+}
+
+/* TÍTULO PRINCIPAL (sem glitch) */
+.titulo-principal {
+    font-size: 3rem;
+    font-weight: bold;
+    text-align: center;
+    margin: 20px 0;
+    text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+    color: #00ffff;
+    animation: pulse-text 2s infinite;
+    position: relative;
+}
+
+.titulo-principal::after {
+    content: "⚠️";
+    position: absolute;
+    top: -10px;
+    right: -40px;
+    font-size: 2rem;
+    animation: spin 3s linear infinite;
+}
+
+/* GLITCH SEPARADO (opcional - se quiser manter) */
+.glitch-container {
+    position: relative;
+    display: inline-block;
+}
+
+.glitch {
+    font-size: 3rem;
+    font-weight: bold;
+    position: relative;
+    display: inline-block;
+    margin-bottom: 15px;
+}
+
+.glitch::before,
+.glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+}
+
+.glitch::before {
+    left: 2px;
+    text-shadow: -2px 0 #ff00ff;
+    animation: glitch-anim 3s infinite linear alternate-reverse;
+    opacity: 0.8;
+}
+
+.glitch::after {
+    left: -2px;
+    text-shadow: -2px 0 #00ffff;
+    animation: glitch-anim2 8s infinite linear alternate-reverse;
+    opacity: 0.8;
+}
+
+.container-2 {
+    background: rgba(0, 0, 0, 0.7);
+    border-radius: 15px;
+    padding: 30px;
+    width: 90%;
+    max-width: 600px;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+    border: 2px solid #00ffff;
+    position: relative;
+    overflow: hidden;
+}
+
+.container-2::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(0, 255, 255, 0.1), transparent);
+    transform: rotate(45deg);
+    animation: shine 3s infinite;
+}
+
+.boxSenha {
+    display: flex;
+    flex-direction: column;
+}
+
+.inputBox {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+#input {
+    width: 100%;
+    padding: 15px;
+    font-size: 1.2rem;
+    background: rgba(255, 255, 255, 0.102);
+    border: 2px solid #00ffff;
+    border-radius: 8px;
+    color: white;
+    outline: none;
+    transition: all 0.3s;
+}
+
+#input:focus {
+    box-shadow: 0 0 10px #00ffff;
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.inputBox span {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255, 255, 255, 0.7);
+    pointer-events: none;
+    transition: 0.3s;
+    font-size: 1.2rem;
+}
+
+#input:focus + span,
+#input:not(:placeholder-shown) + span {
+    top: -15px;
+    left: 5px;
+    font-size: 0.9rem;
+    color: #00ffff;
+    background: #fdfeff00;
+}
+
+.esqueciSenha {
+    text-decoration: none;
+    color: #FF4146;
+    margin-bottom: 12px;
+    font-size: 1.1rem;
+    display: none;
+}
+
+.esqueciSenha:hover {
+    color: #fd7f84;
+}
+
+#btn {
+    padding: 15px;
+    font-size: 1.2rem;
+    background: linear-gradient(45deg, #00ffff, #0080ff);
+    border: none;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+#btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 255, 255, 0.4);
+}
+
+#btn:active {
+    transform: translateY(1px);
+}
+
+#btn::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: rgba(245, 9, 9, 0.1);
+    transform: rotate(45deg);
+    transition: all 0.5s;
+}
+
+#btn:hover::after {
+    transform: rotate(45deg) translate(50%, 50%);
+}
+
+.boxSenha p {
+    font-size: 1.1rem;
+    color: #FF4146;
+    display: none;
+    margin-bottom: 10px;
+}
+
+.boxSenha p .alert {
+    font-weight: bold;
+    color: #00ffff;
+}
+
+/* ANIMAÇÕES DO CÓDIGO ANTIGO */
+@keyframes pulse-text {
+    0% { text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff; }
+    50% { text-shadow: 0 0 15px #00ffff, 0 0 30px #00ffff, 0 0 40px #00ffff; }
+    100% { text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff; }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@keyframes shine {
+    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+@keyframes glitch-anim {
+    0% { clip: rect(42px, 9999px, 44px, 0); }
+    5% { clip: rect(12px, 9999px, 59px, 0); }
+    10% { clip: rect(48px, 9999px, 29px, 0); }
+    15% { clip: rect(42px, 9999px, 73px, 0); }
+    20% { clip: rect(63px, 9999px, 27px, 0); }
+    25% { clip: rect(34px, 9999px, 55px, 0); }
+    30% { clip: rect(86px, 9999px, 73px, 0); }
+    35% { clip: rect(20px, 9999px, 20px, 0); }
+    40% { clip: rect(26px, 9999px, 60px, 0); }
+    45% { clip: rect(25px, 9999px, 66px, 0); }
+    50% { clip: rect(57px, 9999px, 98px, 0); }
+    55% { clip: rect(5px, 9999px, 46px, 0); }
+    60% { clip: rect(82px, 9999px, 31px, 0); }
+    65% { clip: rect(54px, 9999px, 27px, 0); }
+    70% { clip: rect(28px, 9999px, 99px, 0); }
+    75% { clip: rect(45px, 9999px, 69px, 0); }
+    80% { clip: rect(23px, 9999px, 85px, 0); }
+    85% { clip: rect(54px, 9999px, 84px, 0); }
+    90% { clip: rect(45px, 9999px, 47px, 0); }
+    95% { clip: rect(37px, 9999px, 20px, 0); }
+    100% { clip: rect(4px, 9999px, 91px, 0); }
+}
+
+@keyframes glitch-anim2 {
+    0% { clip: rect(65px, 9999px, 100px, 0); }
+    5% { clip: rect(52px, 9999px, 74px, 0); }
+    10% { clip: rect(79px, 9999px, 85px, 0); }
+    15% { clip: rect(75px, 9999px, 5px, 0); }
+    20% { clip: rect(67px, 9999px, 61px, 0); }
+    25% { clip: rect(14px, 9999px, 79px, 0); }
+    30% { clip: rect(1px, 9999px, 66px, 0); }
+    35% { clip: rect(86px, 9999px, 30px, 0); }
+    40% { clip: rect(23px, 9999px, 98px, 0); }
+    45% { clip: rect(85px, 9999px, 72px, 0); }
+    50% { clip: rect(71px, 9999px, 75px, 0); }
+    55% { clip: rect(2px, 9999px, 48px, 0); }
+    60% { clip: rect(30px, 9999px, 16px, 0); }
+    65% { clip: rect(59px, 9999px, 50px, 0); }
+    70% { clip: rect(41px, 9999px, 62px, 0); }
+    75% { clip: rect(2px, 9999px, 82px, 0); }
+    80% { clip: rect(47px, 9999px, 73px, 0); }
+    85% { clip: rect(3px, 9999px, 27px, 0); }
+    90% { clip: rect(26px, 9999px, 55px, 0); }
+    95% { clip: rect(42px, 9999px, 97px, 0); }
+    100% { clip: rect(38px, 9999px, 49px, 0); }
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-20px); }
+}
+
+@keyframes textGlow {
+    0% { text-shadow: 3px 3px 0 #ff9900, 6px 6px 0 rgba(0,0,0,0.1); }
+    100% { text-shadow: 3px 3px 0 #ff3300, 6px 6px 20px rgba(255,0,0,0.3); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+@keyframes confettiFall {
+    0% { transform: translateY(-100px) rotate(0deg); }
+    100% { transform: translateY(100vh) rotate(360deg); }
+}
+
+/* BOX PARABÉNS */
+.boxParabens {
+    background: linear-gradient(135deg, #ffd700, #ffed4e);
+    padding: 40px;
+    border-radius: 25px;
+    text-align: center;
+    box-shadow: 
+        0 0 50px rgba(255, 215, 0, 0.6),
+        0 0 100px rgba(255, 215, 0, 0.3),
+        inset 0 0 20px rgba(255, 255, 255, 0.5);
+    border: 8px solid #ff9900;
+    animation: pulse-box 2s infinite, bounce 3s infinite;
+    max-width: 500px;
+    margin: 20px auto;
+    position: relative;
+    overflow: hidden;
+    display: none;
+}
+
+.boxParabens::before {
+    content: "🎉";
+    position: absolute;
+    top: -30px;
+    left: -30px;
+    font-size: 60px;
+    animation: spin 4s linear infinite;
+}
+
+.boxParabens::after {
+    content: "🎊";
+    position: absolute;
+    bottom: -30px;
+    right: -30px;
+    font-size: 60px;
+    animation: spin 3s linear infinite reverse;
+}
+
+.boxParabens h2 {
+    color: #d40000;
+    font-size: 3.5rem;
+    margin-bottom: 30px;
+    text-shadow: 
+        3px 3px 0 #ff9900,
+        6px 6px 0 rgba(0,0,0,0.1);
+    animation: textGlow 1.5s ease-in-out infinite alternate;
+}
+
+.boxParabens img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 15px;
+    border: 5px solid #ff9900;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    animation: float 3s ease-in-out infinite;
+    transition: transform 0.3s ease;
+}
+
+.boxParabens img:hover {
+    transform: scale(1.05) rotate(2deg);
+}
+
+.confetti {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background: #ff0000;
+    animation: confettiFall 5s linear infinite;
+}
+
+.confetti:nth-child(2n) { background: #00ff00; }
+.confetti:nth-child(3n) { background: #0000ff; }
+.confetti:nth-child(4n) { background: #ffff00; }
+
+/* RESPONSIVIDADE CORRIGIDA */
+@media (max-width: 768px) {
+    .glitch {
+        font-size: 2.5rem;
+    }
+    
+    .container-2 {
+        padding: 20px;
+    }
+    
+    #input, #btn {
+        font-size: 1rem;
+        padding: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .glitch {
+        font-size: 2rem;
+    }
+    
+    .glitch::after {
+        font-size: 1.5rem;
+        right: -30px;
+    }
+}
