@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="16x16" href="Image/iconMusic.png">
+    <link rel="stylesheet" href="Css/StylesAdivinhaMusica/StyleResult.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="Css/StylesAdivinhaMusica/Style.css">
+    <link rel="stylesheet" href="Css/header.css">
+    <script src="Js/JsAdivinhaMusica/Script.js"></script>
+    <title>NickJogos - Jogos Grátis</title>
+</head>
+<body>
+        <!-- Header -->
+        <header>
+            <div class="container">
+                <nav class="navbar">
+                    <a href="index.html" class="logo">
+                        <i class="fas fa-gamepad"></i>
+                        NickJogos
+                    </a>
+                </nav>
+            </div>
+        </header>
+
+    <div class="result-container">
+        <div class="result-content">
+            <h1 class="result">Resultado</h1>
+            
+            <div class="result-card">
+                <p class="txtAcerto">Você acertou: <span class="textResult" id="textResult">???</span></p>
+                
+                <div class="result-image">
+                    <img class="imagemFim" id="imagemFim" src="" alt="Resultado ilustrativo">
+                </div>
+                
+                <p class="txtFinal" id="txtFinal">Blá blá</p>
+            </div>
+            
+            <button class="play-again" onclick="window.location.href='adivinhaMusica.html'">Jogar Novamente</button>
+        </div>
+    </div>
+
+    <script>
+        // Recupera os dados do localStorage
+        var retorno = window.localStorage.getItem('acertos') || '0';
+        var texto1 = window.localStorage.getItem('mensagem') || 'Ótimo trabalho!';
+        var num = window.localStorage.getItem('num') || 'default';
+        
+        // Atualiza os elementos
+        document.getElementById("textResult").textContent = retorno + '/100';
+        document.getElementById("txtFinal").textContent = texto1;
+        document.getElementById("imagemFim").src = `Img/ImageAdivinhaMusica/${num}.gif`;
+        document.getElementById("imagemFim").alt = `Imagem de resultado ${num}`;
+    </script>
+</body>
+</html>

@@ -1,0 +1,113 @@
+/* Cartas */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); /* 7 colunas iguais */
+  gap: 15px;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  margin-top: 30px;
+  padding: 0 15px; /* Padding para não colar nas bordas */
+}
+
+.card {
+  width: 100%;
+  aspect-ratio: 4/4; /* Mantém proporção carta */
+  background-color: #333;
+  border: 3px solid black;
+  border-radius: 5px;
+  position: relative;
+  transition: all 400ms ease;
+  transform-style: preserve-3d;
+}
+
+.face {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  transition: all 500ms ease;
+  border-radius: 2px; /* Borda interna */
+}
+
+.front {
+  background-size: cover;
+  background-position: center;
+  transform: rotateY(180deg);
+}
+
+.back {
+  background-image: url('/Games/Img/ImagemMemoria/Jogodamemoria.jpg');
+  background-size: cover;
+  background-position: center;
+  backface-visibility: hidden;
+}
+
+.reveal-card {
+  transform: rotateY(180deg);
+}
+
+.disabled-card {
+  filter: saturate(2);
+  opacity: 0.5;
+}
+
+/* Responsividade */
+@media (max-width: 1200px) {
+  .grid {
+    grid-template-columns: repeat(6, 1fr); /* 6 colunas */
+    max-width: 900px;
+    gap: 12px;
+  }
+}
+
+@media (max-width: 992px) {
+  .grid {
+    grid-template-columns: repeat(5, 1fr); /* 5 colunas */
+    max-width: 800px;
+    gap: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: repeat(4, 1fr); /* 4 colunas */
+    max-width: 600px;
+    gap: 8px;
+    margin-top: 20px;
+  }
+}
+
+@media (max-width: 576px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr); /* 3 colunas */
+    max-width: 400px;
+    gap: 6px;
+    margin-top: 15px;
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 400px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr); /* 2 colunas */
+    max-width: 300px;
+    gap: 5px;
+  }
+}
+
+/* Para telas muito pequenas (celulares antigos) */
+@media (max-width: 320px) {
+  .grid {
+    grid-template-columns: repeat(2, 1fr);
+    max-width: 280px;
+    gap: 4px;
+  }
+}
+
+/* Opcional: Melhorar visual em telas muito grandes */
+@media (min-width: 1400px) {
+  .grid {
+    max-width: 1200px;
+    gap: 20px;
+  }
+}

@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+/* Painel de informações */
+.painel {
+  border: 4px solid #333;
+  border-radius: 4px;
+  Background: rgba(0, 0, 0, 0.7);
+  margin: 15px 15%;
+  color: white;
+  font-family: 'Press Start 2P';
+  font-size: clamp(1.2rem, 3vw, 1.4rem);
+  padding: 15px 0;
+  line-height: 40px;
+  text-align: center;
+}
+
+/* Informações do jogador */
+.usuario {
+  display: inline-block;
+  margin-right: 40px;
+}
+
+#pontos {
+  display: inline-block;
+  padding-left: 40px;
+}
+
+#vida {
+  display: block;
+  margin-top: 10px;
+}
+
+/* Grade do jogo */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr); /* 12 colunas iguais */
+  gap: 5px; /* Espaço entre as cartas */
+  padding: 10px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Cartas do jogo */
+.card {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* Mantém quadrado */
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.5s;
+  cursor: pointer;
+}
+
+.face {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  background-size: cover;
+  background-position: center;
+  border-radius: 6px;
+  border: 1px solid rgba(0, 0, 0, 0.7);
+}
+
+.front {
+  background-size: cover;
+  background-position: center;
+  transform: rotateY(180deg);
+}
+
+.back {
+  background-image: url('/Games/Img/ImagensBatalha/Mar.jpg');
+  background-size: cover;
+  background-position: center;
+  backface-visibility: hidden;
+}
+
+.reveal-card {
+  transform: rotateY(180deg);
+}
+
+.disabled-card {
+  filter: saturate(2);
+  opacity: 0.5;
+}

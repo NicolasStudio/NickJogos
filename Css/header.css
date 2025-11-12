@@ -1,0 +1,102 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: #fff;
+    min-height: 100vh;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header */
+header {
+    background: rgba(0, 0, 0, 0.7);
+    padding: 15px 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    position: relative;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Logo sempre alinhado à esquerda */
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #ff6b6b;
+    text-decoration: none;
+    /* Garante que o logo fique sempre no mesmo lugar */
+    margin-right: auto;
+}
+
+.logo i {
+    color: #4ecdc4;
+}
+
+/* Search-bar alinhado à direita */
+.search-bar {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+    padding: 8px 15px;
+    width: 300px;
+    /* Garante que fique à direita */
+    margin-left: auto;
+}
+
+.search-bar input {
+    background: transparent;
+    border: none;
+    color: white;
+    height: 22px;
+    width: 100%;
+    padding: 5px 10px;
+    outline: none;
+}
+
+.search-bar i {
+    color: #4ecdc4;
+}
+
+/* Versão sem search-bar - mantém o logo centralizado */
+.navbar:has(.logo:only-child) {
+    justify-content: center;
+}
+
+/* Ou se preferir manter à esquerda mesmo sem search: */
+/* .navbar:has(.logo:only-child) {
+    justify-content: flex-start;
+} */
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .navbar {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .search-bar {
+        width: 100%;
+        margin-left: 0;
+    }
+    
+    .logo {
+        margin-right: 0;
+    }
+}

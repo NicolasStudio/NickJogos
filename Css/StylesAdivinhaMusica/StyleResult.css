@@ -1,0 +1,121 @@
+/* Estilos Gerais para a Página de Resultados */
+.result-container {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    color: #ffffff;
+    font-family: 'Caprasimo', cursive;
+}
+
+.result-content {
+    width: 100%;
+    max-width: 800px;
+    text-align: center;
+}
+
+.result {
+    color: #ffb914;
+    font-size: clamp(2rem, 8vw, 3rem);
+    margin-bottom: 2rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.result-card {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 15px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    border: 2px solid #ffb914;
+}
+
+.txtAcerto {
+    font-size: clamp(1.2rem, 5vw, 1.8rem);
+    color: #ABDECB;
+    margin-bottom: 1.5rem;
+}
+
+.textResult {
+    color: #ffb914;
+    font-weight: bold;
+}
+
+.result-image {
+    margin: 1.5rem auto;
+    max-width: 300px;
+}
+
+.imagemFim {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+}
+
+.txtFinal {
+    font-size: clamp(1rem, 4vw, 1.5rem);
+    margin-top: 1.5rem;
+    line-height: 1.5;
+}
+
+.play-again {
+    background-color: #30fa55;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    font-size: 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Caprasimo', cursive;
+    box-shadow: -3px 4px 0 #1b7f2e;
+    transition: all 0.3s ease;
+    margin-top: 1rem;
+}
+
+.play-again:hover {
+    background-color: #73fa8c;
+    transform: translateY(-2px);
+}
+
+.play-again:active {
+    transform: translateY(1px);
+    box-shadow: inset -4px 4px 0 #1b7f2e;
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .result-container {
+        padding: 1rem;
+    }
+    
+    .result-card {
+        padding: 1.5rem;
+    }
+    
+    .result-image {
+        max-width: 200px;
+    }
+    
+    .play-again {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 400px) {
+    .result-card {
+        padding: 1rem;
+    }
+    
+    .txtAcerto {
+        font-size: 1.1rem;
+    }
+    
+    .txtFinal {
+        font-size: 0.9rem;
+    }
+}

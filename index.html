@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NickJogos - Jogos Grátis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="Css/stylePadrao.css">
+    <link rel="stylesheet" href="Css/header.css">
+    <script src="Js/scriptPadrao.js"></script>
+
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">
+                    <i class="fas fa-gamepad"></i>
+                    NickJogos
+                </a>
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Buscar jogos...">
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Jogos Online Grátis</h1>
+            <p>Divirta-se com nossa coleção de jogos gratuitos. Não precisa baixar, basta clicar e jogar!</p>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="categories">
+        <div class="container">
+            <div class="category-list">
+                <button class="category-btn active">Todos</button>
+                <button class="category-btn">Ação</button>
+                <button class="category-btn">Aventura</button>
+                <button class="category-btn">Estratégia</button>
+                <button class="category-btn">Esportes</button>
+                <button class="category-btn">Corrida</button>
+                <button class="category-btn">Puzzle</button>
+                <button class="category-btn">Meninas</button>
+                <button class="category-btn">Clássicos</button>
+                <button class="category-btn">Multiplayer</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Games Section -->
+    <section class="games-section">
+        <div class="container">
+            <h2 class="section-title">
+                <i class="fas fa-fire"></i>
+                Jogos Populares
+            </h2>
+            <div class="games-grid">
+                <!-- Game 1 -->
+                <div class="game-card" onclick="abrirBatalhaNaval()">
+                    <div class="game-image">
+                        <a href="http://batalhaNaval.html"></a>
+                        <img src="Img/batalhaNavalGame.png" alt="Jogo de Estratégia Batalha Naval">
+                    </div>
+                    <div class="game-content">
+                        <h3 class="game-title">Batalha Naval</h3>
+                        <div class="game-info">
+                            <span>Musical</span>
+                            <div class="game-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.7</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Game 2 -->
+                <div class="game-card" onclick="abrirJogoMemoria()">
+                    <div class="game-image">
+                        <img src="Img/jogoMemoria.png" alt="Jogo de Memória">
+                    </div>
+                    <div class="game-content">
+                        <h3 class="game-title">Jogo da Memória</h3>
+                        <div class="game-info">
+                            <span>Jogo de Carta</span>
+                            <div class="game-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.5</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Game 3 -->
+                <div class="game-card" onclick="abrirJogoMusica()">
+                    <div class="game-image">
+                        <img src="Img/adivinhaMusica.png" alt="Jogo de Estratégia">
+                    </div>
+                    <div class="game-content">
+                        <h3 class="game-title">Adivinhe a Música</h3>
+                        <div class="game-info">
+                            <span>Estratégia</span>
+                            <div class="game-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.8</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Game 4 -->
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Jogo de Esportes">
+                    </div>
+                    <div class="game-content">
+                        <h3 class="game-title">Futebol Máximo</h3>
+                        <div class="game-info">
+                            <span>Esportes</span>
+                            <div class="game-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.6</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Game 5 -->
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="https://images.unsplash.com/photo-1542751110-97427bbecf20?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Jogo de Aventura">
+                    </div>
+                    <div class="game-content">
+                        <h3 class="game-title">Aventura na Selva</h3>
+                        <div class="game-info">
+                            <span>Aventura</span>
+                            <div class="game-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Game 6 -->
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="https://images.unsplash.com/photo-1552820728-8b83bb6b773f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Jogo de Puzzle">
+                    </div>
+                    <div class="game-content">
+                        <h3 class="game-title">Quebra-Cabeça Mágico</h3>
+                        <div class="game-info">
+                            <span>Puzzle</span>
+                            <div class="game-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.4</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Game 7 -->
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="https://images.unsplash.com/photo-1579373903781-fd5c0c30c4cd?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Jogo de Meninas">
+                    </div>
+                    <div class="game-content">
+                        <h3 class="game-title">Fashion Studio</h3>
+                        <div class="game-info">
+                            <span>Meninas</span>
+                            <div class="game-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.7</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Game 8 -->
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="https://images.unsplash.com/photo-1551103782-8ab07afd45c1?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Jogo Clássico">
+                    </div>
+                    <div class="game-content">
+                        <h3 class="game-title">Xadrez Clássico</h3>
+                        <div class="game-info">
+                            <span>Clássicos</span>
+                            <div class="game-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.8</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <h2 class="section-title" style="margin-top: 40px;">
+                <i class="fas fa-users"></i>
+                Jogos Multiplayer
+            </h2>
+            <div class="games-grid">
+                <!-- Multiplayer Game 1 -->
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="https://images.unsplash.com/photo-1542751110-97427bbecf20?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Jogo Multiplayer">
+                    </div>
+                    <div class="game-content">
+                        <h3 class="game-title">Batalha em Equipe</h3>
+                        <div class="game-info">
+                            <span>Multiplayer</span>
+                            <div class="game-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.9</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Multiplayer Game 2 -->
+                <div class="game-card">
+                    <div class="game-image">
+                        <img src="https://images.unsplash.com/photo-1542751371-adc38448a05e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Jogo Multiplayer">
+                    </div>
+                    <div class="game-content">
+                        <h3 class="game-title">Corrida Online</h3>
+                        <div class="game-info">
+                            <span>Multiplayer</span>
+                            <div class="game-rating">
+                                <i class="fas fa-star"></i>
+                                <span>4.7</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>NickJogos &copy; 2025 - Todos os jogos são gratuitos e online</p>
+        </div>
+    </footer>
+
+    <!-- <script>
+        // Simples funcionalidade para as categorias
+        document.addEventListener('DOMContentLoaded', function() {
+            const categoryButtons = document.querySelectorAll('.category-btn');
+            
+            categoryButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove a classe active de todos os botões
+                    categoryButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Adiciona a classe active ao botão clicado
+                    this.classList.add('active');
+                    
+                    // Aqui você implementaria a filtragem dos jogos por categoria
+                    // Por simplicidade, estamos apenas mudando a classe active
+                });
+            });
+            
+            // Simulação de clique nos cards de jogo
+            const gameCards = document.querySelectorAll('.game-card');
+            gameCards.forEach(card => {
+                card.addEventListener('click', function() {
+                    alert('Jogo iniciado! Em um site real, o jogo seria carregado aqui.');
+                });
+            });
+        });
+    </script> -->
+</body>
+</html>

@@ -1,0 +1,539 @@
+@import url('https://fonts.googleapis.com/css2?family=Caprasimo&display=swap');
+
+:root {
+    --primary-color: #ffb914;
+    --secondary-color: #ABDECB;
+    --background-color: #322f3e;
+    --success-color: #30fa55;
+    --warning-color: #ffb914;
+    --danger-color: #ff2929;
+    --music-volume: #222;
+    --text-color: #ffffff;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+    --border-radius: 15px;
+    --transition: all 0.3s ease;
+}
+
+.game-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Títulos */
+.titleGame {
+    text-align: center;
+    margin-bottom: 2rem;
+    margin-top: 2%;
+}
+
+.letraTitulo {
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: clamp(1.5rem, 6vw, 2.5rem);
+    margin-bottom: 1rem;
+    font-family: 'Caprasimo', cursive;
+    text-shadow: 2px 2px 4px var(--shadow-color);
+}
+
+/* Container da Música */
+.boxMusica {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.1));
+    border-radius: var(--border-radius);
+    padding: 2rem;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.txtMusica, .numMusica {
+    text-align: center;
+    color: var(--secondary-color);
+    font-weight: 200;
+    font-size: clamp(1rem, 5vw, 1.5rem);
+    margin-bottom: 1.5rem;
+    font-family: 'Caprasimo', cursive;
+}
+
+/* Conteúdo da Música */
+.music-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.capaMusic {
+    width: 100%;
+    max-width: 280px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px var(--shadow-color);
+    transition: var(--transition);
+}
+
+.capaMusic:hover {
+    transform: scale(1.02);
+}
+
+/* Barra de Progresso */
+.duracao {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.barra {
+    width: 100%;
+    height: 12px;
+    border: 2px solid var(--text-color);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+progress {
+    height: 100%;
+    width: 0;
+    background: linear-gradient(90deg, var(--primary-color), var(--warning-color));
+    border: none;
+    border-radius: 6px;
+    transition: width 0.1s ease;
+}
+
+progress::-webkit-progress-bar {
+    background: transparent;
+    border-radius: 6px;
+}
+
+progress::-webkit-progress-value {
+    background: linear-gradient(90deg, var(--primary-color), var(--warning-color));
+    border-radius: 6px;
+    transition: width 0.1s ease;
+}
+
+.ponto {
+    width: 18px;
+    height: 18px;
+    background-color: var(--text-color);
+    border-radius: 50%;
+    margin-left: -9px;
+    cursor: pointer;
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 0 8px rgba(255, 185, 20, 0.6);
+    transition: var(--transition);
+}
+
+.ponto:hover {
+    transform: scale(1.2);
+    background-color: var(--primary-color);
+}
+
+.tempo {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.9rem;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+/* Controles do Player */
+.botoesPlayer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    width: 100%;
+    margin: 1.5rem 0;
+    flex-wrap: wrap;
+}
+
+/* Botões Base */
+.boxPlay, .boxPause, .boxStop, .volume-btn {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    box-shadow: -3px 4px 0;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+}
+
+.boxPlay::before, .boxPause::before, .boxStop::before, .volume-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.boxPlay:hover::before, .boxPause:hover::before, .boxStop:hover::before, .volume-btn:hover::before {
+    left: 100%;
+}
+
+.boxPlay {
+    background: linear-gradient(135deg, var(--success-color), #25d14a);
+    box-shadow: -3px 4px 0 #1b7f2e;
+}
+
+.boxPause {
+    background: linear-gradient(135deg, var(--warning-color), #e6a413);
+    box-shadow: -3px 4px 0 #a17309;
+}
+
+.boxStop {
+    background: linear-gradient(135deg, var(--danger-color), #e62424);
+    box-shadow: -3px 4px 0 #a71515;
+}
+
+.volume-btn {
+    background: linear-gradient(135deg, var(--music-volume), #333);
+    box-shadow: -3px 4px 0 #000;
+}
+
+.boxPlay:hover, .boxPause:hover, .boxStop:hover, .volume-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+}
+
+.boxPlay:active, .boxPause:active, .boxStop:active, .volume-btn:active {
+    transform: translateY(1px) scale(0.98);
+    box-shadow: inset -2px 2px 4px rgba(0,0,0,0.3);
+}
+
+.play, .pause, .stop, .volume-icon {
+    width: 60%;
+    height: 60%;
+    color: white;
+    filter: drop-shadow(1px 1px 2px rgba(0,0,0,0.3));
+}
+
+/* Controles de Volume */
+.volume-control {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.volume-slider-container {
+    width: 0;
+    opacity: 0;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: var(--transition);
+    overflow: hidden;
+}
+
+.volume-control:hover .volume-slider-container {
+    width: 100px;
+    opacity: 1;
+    transform: scaleX(1);
+}
+
+.volume-slider {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(90deg, var(--primary-color), #4a5568);
+    outline: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--text-color);
+    cursor: pointer;
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 0 8px rgba(255, 185, 20, 0.6);
+    transition: var(--transition);
+}
+
+.volume-slider::-webkit-slider-thumb:hover {
+    background: var(--primary-color);
+    transform: scale(1.2);
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--text-color);
+    cursor: pointer;
+    border: 2px solid var(--primary-color);
+    box-shadow: 0 0 8px rgba(255, 185, 20, 0.6);
+}
+
+/* Área de Resposta */
+.botoesExterno {
+    width: 100%;
+    max-width: 400px;
+    margin-top: 1.5rem;
+}
+
+.texto {
+    width: 100%;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 12px;
+    border: 2px solid rgba(173, 173, 173, 0.5);
+    font-size: 1rem;
+    outline: none;
+    background: rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+    box-shadow: -3px 4px 0 var(--secondary-color);
+    transition: var(--transition);
+}
+
+.texto:focus {
+    border-color: var(--primary-color);
+    box-shadow: -3px 4px 0 var(--primary-color);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.texto::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+}
+
+.confirmar, .pular {
+    flex: 1;
+    padding: 1rem;
+    border-radius: 12px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    border: none;
+    transition: var(--transition);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+}
+
+.confirmar::before, .pular::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s ease;
+}
+
+.confirmar:hover::before, .pular:hover::before {
+    left: 100%;
+}
+
+.confirmar {
+    background: linear-gradient(135deg, var(--success-color), #25d14a);
+    color: white;
+    box-shadow: -3px 4px 0 #1b7f2e;
+}
+
+.pular {
+    background: linear-gradient(135deg, var(--danger-color), #e62424);
+    color: white;
+    box-shadow: -3px 4px 0 #a71515;
+}
+
+.confirmar:hover, .pular:hover {
+    transform: translateY(-3px);
+    box-shadow: -5px 6px 0 rgba(0,0,0,0.3);
+}
+
+.confirmar:active, .pular:active {
+    transform: translateY(1px);
+    box-shadow: inset -2px 2px 4px rgba(0,0,0,0.3);
+}
+
+/* Estados do Jogo */
+.loading {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.error {
+    border-color: var(--danger-color) !important;
+    box-shadow: -3px 4px 0 var(--danger-color) !important;
+}
+
+.success {
+    border-color: var(--success-color) !important;
+    box-shadow: -3px 4px 0 var(--success-color) !important;
+}
+
+/* Resultados */
+.result {
+    text-align: center;
+    color: var(--primary-color);
+    font-weight: 600;
+    font-size: clamp(1.5rem, 6vw, 2.5rem);
+    margin-top: 2rem;
+    font-family: 'Caprasimo', cursive;
+}
+
+.txtAcerto, .textResult, .txtFinal {
+    text-align: center;
+    color: var(--text-color);
+    font-weight: 500;
+    font-size: clamp(1rem, 5vw, 1.5rem);
+    margin-top: 1rem;
+    line-height: 1.6;
+}
+
+.imagemFim {
+    max-width: 200px;
+    margin: 2rem auto;
+    display: block;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px var(--shadow-color);
+}
+
+/* Animações */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slide-in {
+    animation: slideIn 0.5s ease-out;
+}
+
+/* Media Queries para responsividade */
+@media (max-width: 768px) {
+    .game-container {
+        padding: 10px;
+    }
+    
+    .boxMusica {
+        padding: 1.5rem;
+    }
+    
+    .botoesPlayer {
+        gap: 0.8rem;
+    }
+    
+    .boxPlay, .boxPause, .boxStop, .volume-btn {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .volume-control:hover .volume-slider-container {
+        width: 80px;
+    }
+}
+
+@media (max-width: 600px) {
+    .boxMusica {
+        padding: 1rem;
+    }
+    
+    .botoesPlayer {
+        gap: 0.5rem;
+    }
+    
+    .boxPlay, .boxPause, .boxStop, .volume-btn {
+        width: 45px;
+        height: 45px;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .confirmar, .pular {
+        width: 100%;
+    }
+    
+    .volume-control:hover .volume-slider-container {
+        width: 70px;
+    }
+}
+
+@media (max-width: 400px) {
+    .letraTitulo {
+        font-size: 1.3rem;
+    }
+    
+    .txtMusica, .numMusica {
+        font-size: 0.9rem;
+    }
+    
+    .texto {
+        padding: 0.8rem;
+        font-size: 0.9rem;
+    }
+    
+    .confirmar, .pular {
+        padding: 0.8rem;
+        font-size: 1rem;
+    }
+    
+    .volume-control:hover .volume-slider-container {
+        width: 60px;
+    }
+}
+
+/* Estados de foco para acessibilidade */
+button:focus-visible,
+.volume-slider:focus-visible,
+.texto:focus-visible {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+}
+
+/* Scrollbar personalizada */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--background-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--warning-color);
+}
