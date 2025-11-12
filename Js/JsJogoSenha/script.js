@@ -156,7 +156,7 @@ function validar() {
             
             // Para todas as outras regras, mostra erro e para
             mensagem.innerHTML = `
-                <img src="../Img/ImagensJogoSenha/erro.svg" 
+                <img src="/NickJogos/Img/ImagensJogoSenha/erro.svg" 
                     alt="Erro" 
                     style="width:20px; vertical-align:middle; margin-right:5px; margin-bottom:3px;">
                 ${regra.mensagem}

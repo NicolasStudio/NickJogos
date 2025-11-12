@@ -109,7 +109,7 @@ const createCard  = (personagens) => /* (=>) arrow function*/ {
     const back = createElement('div', 'face back');
 
     /* acessar a div do front, acessar a variavel atráves de String( `` ) e por o outro lado da carta*/ 
-    front.style.backgroundImage = `url('/Games/Img/ImagemMemoria/${personagens}.jpg')`;
+    front.style.backgroundImage = `url('/NickJogos/Img/ImagemMemoria/${personagens}.jpg')`;
 
     /*Agora é feito a estruturação, colocando o front e o back dentro da div card */
     card.appendChild(front);

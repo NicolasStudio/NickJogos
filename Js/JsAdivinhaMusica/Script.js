@@ -15,17 +15,17 @@ const GAME_CONFIG = {
 
 // Dados do jogo
 const musicas = [
-  { title: 'Green Hill Zone',         jogo: 'Sonic',           src: '/Games/Music/Sonic%20The%20Hedgehog%20-%20Green%20Hill%20Zone.mp3'
+  { title: 'Green Hill Zone',         jogo: 'Sonic',           src: '/NickJogos/Music/Sonic%20The%20Hedgehog%20-%20Green%20Hill%20Zone.mp3'
 , numero: '1' },
-  { title: 'Theme Super Mario Bros.', jogo: 'Super Mario',     src: '/Games/Music/Super Mario Bros. - Theme.mp3',            numero: '2' },
-  { title: 'Riders on the Storm',     jogo: 'Need for speed',  src: '/Games/Music/Riders on the Storm.mp3',                  numero: '3' },
-  { title: 'Top Gear - Theme',        jogo: 'Top Gear',        src: '/Games/Music/Top Gear - Theme.mp3',                     numero: '4' },
-  { title: 'Bully - Theme',           jogo: 'Bully',           src: '/Games/Music/Bully - Theme.mp3',                        numero: '5' },
-  { title: 'The Last of Us',          jogo: 'The last of us',  src: '/Games/Music/The Last of Us.mp3',                       numero: '6' },
-  { title: 'Crash Bandicoot',         jogo: 'Crash',           src: '/Games/Music/Crash Bandicoot.mp3',                      numero: '7' },
-  { title: 'Gta San Andreas',         jogo: 'Gta San Andreas', src: '/Games/Music/Gta San Andreas.mp3',                      numero: '8' },
-  { title: 'Aerokid - Habbo',         jogo: 'Habbo',           src: '/Games/Music/Aerokid - Habbo.mp3',                      numero: '9' },
-  { title: 'Super Bomberman',         jogo: 'Super Bomberman', src: '/Games/Music/Super Bomberman.mp3',                      numero: '10' }
+  { title: 'Theme Super Mario Bros.', jogo: 'Super Mario',     src: '/NickJogos/Music/Super Mario Bros. - Theme.mp3',            numero: '2' },
+  { title: 'Riders on the Storm',     jogo: 'Need for speed',  src: '/NickJogos/Music/Riders on the Storm.mp3',                  numero: '3' },
+  { title: 'Top Gear - Theme',        jogo: 'Top Gear',        src: '/NickJogos/Music/Top Gear - Theme.mp3',                     numero: '4' },
+  { title: 'Bully - Theme',           jogo: 'Bully',           src: '/NickJogos/Music/Bully - Theme.mp3',                        numero: '5' },
+  { title: 'The Last of Us',          jogo: 'The last of us',  src: '/NickJogos/Music/The Last of Us.mp3',                       numero: '6' },
+  { title: 'Crash Bandicoot',         jogo: 'Crash',           src: '/NickJogos/Music/Crash Bandicoot.mp3',                      numero: '7' },
+  { title: 'Gta San Andreas',         jogo: 'Gta San Andreas', src: '/NickJogos/Music/Gta San Andreas.mp3',                      numero: '8' },
+  { title: 'Aerokid - Habbo',         jogo: 'Habbo',           src: '/NickJogos/Music/Aerokid - Habbo.mp3',                      numero: '9' },
+  { title: 'Super Bomberman',         jogo: 'Super Bomberman', src: '/NickJogos/Music/Super Bomberman.mp3',                      numero: '10' }
 ];
 
 // Estado do jogo - CORREÇÃO: ÚNICA declaração
