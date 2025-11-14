@@ -9,44 +9,28 @@ class PuppetSoccer {
         this.ballLoaded = false;
         this.ballImage.onload = () => {
             this.ballLoaded = true;
-            console.log('Bola carregada');
         };
-        this.ballImage.onerror = () => {
-            console.error('Erro ao carregar bola.jpg');
-        };
-
+        
         this.player1Image = new Image();
-        this.player1Image.src = 'Img/ImagemHeadSoccer/jogador1.png';
+        this.player1Image.src = 'Img/ImagemHeadSoccer/Jogador1.png';
         this.player1Loaded = false;
         this.player1Image.onload = () => {
             this.player1Loaded = true;
-            console.log('Jogador 1 carregado');
         };
-        this.player1Image.onerror = () => {
-            console.error('Erro ao carregar jogador1.png');
-        };
-
+        
         this.player2Image = new Image();
-        this.player2Image.src = 'Img/ImagemHeadSoccer/jogador2.png';
+        this.player2Image.src = 'Img/ImagemHeadSoccer/Jogador2.png';
         this.player2Loaded = false;
         this.player2Image.onload = () => {
             this.player2Loaded = true;
-            console.log('Jogador 2 carregado');
         };
-        this.player2Image.onerror = () => {
-            console.error('Erro ao carregar jogador2.png');
-        };
-
+        
         // Carregar imagem das traves
         this.goalImage = new Image();
         this.goalImage.src = 'Img/ImagemHeadSoccer/Trave.png';
         this.goalLoaded = false;
         this.goalImage.onload = () => {
             this.goalLoaded = true;
-            console.log('Trave carregada');
-        };
-        this.goalImage.onerror = () => {
-            console.error('Erro ao carregar Trave.png');
         };
         
         // Configurações do jogo (serão ajustadas no setCanvasSize)
@@ -471,60 +455,52 @@ class PuppetSoccer {
         }
     }
     
-drawPlayer(player) {
-    // CABEÇA (imagem)
-    const playerImage = player === this.players[0] ? this.player1Image : this.player2Image;
-    const playerLoaded = player === this.players[0] ? this.player1Loaded : this.player2Loaded;
-    
-    if (playerLoaded) {
-        this.ctx.save();
-        
-        if (player.direction === 1) {
-            this.ctx.translate(player.x, 0);
-            this.ctx.scale(-1, 1);
-            this.ctx.translate(-player.x, 0);
+    drawPlayer(player) {
+        // CABEÇA (imagem)
+        if ((player === this.players[0] && this.player1Loaded) || 
+            (player === this.players[1] && this.player2Loaded)) {
+            
+            this.ctx.save();
+            
+            // CORREÇÃO: Espelhar apenas quando direction = 1 (direita)
+            if (player.direction === 1) {
+                this.ctx.translate(player.x, 0);
+                this.ctx.scale(-1, 1);
+                this.ctx.translate(-player.x, 0);
+            }
+            
+            this.ctx.drawImage(
+                player.image,
+                player.x - player.width / 2,
+                player.y - player.height / 2,
+                player.width,
+                player.height
+            );
+            
+            this.ctx.restore();
+        } else {
+            // Fallback: desenhar círculo colorido
+            this.ctx.fillStyle = player.color;
+            this.ctx.beginPath();
+            this.ctx.arc(player.x, player.y, player.width / 2, 0, Math.PI * 2);
+            this.ctx.fill();
         }
         
-        this.ctx.drawImage(
-            playerImage,
-            player.x - player.width / 2,
-            player.y - player.height / 2,
-            player.width,
-            player.height
-        );
+        // PÉ (triângulo escaleno)
+        const footPoints = this.calculateFootPoints(player);
         
-        this.ctx.restore();
-    } else {
-        // Fallback: desenhar círculo colorido com indicador de carregamento
-        this.ctx.fillStyle = player.color;
+        this.ctx.fillStyle = '#8B4513';
         this.ctx.beginPath();
-        this.ctx.arc(player.x, player.y, player.width / 2, 0, Math.PI * 2);
+        this.ctx.moveTo(footPoints[0].x, footPoints[0].y);
+        this.ctx.lineTo(footPoints[1].x, footPoints[1].y);
+        this.ctx.lineTo(footPoints[2].x, footPoints[2].y);
+        this.ctx.closePath();
         this.ctx.fill();
         
-        // Texto indicando que a imagem não carregou
-        this.ctx.fillStyle = 'white';
-        this.ctx.font = '12px Arial';
-        this.ctx.textAlign = 'center';
-        this.ctx.fillText('?', player.x, player.y + 4);
+        this.ctx.strokeStyle = '#654321';
+        this.ctx.lineWidth = 2 * this.scale;
+        this.ctx.stroke();
     }
-    
-    // CHUTEIRA (código da chuteira que já temos)
-    const shoePoints = this.calculateFootPoints(player);
-    const shoeColor = player === this.players[0] ? '#FF6B35' : '#2E86AB';
-    
-    this.ctx.fillStyle = player.isKicking ? '#FF0000' : shoeColor;
-    this.ctx.beginPath();
-    this.ctx.moveTo(shoePoints[0].x, shoePoints[0].y);
-    for (let i = 1; i < shoePoints.length; i++) {
-        this.ctx.lineTo(shoePoints[i].x, shoePoints[i].y);
-    }
-    this.ctx.closePath();
-    this.ctx.fill();
-    
-    this.ctx.strokeStyle = '#000000';
-    this.ctx.lineWidth = 1 * this.scale;
-    this.ctx.stroke();
-}
     
     drawBall() {
         if (this.ballLoaded) {
