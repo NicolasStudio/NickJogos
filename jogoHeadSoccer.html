@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>NickJogos - Head Soccer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="Css/header.css">
+    <link rel="stylesheet" href="Css/StylesHeadSoccer/style.css">
+</head>
+<body>
+        <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-gamepad"></i>
+                    NickJogos
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="boxMasterSoccer">
+        <div class="game-container">
+            <div class="score-board">
+                <div class="team team-1">
+                    <div class="player-color" style="background-color: #e74c3c"></div>
+                    <div class="team-info">
+                        <span class="team-name">Jogador 1</span>
+                        <span class="team-score" id="score1">0</span>
+                    </div>
+                </div>
+                <div class="vs">VS</div>
+                <div class="team team-2">
+                    <div class="team-info">
+                        <span class="team-score" id="score2">0</span>
+                        <span class="team-name">Jogador 2</span>
+                    </div>
+                    <div class="player-color" style="background-color: #3498db"></div>
+                </div>
+            </div>
+            
+            <div class="field-container">
+                
+                <canvas id="gameCanvas"></canvas>
+            </div>
+            
+            <div class="controls">
+                <p>Jogador 1: WASD (W pular, SPACE chutar) | Jogador 2: Setas (↑ pular, 0 chutar)</p>
+            </div>
+        </div>
+    </div>
+    <script src="game.js"></script>
+</body>
+</html>

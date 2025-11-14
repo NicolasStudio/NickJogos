@@ -3,7 +3,7 @@ function home(){
 }
 
 function abrirBatalhaNaval(){
-    window.location.href = "batalhaNaval.html";
+    window.location.href = "jogoBatalhaNaval.html";
 }
 
 function abrirJogoMemoria(){
@@ -11,9 +11,13 @@ function abrirJogoMemoria(){
 }
 
 function abrirJogoMusica(){
-    window.location.href = "adivinhaMusica.html";
+    window.location.href = "jogoAdivinhaMusica.html";
 }
 
 function abrirJogoSenha(){
     window.location.href = "jogoSenha.html";
+}
+
+function abrirJogoHeadSoccer(){
+    window.location.href = "jogoHeadSoccer.html";
 }
