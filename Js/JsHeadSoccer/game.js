@@ -33,6 +33,13 @@ class PuppetSoccer {
             this.goalLoaded = true;
         };
         
+        // Carregar imagens das chuteiras
+        this.bootRightImage = new Image();
+        this.bootRightImage.src = 'Img/ImagemHeadSoccer/ChuteiraDireita.png';
+
+        this.bootLeftImage = new Image();
+        this.bootLeftImage.src = 'Img/ImagemHeadSoccer/ChuteiraEsquerda.png';
+
         // Configurações do jogo (serão ajustadas no setCanvasSize)
         this.groundY = 400;
         this.gravity = 0.4;
@@ -456,13 +463,12 @@ class PuppetSoccer {
     }
     
     drawPlayer(player) {
-        // CABEÇA (imagem)
+        // 1. PRIMEIRO desenha o jogador (FUNDO)
         if ((player === this.players[0] && this.player1Loaded) || 
             (player === this.players[1] && this.player2Loaded)) {
             
             this.ctx.save();
             
-            // CORREÇÃO: Espelhar apenas quando direction = 1 (direita)
             if (player.direction === 1) {
                 this.ctx.translate(player.x, 0);
                 this.ctx.scale(-1, 1);
@@ -472,34 +478,86 @@ class PuppetSoccer {
             this.ctx.drawImage(
                 player.image,
                 player.x - player.width / 2,
-                player.y - player.height / 2,
+                player.y - player.height / 2.2,
                 player.width,
                 player.height
             );
             
             this.ctx.restore();
         } else {
-            // Fallback: desenhar círculo colorido
             this.ctx.fillStyle = player.color;
             this.ctx.beginPath();
             this.ctx.arc(player.x, player.y, player.width / 2, 0, Math.PI * 2);
             this.ctx.fill();
         }
         
-        // PÉ (triângulo escaleno)
-        const footPoints = this.calculateFootPoints(player);
+        // 2. DEPOIS desenha a CHUTEIRA (SOBRE o jogador)
+        this.drawBoot(player);
+    }
+
+    drawBoot(player) {
+        const bootPosition = this.calculateBootPosition(player);
         
-        this.ctx.fillStyle = '#8B4513';
-        this.ctx.beginPath();
-        this.ctx.moveTo(footPoints[0].x, footPoints[0].y);
-        this.ctx.lineTo(footPoints[1].x, footPoints[1].y);
-        this.ctx.lineTo(footPoints[2].x, footPoints[2].y);
-        this.ctx.closePath();
-        this.ctx.fill();
+        // CORREÇÃO: Usar a chuteira correta baseada na direção
+        let bootImage;
+        if (player.direction === 1) { // Virado para DIREITA
+            bootImage = this.bootRightImage;
+        } else { // Virado para ESQUERDA
+            bootImage = this.bootLeftImage;
+        }
         
-        this.ctx.strokeStyle = '#654321';
-        this.ctx.lineWidth = 2 * this.scale;
-        this.ctx.stroke();
+        if (bootImage && bootImage.complete && bootImage.naturalHeight !== 0) {
+            this.ctx.save();
+            
+            // Posicionar na base do jogador
+            this.ctx.translate(bootPosition.x, bootPosition.y);
+            
+            // CORREÇÃO: NÃO ESPELHAR - usar a imagem correta diretamente
+            // Apenas rotacionar para a animação do chute
+            this.ctx.rotate(player.footAngle * player.direction);
+            
+            // MANTER a escala
+            const bootWidth = 50 * this.scale;
+            const bootHeight = 32 * this.scale;
+            
+            this.ctx.drawImage(
+                bootImage,
+                -bootWidth / 2,
+                -bootHeight / 2,
+                bootWidth,
+                bootHeight
+            );
+            
+            this.ctx.restore();
+        } else {
+            // Fallback: desenhar triângulo se a imagem não carregar
+            const footPoints = this.calculateFootPoints(player);
+            
+            this.ctx.fillStyle = '#8B4513';
+            this.ctx.beginPath();
+            this.ctx.moveTo(footPoints[0].x, footPoints[0].y);
+            this.ctx.lineTo(footPoints[1].x, footPoints[1].y);
+            this.ctx.lineTo(footPoints[2].x, footPoints[2].y);
+            this.ctx.closePath();
+            this.ctx.fill();
+            
+            this.ctx.strokeStyle = '#654321';
+            this.ctx.lineWidth = 2 * this.scale;
+            this.ctx.stroke();
+        }
+    }
+
+    calculateBootPosition(player) {
+        // Posição da chuteira na BASE do jogador
+        const baseX = player.x;
+        const baseY = player.y + player.height / 2 - (11 * this.scale); // Ajuste fino na altura
+        
+        const kickDistance = 45 * this.scale;
+        
+        return {
+            x: baseX + Math.cos(player.footAngle) * kickDistance * player.direction,
+            y: baseY + Math.sin(player.footAngle) * kickDistance
+        };
     }
     
     drawBall() {
