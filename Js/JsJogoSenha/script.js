@@ -118,12 +118,28 @@ function validar() {
             mensagem: "Sua senha não tem o nome de um alimento Palíndromo!"
         },
         {
+            condicao: () => !senhaMinuscula.includes("lumos"),
+            mensagem: "Sua senha não tem o nome do feitiço de iluminação de Harry Potter!"
+        },
+        {
+            condicao: () => !senhaMinuscula.includes("+55"),
+            mensagem: "Sua senha não o código telefônico internacional do Brasil!"
+        },
+        {
+            condicao: () => !senhaMinuscula.includes("gelado"),
+            mensagem: "Sua senha está muito quente 🔥🔥🔥 Coloque o nome de um super herói do filme Os Incríveis que tem o poder de gelo!"
+        },
+        {
             condicao: () => !senhaMinuscula.includes("charizard"),
             mensagem: "Sua senha não tem o nome do Pokémon número 6 da Pokédex!"
         },
         {
             condicao: () => (senha.split("@").length - 1) < 2,
             mensagem: 'Sua senha precisa conter 2 caracteres "@"!'
+        },
+        {
+            condicao: () => !senhaMinuscula.includes("xique"),
+            mensagem: 'Sua precisa conter o primeiro nome de um municipio da Bahia, que faz alusão a uma pessoa estar bem vestida!'
         },
         {
             condicao: () => {
@@ -173,6 +189,7 @@ function validar() {
     }   
 
     mensagem.textContent = "Senha perfeita! Você completou todos os requisitos!";
+    document.querySelector(".esqueciSenha").style.display = "none";
     mensagem.style.color = "lightgreen";
     mensagem.style.display = "block";
 
@@ -181,10 +198,22 @@ function validar() {
         if (parabens) {
             document.querySelector(".titulo-glitch").style.display = "none";
             document.querySelector(".container-2").style.display = "none";
+            
             parabens.style.display = "block";
         }
     }, 1500);
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+    const input = document.getElementById("input");
+
+    input.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+            event.preventDefault(); // evita comportamento padrão (ex: enviar formulário)
+            validar(); // chama sua função de validação
+        }
+    });
+});
 
 function aparecerLembrarSenha(){
     const input = document.getElementById('input');
@@ -212,8 +241,7 @@ function esqueciSenha() {
     
     setTimeout(() => {
         mensagem.style.display = "none";
-    }, 3000);
-
+    }, 3500);
 
     input.style.color = ""; // ← Volta para cor padrão do CSS
 }
