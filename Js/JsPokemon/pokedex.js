@@ -12,7 +12,7 @@ function updatePokedex() {
     if (pokedex[p.name]) {
       div.innerHTML = `<img src="${p.img}" alt="${p.name}"><span>#${p.id} - ${p.name}</span>`;
     } else {
-      div.innerHTML = `<img src="Img/unknown.png" alt="Desconhecido"><span>#${p.id} - ???</span>`;
+      div.innerHTML = `<img src="/NickJogos/Img/ImagemPokemon/unknown.png" alt="Desconhecido"><span>#${p.id} - ???</span>`;
     }
 
     dexDiv.appendChild(div);
