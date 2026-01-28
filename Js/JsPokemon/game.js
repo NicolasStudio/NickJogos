@@ -94,6 +94,14 @@ function handleMovement(e) {
   }
 }
 
+document.addEventListener("keydown", function(e) {
+  const keysToPrevent = ["ArrowUp", "ArrowDown"];
+  if (keysToPrevent.includes(e.key)) {
+    e.preventDefault();
+  }
+});
+
+
 function isWalkable(x, y) {
   return (
     x >= 0 &&
