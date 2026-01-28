@@ -36,7 +36,7 @@ const collisionMap = [
 
 // ===== MAPA =====
 function renderMap() {
-  mapElement.style.backgroundImage = 'url("/Img/ImagemPokemon/RotaFloresta.png")';
+  mapElement.style.backgroundImage = 'url("/NickJogos/Img/ImagemPokemon/RotaFloresta.png")';
   mapElement.style.backgroundSize = 'cover';
   mapElement.style.backgroundPosition = 'center';
   mapElement.style.position = 'relative';
@@ -51,7 +51,7 @@ function renderPlayer() {
   if (!player) {
     player = document.createElement("img");
     player.id = "player";
-    player.src = "Img/ImagemPokemon/Player1.png";
+    player.src = "/NickJogos/Img/ImagemPokemon/Player1.png";
     player.classList.add("player-sprite");
     mapElement.appendChild(player);
   }
