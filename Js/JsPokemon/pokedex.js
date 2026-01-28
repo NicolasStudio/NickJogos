@@ -11,7 +11,7 @@ function updatePokedex() {
     if (pokedex[p.name]) {
       div.innerHTML = `
         <img src="${p.img}" alt="${p.name}">
-        <span class="rarity-${p.rarity}">#${p.id} - ${p.name}</span>
+        <span>#${p.id} - ${p.name}</span>
       `;
     } else {
       div.innerHTML = `

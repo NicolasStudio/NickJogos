@@ -54,6 +54,8 @@
             </div>
         </div>
 
+        <div id="overlay"></div>
+
         <!-- Área principal do jogo -->
         <div id="game-container">
             <!-- Mapa -->
@@ -61,10 +63,22 @@
 
             <!-- Painel de encontro (lado direito do mapa) -->
             <div id="sidebar">
+            <h2>Controles</h2>
+            <div id="controls">
+                <button id="move-up-btn">↑</button><br>
+                <button id="move-left-btn">←</button>
+                <button id="move-down-btn">↓</button>
+                <button id="move-right-btn">→</button>
+            </div>
+
+            <hr>
+            
             <h2>Encontro</h2>
             <div id="encounter"></div>
+            
             <button id="capture-btn" style="display:none;">Capturar</button>
             </div>
+
         </div>
     </div>
     <script src="Js/JsPokemon/game.js"></script>

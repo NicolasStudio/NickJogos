@@ -12,7 +12,7 @@ let dinheiro = JSON.parse(localStorage.getItem("dinheiro")) || 0;
 
 // ===== MATRIZ DE COLISÃO =====
 const collisionMap = [
-  ["x","x","x","x","x","x","x","x","x","x"],
+  ["x","x","x","x","p","p","x","x","x","x"],
   ["p","p","p","p","p","p","p","p","p","p"],
   ["x","x","x","x","x","x","x","p","p","p"],
   ["p","p","p","x","g","g","g","g","g","g"],
@@ -94,13 +94,18 @@ function handleMovement(e) {
   }
 }
 
+document.getElementById("move-up-btn").addEventListener("click", () => movePlayer("up"));
+document.getElementById("move-down-btn").addEventListener("click", () => movePlayer("down"));
+document.getElementById("move-left-btn").addEventListener("click", () => movePlayer("left"));
+document.getElementById("move-right-btn").addEventListener("click", () => movePlayer("right"));
+
+
 document.addEventListener("keydown", function(e) {
   const keysToPrevent = ["ArrowUp", "ArrowDown"];
   if (keysToPrevent.includes(e.key)) {
     e.preventDefault();
   }
 });
-
 
 function isWalkable(x, y) {
   return (
@@ -111,6 +116,35 @@ function isWalkable(x, y) {
     collisionMap[y][x] !== "x"
   );
 }
+function movePlayer(dir) {
+  if (!canMove) return;
+
+  const directions = {
+    up:    { x: 0, y: -1 },
+    down:  { x: 0, y: 1 },
+    left:  { x: -1, y: 0 },
+    right: { x: 1, y: 0 }
+  };
+
+  const d = directions[dir];
+  if (!d) return;
+
+  const newX = playerPos.x + d.x;
+  const newY = playerPos.y + d.y;
+
+  if (isWalkable(newX, newY)) {
+    playerPos = { x: newX, y: newY };
+    renderPlayer();
+    clearEncounter();
+
+    canMove = false;
+    checkEncounter();
+    setTimeout(() => { canMove = true; }, moveDelay);
+  }
+}
+
+
+
 
 // ===== POKÉMON =====
 const pokemons = [
@@ -335,6 +369,7 @@ function openTab(tabName) {
   const tabContent = document.getElementById(tabName + "TabContent");
   const tabLink = document.getElementById(tabName + "Tab");
   const sidebarTabs = document.getElementById("sidebarTabs");
+  const overlay = document.getElementById("overlay");
 
   const isVisible = tabContent.style.display === "block";
 
@@ -342,7 +377,8 @@ function openTab(tabName) {
     tabContent.style.display = "none";
     tabLink.classList.remove("selected", "opened");
     sidebarContent.style.display = "none";
-    sidebarTabs.classList.remove("opened"); // remove arredondamento invertido
+    sidebarTabs.classList.remove("opened");
+    overlay.style.display = "none"; // esconde overlay
     return;
   }
 
@@ -354,10 +390,20 @@ function openTab(tabName) {
   sidebarContent.style.display = "block";
   tabContent.style.display = "block";
   tabLink.classList.add("selected", "opened");
-  sidebarTabs.classList.add("opened"); // aplica arredondamento invertido
+  sidebarTabs.classList.add("opened");
+  overlay.style.display = "block"; // mostra overlay
 
   // Atualiza conteúdo específico
   if (tabName === "pokedex" && typeof updatePokedex === "function") updatePokedex();
   if (tabName === "captured" && typeof updateCaptured === "function") updateCaptured();
   if (tabName === "store" && typeof updateStore === "function") updateStore();
 }
+
+document.getElementById("overlay").addEventListener("click", () => {
+  // Fecha tudo
+  document.querySelectorAll(".tabContent").forEach(div => div.style.display = "none");
+  document.querySelectorAll("#sidebarTabs a").forEach(a => a.classList.remove("selected", "opened"));
+  document.getElementById("sidebarContent").style.display = "none";
+  document.getElementById("sidebarTabs").classList.remove("opened");
+  document.getElementById("overlay").style.display = "none";
+});
