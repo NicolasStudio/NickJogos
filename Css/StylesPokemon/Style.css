@@ -252,3 +252,24 @@
     margin-top: 5%;
     margin-bottom: 5%;
 }
+
+/* Coloração por raridade */
+.rarity-lendario {
+  color: #FF782A;
+}
+
+.rarity-mistico {
+  color: #A058E0;
+}
+
+.rarity-raro {
+  color: #13AAD2;
+}
+
+.rarity-incomum {
+  color: #4E9F1C;
+}
+
+.rarity-comum {
+  color: #656D91;
+}

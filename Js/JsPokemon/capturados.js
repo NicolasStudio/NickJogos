@@ -16,10 +16,11 @@ function updateCaptured() {
     div.classList.add("pokemon-entry");
 
     div.innerHTML = `
-    <img src="${p.img}" alt="${nome}">
-    <span>${nome}</span>
-    <button class="capture-btn vender-btn" onclick="venderPokemon('${nome}')">Vender</button>
+      <img src="${p.img}" alt="${nome}">
+      <span class="rarity-${p.rarity}">${nome} (${p.rarity})</span>
+      <button class="vender-btn" onclick="venderPokemon('${nome}')">Vender</button>
     `;
+
 
     capturedDiv.appendChild(div);
   }
