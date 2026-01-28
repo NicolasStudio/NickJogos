@@ -255,21 +255,21 @@
 
 /* Coloração por raridade */
 .rarity-lendario {
-  color: #FF782A;
+  color: #ff711f !important;
 }
 
 .rarity-mistico {
-  color: #A058E0;
+  color: #a950f7 !important;
 }
 
 .rarity-raro {
-  color: #13AAD2;
+  color: #0050fc !important;
 }
 
 .rarity-incomum {
-  color: #4E9F1C;
+  color: #69d823 !important;
 }
 
 .rarity-comum {
-  color: #656D91;
+  color: #5f6580 !important;
 }

@@ -1,6 +1,5 @@
 // ===== POKÉDEX =====
 // Registro permanente de capturas
-
 function updatePokedex() {
   const dexDiv = document.getElementById("pokedexList");
   dexDiv.innerHTML = "";
