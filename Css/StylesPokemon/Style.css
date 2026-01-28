@@ -23,7 +23,7 @@
 
 /* Mapa */
 #map {
-  background: url("/Img/ImagemPokemon/RotaFloresta.png") no-repeat center center;
+  background: url("/NickJogos/Img/ImagemPokemon/RotaFloresta.png") no-repeat center center;
   background-size: cover;
   position: relative;
   display: grid;
