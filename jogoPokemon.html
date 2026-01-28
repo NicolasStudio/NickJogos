@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NickJogos - Jogos Grátis</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="Css/StylesPokemon/Style.css">
+    <link rel="stylesheet" href="Css/header.css">
+
+</head>
+<body>
+    <!-- Cabeçalho -->
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-gamepad"></i>
+                    NickJogos
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="game">
+        <!-- Menu lateral fixo à esquerda -->
+        <ul id="sidebarTabs">
+            <li><a href="#" id="pokedexTab" onclick="openTab('pokedex')"><div class="rotate">POKÉDEX</div></a></li>
+            <li><a href="#" id="capturedTab" onclick="openTab('captured')"><div class="rotate">CAPTURADOS</div></a></li>
+            <li><a href="#" id="storeTab" onclick="openTab('store')"><div class="rotate">LOJA</div></a></li>
+            <li><a href="#" id="optionsTab" onclick="openTab('options')"><div class="rotate">OPTIONS</div></a></li>
+        </ul>
+
+        <div id="sidebarContent">
+            <div id="pokedexTabContent" class="tabContent" style="display:none;">
+            <h2>Sua Pokédex</h2>
+            <div id="pokedexList" class="content-container"></div>
+            </div>
+
+            <div id="capturedTabContent" class="tabContent" style="display:none;">
+            <h2>Pokémons Capturados</h2>
+            <p>Conteúdo futuro...</p>
+            </div>
+
+            <div id="storeTabContent" class="tabContent" style="display:none;">
+            <h2>Loja</h2>
+            <p>Conteúdo futuro...</p>
+            </div>
+
+            <div id="optionsTabContent" class="tabContent" style="display:none;">
+            <h2>Opções</h2>
+            <p>Configurações do jogo...</p>
+            </div>
+        </div>
+
+        <!-- Área principal do jogo -->
+        <div id="game-container">
+            <!-- Mapa -->
+            <div id="map"></div>
+
+            <!-- Painel de encontro (lado direito do mapa) -->
+            <div id="sidebar">
+            <h2>Encontro</h2>
+            <div id="encounter"></div>
+            <button id="capture-btn" style="display:none;">Capturar</button>
+            </div>
+        </div>
+    </div>
+    <script src="Js/JsPokemon/game.js"></script>
+    <script src="Js/JsPokemon/pokedex.js"></script>
+    <script src="Js/JsPokemon/capturados.js"></script>
+    <script src="Js/JsPokemon/store.js"></script>
+
+</body>
+</html>

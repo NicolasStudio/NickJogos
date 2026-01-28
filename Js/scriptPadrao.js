@@ -21,3 +21,7 @@ function abrirJogoSenha(){
 function abrirJogoHeadSoccer(){
     window.location.href = "jogoHeadSoccer.html";
 }
+
+function abrirJogoPokemon(){
+    window.location.href = "jogoPokemon.html";
+}
