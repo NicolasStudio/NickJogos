@@ -15,7 +15,7 @@ function updatePokedex() {
       `;
     } else {
       div.innerHTML = `
-        <img src="Img/unknown.png" alt="Desconhecido">
+        <img src="/NickJogos/Img/ImagemPokemon/unknown.png" alt="Desconhecido">
         <span>#${p.id} - ???</span>
       `;
     }

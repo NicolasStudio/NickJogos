@@ -185,7 +185,13 @@ button, a {
 }
 
 #pokedexTabContent h2, #capturedTabContent h2, #storeTabContent h2, #optionsTabContent h2 {
+  display: flex;
+  background-color: #111;
+  color: #fff;
+  padding: 5%;
   text-align: center;
+  justify-content: center;
+  align-items: center;
 }
 
 #sidebarTabs a {
@@ -240,24 +246,18 @@ button, a {
   bottom: 0;
   width: 350px;
   background: #f8f8f8;
-  border-right: 2px solid #333;
   display: none; /* começa fechado */
   overflow-y: auto;
   z-index: 100;
   box-shadow: 4px 0 10px rgba(0,0,0,0.5);
 }
 
-.tabContent {
+#pokedexList {
   padding: 10px;
 }
 
 .tabContent h2, .tabContent p {
   color: #111;
-}
-
-.tabContent h2{
-    margin-top: 5%;
-    margin-bottom: 5%;
 }
 
 #overlay {
