@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="Css/StylesPokemon/Style.css">
     <link rel="stylesheet" href="Css/header.css">
-
+    <link rel="stylesheet" href="Css/StylesPokemon/Options.css">
 </head>
 <body>
     <!-- Cabeçalho -->
@@ -34,24 +34,125 @@
 
         <div id="sidebarContent">
             <div id="pokedexTabContent" class="tabContent" style="display:none;">
-            <h2>Sua Pokédex</h2>
-            <div id="pokedexList" class="content-container"></div>
+                <h2>Sua Pokédex</h2>
+                <div id="pokedexList" class="content-container"></div>
             </div>
 
             <div id="capturedTabContent" class="tabContent" style="display:none;">
-            <h2>Pokémons Capturados</h2>
-            <p>Conteúdo futuro...</p>
+                <h2>Pokémons Capturados</h2>
+                <p>Conteúdo futuro...</p>
             </div>
 
             <div id="storeTabContent" class="tabContent" style="display:none;">
-            <h2>Loja</h2>
-            <p>Conteúdo futuro...</p>
+                <h2>Loja</h2>
+                <p>Conteúdo futuro...</p>
             </div>
 
             <div id="optionsTabContent" class="tabContent" style="display:none;">
-            <h2>Opções</h2>
-            <p>Configurações do jogo...</p>
+                <h2>Opções</h2>
+                
+                <div class="options-section">
+                    <h3>🔊 Áudio</h3>
+                    <div class="option-item">
+                        <label>Volume Geral</label>
+                        <input type="range" id="masterVolume" min="0" max="100" value="70">
+                        <span class="volume-value" id="masterValue">70%</span>
+                    </div>
+                    <div class="option-item">
+                        <label>Música</label>
+                        <input type="range" id="musicVolume" min="0" max="100" value="80">
+                        <span class="volume-value" id="musicValue">80%</span>
+                    </div>
+                </div>
+
+                <div class="options-section">
+                    <h3>🎮 Controles</h3>
+                    <div class="option-item">
+                        <label>Plataforma</label>
+                        <select id="tipoPlataforma">
+                            <option value="desktop">Desktop PC</option>
+                            <option value="mobile" selected>Mobile</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="options-section">
+                    <h3>🎨 Gráficos</h3>
+                    
+                    <div class="option-item">
+                        <label>Zoom do Jogo</label>
+                        <button class="zoom-btn" onclick="alternarZoomGame()" id="btnZoomGame">
+                            🔍 Aumentar
+                        </button>
+                        <span class="option-status" id="zoomStatus">Normal</span>
+                    </div>
+                    
+                    <div class="option-item">
+                        <label>Tela Cheia</label>
+                        <button class="fullscreen-btn" onclick="alternarTelaCheia()" id="btnTelaCheia">
+                            Ativar Tela Cheia
+                        </button>
+                        <span class="option-status" id="fullscreenStatus">Normal</span>
+                    </div>
+                </div>
+
+                <div class="options-section warning-section">
+                    <h3>⚠️ Salvamento</h3>
+                    <p class="warning-text">
+                        <i>Atenção: atualmente o sistema não possui integração com banco de dados. 
+                        Salvar em txt permitirá guardar seu progresso.</i>
+                    </p>
+                    
+                    <div class="save-info">
+                        <div class="info-item">
+                            <span class="info-label">Último Salvamento:</span>
+                            <span class="info-value" id="lastSave">Nenhum</span>
+                        </div>
+                        <div class="info-item">
+                            <span class="info-label">Status:</span>
+                            <span class="status-indicator" id="saveStatus">🔴 Offline</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="options-actions">
+                    <div class="save-action">
+                        <button class="btn exportar" id="exportar">
+                            <span class="btn-icon">💾</span>
+                            <span class="btn-text">Exportar Progresso</span>
+                        </button>
+                        <span class="toggle-info" id="exportInfo">Clique para baixar arquivo .txt</span>
+                    </div>
+                    
+                    <div class="save-action">
+                        <button class="btn importar" id="importar">
+                            <span class="btn-icon">📂</span>
+                            <span class="btn-text">Importar Progresso</span>
+                        </button>
+                        <!-- Adicione isso dentro do optionsTabContent, após os botões -->
+                        <input type="file" id="fileImportInput" accept=".txt" style="display: none;">
+                        <span class="toggle-info" id="importInfo">Selecione arquivo .txt salvo</span>
+                    </div>
+                    
+                    <div class="save-action">
+                        <button class="btn atualizar" id="atualizar">
+                            <span class="btn-icon">🔄</span>
+                            <span class="btn-text">Atualizar Progresso</span>
+                        </button>
+                        <span class="toggle-info" id="updateInfo">Salva estado atual</span>
+                    </div>
+
+                    <div class="save-action">
+                        <button class="btn limpar" id="limparProgresso">
+                            <span class="btn-icon">🗑️</span>
+                            <span class="btn-text">Limpar Progresso</span>
+                        </button>
+                        <span class="toggle-info" id="clearInfo">Limpa todos os dados salvos</span>
+                    </div>
+                </div>
             </div>
+
+
         </div>
 
         <div id="overlay"></div>
@@ -81,10 +182,13 @@
 
         </div>
     </div>
+    <script src="Js/JsPokemon/maps.js"></script>
+    <script src="Js/JsPokemon/player.js"></script>
     <script src="Js/JsPokemon/game.js"></script>
     <script src="Js/JsPokemon/pokedex.js"></script>
     <script src="Js/JsPokemon/capturados.js"></script>
+    <script src="Js/JsPokemon/menu.js"></script>
     <script src="Js/JsPokemon/store.js"></script>
-
+    <script src="Js/JsPokemon/options.js"></script>
 </body>
 </html>

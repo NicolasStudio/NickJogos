@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Oxanium&display=swap');
+
 html {
   cursor: url('/NickJogos/Img/ImagemPokemon/cursor.png'), auto;
 }
@@ -29,15 +30,15 @@ button, a {
 
 /* Mapa */
 #map {
-  background: url("/NickJogos/Img/ImagemPokemon/RotaFloresta.png") no-repeat center center;
   background-size: cover;
   position: relative;
   display: grid;
-  grid-template-columns: repeat(10, 32px);
-  grid-template-rows: repeat(20, 32px);
+  grid-template-columns: repeat(32, 16px);
+  grid-template-rows: repeat(31, 16px);
   width: 320px;
   height: 640px;
 }
+
 
 .tile {
   width: 32px;
@@ -80,7 +81,6 @@ button, a {
   padding: 10px;
   text-align: center;
   min-height: 120px;
-  margin-bottom: 10px;
 }
 
 #encounter p {
@@ -136,7 +136,7 @@ button, a {
   align-items: center;
   justify-content: space-between; /* ícone+nome à esquerda, botão à direita */
   margin: 5px 0;
-  padding: 5px;
+  padding: 5px 15px;
   border-bottom: 1px solid #ddd;
 }
 
@@ -183,6 +183,7 @@ button, a {
 #sidebarTabs li {
   margin: 0;
 }
+
 
 #pokedexTabContent h2, #capturedTabContent h2, #storeTabContent h2, #optionsTabContent h2 {
   display: flex;
@@ -252,9 +253,6 @@ button, a {
   box-shadow: 4px 0 10px rgba(0,0,0,0.5);
 }
 
-#pokedexList {
-  padding: 10px;
-}
 
 .tabContent h2, .tabContent p {
   color: #111;
@@ -292,11 +290,7 @@ button, a {
   color: #5f6580 !important;
 }
 
-hr{
-  border: 2px solid #333;
-  margin-top: 10%;
-  margin-bottom: 10%;
-}
+
 
 /* Controles de movimento e encontro */
 #sidebar {
