@@ -1,0 +1,372 @@
+/* ============================================
+   VARIÁVEIS E RESET
+   ============================================ */
+:root {
+  --store-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --store-primary: #e74c3c;
+  --store-success: #27ae60;
+  --store-info: #3498db;
+  --store-border: #dee2e6;
+  --color-gray-dark: #333;
+  --color-black: #111;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ============================================
+   CONTAINER PRINCIPAL DA LOJA
+   ============================================ */
+.store-container {
+  width: auto;
+  margin: 0 auto;
+  padding: 15px;
+  background: #111;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+  color: white;
+}
+
+/* ============================================
+   CABEÇALHO DA LOJA
+   ============================================ */
+.store-header {
+  text-align: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.store-title {
+  font-size: 18px;
+  margin-bottom: 5px;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+}
+
+.money-display {
+  font-size: 1.2rem;
+  font-weight: bold;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 6px 12px;
+  border-radius: 20px;
+  display: inline-block;
+  margin-top: 5px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.money-display span {
+  color: #f1c40f;
+  margin-left: 5px;
+}
+
+/* ============================================
+   GRID DE PRODUTOS - CARDS PEQUENOS
+   ============================================ */
+.products-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.product-card {
+  background: white;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 3px 6px rgba(0,0,0,0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.product-card:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+/* ============================================
+   CONTEÚDO DOS CARDS (TAMANHO REDUZIDO)
+   ============================================ */
+.product-image {
+  width: 50px;
+  height: 50px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.product-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.product-name {
+  font-size: 0.95rem;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.product-description {
+  font-size: 0.75rem;
+  color: #666;
+  text-align: center;
+  margin-bottom: 6px;
+  line-height: 1.2;
+  min-height: 30px;
+}
+
+.product-price {
+  font-size: 1rem;
+  font-weight: bold;
+  color: var(--store-primary);
+  margin-bottom: 8px;
+  text-align: center;
+}
+
+.catch-rate {
+  font-size: 0.75rem;
+  color: var(--store-success);
+  font-weight: bold;
+  margin-bottom: 8px;
+  background: #e8f5e9;
+  padding: 2px 8px;
+  border-radius: 10px;
+  display: inline-block;
+}
+
+/* ============================================
+   CONTROLES DE QUANTIDADE
+   ============================================ */
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  width: 100%;
+}
+
+.qty-btn {
+  width: 26px;
+  height: 26px;
+  border: none;
+  border-radius: 50%;
+  background: var(--store-info);
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.qty-btn:hover:not(:disabled) {
+  background: #2980b9;
+  transform: scale(1.05);
+}
+
+.qty-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.qty-btn.minus {
+  background: var(--store-primary);
+}
+
+.qty-btn.minus:hover:not(:disabled) {
+  background: #c0392b;
+}
+
+.quantity-display {
+  min-width: 30px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 1rem;
+  color: #2c3e50;
+  background: #f8f9fa;
+  padding: 3px 6px;
+  border-radius: 4px;
+  border: 1px solid var(--store-border);
+}
+
+/* ============================================
+   BOTÕES DE AÇÃO (COMPRAR E LIMPAR)
+   ============================================ */
+.product-actions {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.action-btn {
+  flex: 1;
+  padding: 6px;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 0.8rem;
+  text-align: center;
+}
+
+.buy-btn {
+  background: var(--store-success);
+  color: white;
+}
+
+.buy-btn:hover:not(:disabled) {
+  background: #219653;
+}
+
+.buy-btn:disabled {
+  background: #95a5a6;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.clear-btn {
+  background: var(--store-primary);
+  color: white;
+}
+
+.clear-btn:hover:not(:disabled) {
+  background: #c0392b;
+}
+
+.clear-btn:disabled {
+  background: #95a5a6;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+/* ============================================
+   CARDS "EM BREVE"
+   ============================================ */
+.coming-soon-card {
+  background: #f8f9fa;
+  border: 2px dashed #bdc3c7;
+  opacity: 0.8;
+}
+
+.coming-soon-label {
+  font-size: 0.9rem;
+  color: #95a5a6;
+  font-style: italic;
+  margin-bottom: 6px;
+}
+
+.coming-soon-icon {
+  font-size: 1.5rem;
+  color: #bdc3c7;
+  margin-bottom: 6px;
+}
+
+/* ============================================
+   TOTAL DA COMPRA
+   ============================================ */
+.purchase-total {
+  margin-top: 10px;
+  padding: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  text-align: center;
+  font-size: 0.9rem;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.total-label {
+  color: rgba(255, 255, 255, 0.9);
+  margin-right: 5px;
+}
+
+.total-amount {
+  color: #f1c40f;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+/* ============================================
+   MENSAGENS DE FEEDBACK
+   ============================================ */
+.store-message {
+  position: fixed;
+  top: 60px;
+  right: 15px;
+  padding: 10px 15px;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+  font-size: 0.85rem;
+  animation: slideIn 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+  z-index: 1000;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+  max-width: 250px;
+}
+
+.message-success {
+  background: linear-gradient(135deg, var(--store-success), #219653);
+}
+
+.message-error {
+  background: linear-gradient(135deg, var(--store-primary), #c0392b);
+}
+
+.message-info {
+  background: linear-gradient(135deg, var(--store-info), #2980b9);
+}
+
+@keyframes slideIn {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; }
+}
+
+/* ============================================
+                    RESPONSIVIDADE
+   ============================================ */
+@media (max-width: 400px) {
+  .store-container {
+    width: 95%;
+    padding: 12px;
+  }
+  
+  .product-card {
+    padding: 8px;
+  }
+  
+  .product-image {
+    width: 45px;
+    height: 45px;
+  }
+  
+  .product-name {
+    font-size: 0.9rem;
+  }
+  
+  .product-description {
+    font-size: 0.7rem;
+    min-height: 28px;
+  }
+}
+
+/* ============================================
+                VENDA DE POKEMON
+   ============================================ */
+
+   

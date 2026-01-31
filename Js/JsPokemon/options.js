@@ -530,50 +530,102 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // ============================================
-//                    Gráficos
+//                    Áudio
 // ============================================
-// ===== TELA CHEIA SIMPLES =====
-// Variável para controlar o estado do zoom
-let gameZoomAtivo = false;
+// ===== CONTROLE SIMPLES DE MÚSICA =====
+// 1. Criar elemento de áudio
+const musica = new Audio('/NickJogos/Music/MusicPokemon/Pallet Town.mp3');
+musica.loop = true; // Tocar em loop
+musica.volume = 0.07; // Volume inicial 7%
 
-// Função para alternar o zoom
-function alternarZoomGame() {
-    const gameContainer = document.querySelector('#game-container');
-    const btnZoom = document.getElementById('btnZoomGame');
-    const zoomStatus = document.getElementById('zoomStatus');
+// 2. Configurar controles
+document.addEventListener('DOMContentLoaded', function() {
+    const volumeSlider = document.getElementById('musicVolume');
+    const volumeDisplay = document.getElementById('musicValue');
     
-    if (!gameContainer) {
-        console.warn('Div .game-container não encontrada');
-        return;
+    if (volumeSlider && volumeDisplay) {
+        // Volume fixo em 7%
+        volumeSlider.value = 7;
+        volumeDisplay.textContent = '7%';
+        
+        // Evento para alterar volume (apenas na sessão atual)
+        volumeSlider.addEventListener('input', function() {
+            const novoVolume = parseInt(this.value);
+            musica.volume = novoVolume / 100;
+            volumeDisplay.textContent = novoVolume + '%';
+            // NÃO salva no localStorage
+        });
     }
     
-    if (gameZoomAtivo) {
-        // Voltar ao normal
-        gameContainer.style.transform = 'scale(1)';
-        gameContainer.style.transformOrigin = 'center center';
-        
-        if (btnZoom) btnZoom.textContent = '🔍 Aumentar';
-        if (zoomStatus) {
-            zoomStatus.textContent = 'Normal';
-            zoomStatus.style.color = '#666';
-        }
-        
-        gameZoomAtivo = false;
-    } else {
-        // Aplicar zoom
-        gameContainer.style.transform = 'scale(1.2)'; // 20% maior
-        gameContainer.style.transformOrigin = 'center center';
-        
-        if (btnZoom) btnZoom.textContent = '🔍 Reduzir';
-        if (zoomStatus) {
-            zoomStatus.textContent = 'Ativo';
-            zoomStatus.style.color = '#4CAF50';
-        }
-        
-        gameZoomAtivo = true;
+    // Iniciar música com delay
+    setTimeout(() => {
+        musica.play().catch(error => {
+        });
+    }, 500);
+});
+
+// 3. Iniciar música ao clicar em qualquer lugar
+document.addEventListener('click', function iniciarMusica() {
+    if (musica.paused) {
+        musica.play();
+    }
+    // Remover após primeira interação
+    document.removeEventListener('click', iniciarMusica);
+}, { once: true });
+
+// ============================================
+//                    Gráficos
+// ============================================
+// ===== ZOOM SIMPLES COM 3 ESTÁGIOS =====
+const zoomNiveis = [
+    { scale: 0.8, status: 'Reduzido --' },
+    { scale: 0.9, status: 'Reduzido -' },
+    { scale: 1, status: 'Normal' },
+    { scale: 1.1, status: 'Aumentado +' },
+    { scale: 1.2, status: 'Aumentado ++' }
+];
+
+let zoomAtual = 2; // Começa no Normal
+
+function aumentarZoom() {
+    if (zoomAtual < zoomNiveis.length - 1) {
+        zoomAtual++;
+        aplicarZoomAtual();
     }
 }
 
+function diminuirZoom() {
+    if (zoomAtual > 0) {
+        zoomAtual--;
+        aplicarZoomAtual();
+    }
+}
+
+function aplicarZoomAtual() {
+    const gameContainer = document.querySelector('#game-container');
+    const nivel = zoomNiveis[zoomAtual];
+    
+    if (!gameContainer) return;
+    
+    gameContainer.style.transform = `scale(${nivel.scale})`;
+    gameContainer.style.transformOrigin = 'center center';
+    gameContainer.style.transition = 'transform 0.3s ease';
+    
+    const zoomStatus = document.getElementById('zoomStatus');
+    if (zoomStatus) zoomStatus.textContent = nivel.status;
+    
+    // Atualizar estado dos botões
+    const btnMais = document.getElementById('btnZoomMais');
+    const btnMenos = document.getElementById('btnZoomMenos');
+    
+    if (btnMais) btnMais.disabled = zoomAtual === zoomNiveis.length - 1;
+    if (btnMenos) btnMenos.disabled = zoomAtual === 0;
+}
+
+// Inicializar
+document.addEventListener('DOMContentLoaded', function() {
+    aplicarZoomAtual();
+});
 // Função para tela cheia (mantida simples)
 function alternarTelaCheia() {
     const btn = document.getElementById('btnTelaCheia');
@@ -601,3 +653,70 @@ function alternarTelaCheia() {
             });
     }
 }
+
+// Se quiser uma versão ainda mais simples e direta:
+function autoSelecionarPlataformaSimples() {
+    const select = document.getElementById('tipoPlataforma');
+    if (!select) return;
+    
+    // Lógica direta: se a largura for menor que 450px OU altura menor que 750px
+    if (window.innerWidth < 450 || window.innerHeight < 750) {
+        select.value = 'mobile';
+    } else {
+        select.value = 'desktop';
+    }
+    
+    // Dispara evento
+    const event = new Event('change');
+    select.dispatchEvent(event);
+}
+
+// Versão alternativa usando matchMedia (recomendada)
+function autoSelecionarPlataformaMediaQuery() {
+    const select = document.getElementById('tipoPlataforma');
+    if (!select) return;
+    
+    // Media query para dispositivos móveis
+    const mediaQuery = window.matchMedia('(max-width: 450px), (max-height: 750px)');
+    
+    // Verifica se a media query corresponde
+    if (mediaQuery.matches) {
+        select.value = 'mobile';
+    } else {
+        select.value = 'desktop';
+    }
+    
+    // Dispara evento
+    const event = new Event('change');
+    select.dispatchEvent(event);
+    
+    // Escuta mudanças na media query (se o usuário redimensionar)
+    mediaQuery.addEventListener('change', function(e) {
+        if (e.matches) {
+            select.value = 'mobile';
+        } else {
+            select.value = 'desktop';
+        }
+        const event = new Event('change');
+        select.dispatchEvent(event);
+    });
+}
+
+// Alternar entre desktop e mobile
+const boxControls = document.getElementById('boxControls');
+
+document.getElementById('tipoPlataforma').addEventListener('change', function() {
+    const isMobile = this.value === 'mobile';
+    const gameContainer = document.getElementById('game-container');
+    
+    // Remove todas as classes de layout primeiro
+    gameContainer.classList.remove('desktop-layout', 'mobile-layout');
+    
+    // Adiciona a classe correspondente
+    if (isMobile) {
+        gameContainer.classList.add('mobile-layout');
+    } else {
+        gameContainer.classList.add('desktop-layout');
+        boxControls.style.display = '';       // volta ao normal
+    }
+});

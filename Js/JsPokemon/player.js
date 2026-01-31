@@ -44,8 +44,54 @@ function handleMovement(e) {
   e.preventDefault(); // bloqueia scroll da página
   movePlayer(dir);
 }
+// Adicione esta função no player.js ANTES da linha 53:
+
+function moverPlayer(direcao) {
+    
+    // Implementação básica - ajuste conforme seu jogo
+    const player = document.getElementById('player');
+    if (!player) return;
+    
+    const velocidade = 10; // pixels por movimento
+    let x = parseInt(player.style.left || 0);
+    let y = parseInt(player.style.top || 0);
+    
+    switch(direcao.toLowerCase()) {
+        case 'cima':
+        case 'up':
+            y -= velocidade;
+            break;
+        case 'baixo':
+        case 'down':
+            y += velocidade;
+            break;
+        case 'esquerda':
+        case 'left':
+            x -= velocidade;
+            break;
+        case 'direita':
+        case 'right':
+            x += velocidade;
+            break;
+    }
+    
+    // Limita os movimentos dentro da tela/jogo
+    x = Math.max(0, Math.min(x, window.innerWidth - 50));
+    y = Math.max(0, Math.min(y, window.innerHeight - 50));
+    
+    player.style.left = x + 'px';
+    player.style.top = y + 'px';
+    
+}
 
 document.addEventListener("keydown", handleMovement);
+
+window.addEventListener("keydown", function(e) {
+  if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+    e.preventDefault(); // bloqueia scroll
+    moverPlayer(e.key); // sua função de movimento
+  }
+});
 
 // ===== MOVIMENTO PELOS BOTÕES =====
 document.getElementById("move-up-btn").addEventListener("click", () => movePlayer({ x: 0, y: -1 }));
@@ -65,12 +111,19 @@ function movePlayer(dir) {
     clearEncounter();
 
     // ===== TELEPORTE =====
+    // ===== TELEPORTE =====
     const tile = collisionMap[newY][newX];
     if (tile === "tp") {
-      trocarMapa("Praia.png");
+      trocarMapa("Praia.png", 15, 30); // floresta → praia
     } else if (tile === "tf") {
-      trocarMapa("RotaFloresta.png");
+      trocarMapa("RotaFloresta.png", 15, 1); // praia → floresta
+    } else if (tile === "tc") {
+      trocarMapa("Caverna.png", 16, 28); // praia → caverna
+    } else if (tile === "tp2") {
+      trocarMapa("Praia.png", 16, 6); // caverna → praia (respawn diferente)
     }
+
+
 
     canMove = false;
     checkEncounter();

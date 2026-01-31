@@ -39,7 +39,6 @@ button, a {
   height: 640px;
 }
 
-
 .tile {
   width: 32px;
   height: 32px;
@@ -54,16 +53,6 @@ button, a {
 }
 
 /* Painel de encontro */
-#sidebar {
-  width: 350px;
-  padding: 15px;
-  border-left: 4px solid #333;
-  background: #fff;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-}
-
 #sidebar h2 {
   background: #333;
   color: #fff;
@@ -184,7 +173,6 @@ button, a {
   margin: 0;
 }
 
-
 #pokedexTabContent h2, #capturedTabContent h2, #storeTabContent h2, #optionsTabContent h2 {
   display: flex;
   background-color: #111;
@@ -243,7 +231,8 @@ button, a {
 #sidebarContent {
   position: fixed;
   left: 50px; /* largura das abas */
-  top: 0;
+  height: 80%;
+  top: 10%;
   bottom: 0;
   width: 350px;
   background: #f8f8f8;
