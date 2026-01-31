@@ -55,7 +55,7 @@ function processarVendaPokemon(nome) {
         "incomum": 300,
         "raro": 800,
         "mistico": 8000,
-        "lendário": 10000
+        "lendario": 10000
     };
     
     const valorVenda = valores[p.rarity] || 100;
@@ -98,7 +98,7 @@ function mostrarModalVenda(nome) {
         "incomum": 300,
         "raro": 800,
         "mistico": 8000,
-        "lendário": 10000
+        "lendario": 10000
     };
     
     const valorVenda = valores[p.rarity] || 100;
@@ -109,7 +109,7 @@ function mostrarModalVenda(nome) {
         "incomum": "#4CAF50", 
         "raro": "#2196F3",
         "mistico": "#9C27B0",
-        "lendário": "#FF9800"
+        "lendario": "#FF9800"
     };
     
     const cor = coresRaridade[p.rarity] || "#808080";
