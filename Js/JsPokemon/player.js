@@ -108,26 +108,34 @@ function movePlayer(dir) {
     playerPos.x = newX;
     playerPos.y = newY;
     renderPlayer();
-    clearEncounter();
+    
+    // Limpa encontro usando a função global
+    if (typeof clearEncounter === 'function') {
+        clearEncounter();
+    }
 
-    // ===== TELEPORTE =====
     // ===== TELEPORTE =====
     const tile = collisionMap[newY][newX];
     if (tile === "tp") {
-      trocarMapa("Praia.png", 15, 30); // floresta → praia
+      trocarMapa("Praia.png", 15, 30);
     } else if (tile === "tf") {
-      trocarMapa("RotaFloresta.png", 15, 1); // praia → floresta
+      trocarMapa("RotaFloresta.png", 15, 1);
     } else if (tile === "tc") {
-      trocarMapa("Caverna.png", 16, 28); // praia → caverna
+      trocarMapa("Caverna.png", 16, 28);
     } else if (tile === "tp2") {
-      trocarMapa("Praia.png", 16, 6); // caverna → praia (respawn diferente)
+      trocarMapa("Praia.png", 16, 6);
     }
 
-
-
     canMove = false;
-    checkEncounter();
-    setTimeout(() => { canMove = true; }, moveDelay);
+    
+    setTimeout(() => {
+        // Verifica encontro usando a função global
+        if (typeof checkEncounter === 'function') {
+            checkEncounter();
+        }
+        
+        canMove = true;
+    }, moveDelay);
   }
 }
 

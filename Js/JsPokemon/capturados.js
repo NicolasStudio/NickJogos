@@ -39,17 +39,32 @@ function updateCaptured() {
   }
 }
 
-// ===== FUNÇÃO PARA PROCESSAR A VENDA =====
+function showMessage(text, type = 'info') {
+    try {
+        const existingMessage = document.querySelector('.store-message');
+        if (existingMessage) existingMessage.remove();
+
+        const message = document.createElement('div');
+        message.className = `store-message message-${type}`;
+        message.textContent = text;
+        
+        document.body.appendChild(message);
+        
+        setTimeout(() => {
+            if (message.parentNode) message.remove();
+        }, 3000);
+    } catch (error) {
+        console.error('Erro ao mostrar mensagem:', error);
+    }
+}
+
 function processarVendaPokemon(nome) {
-    console.log("Processando venda de:", nome);
-    
     const p = capturados[nome];
     if (!p) {
         alert('Pokémon não encontrado!');
         return false;
     }
     
-    // Valores de venda
     const valores = {
         "comum": 100,
         "incomum": 300,
@@ -60,22 +75,18 @@ function processarVendaPokemon(nome) {
     
     const valorVenda = valores[p.rarity] || 100;
     
-    // Adiciona ao dinheiro da loja
     const dinheiroAtual = parseInt(localStorage.getItem('pokemonMoney')) || 0;
     const novoDinheiro = dinheiroAtual + valorVenda;
     localStorage.setItem('pokemonMoney', novoDinheiro.toString());
     
-    // Remove Pokémon
     delete capturados[nome];
     localStorage.setItem("capturados", JSON.stringify(capturados));
     
     // Feedback
-    alert(`✅ Vendeu ${nome} por $${valorVenda}!`);
+    showMessage(`Vendeu ${nome} por $${valorVenda}!`, 'success');
     
-    // Atualiza interfaces
     updateCaptured();
     
-    // Atualiza loja se estiver aberta
     if (window.pokemonStore) {
         window.pokemonStore.money = novoDinheiro;
         window.pokemonStore.updateStore();
@@ -83,6 +94,7 @@ function processarVendaPokemon(nome) {
     
     return true;
 }
+
 
 // ===== MODAL BONITO DE VENDA =====
 function mostrarModalVenda(nome) {

@@ -9,7 +9,7 @@ class PokemonStore {
                 description: 'Bola básica para captura',
                 price: 200,
                 catchRate: 1.0,
-                image: '/NickJogos/Img/ImagemPokemon/Pokebola/pokeball.png'
+                image: 'Img/ImagemPokemon/Pokebola/pokeball.png'
             },
             {
                 id: 'greatball',
@@ -17,7 +17,7 @@ class PokemonStore {
                 description: 'Taxa de captura melhorada',
                 price: 600,
                 catchRate: 1.5,
-                image: '/NickJogos/Img/ImagemPokemon/Pokebola/superball.png'
+                image: 'Img/ImagemPokemon/Pokebola/superball.png'
             },
             {
                 id: 'ultraball',
@@ -25,7 +25,7 @@ class PokemonStore {
                 description: 'Maior taxa de captura',
                 price: 1200,
                 catchRate: 2.0,
-                image: '/NickJogos/Img/ImagemPokemon/Pokebola/ultraball.png'
+                image: 'Img/ImagemPokemon/Pokebola/ultraball.png'
             },
             {
                 id: 'coming_soon_1',
@@ -64,19 +64,19 @@ class PokemonStore {
         try {
             const savedMoney = localStorage.getItem('pokemonMoney');
             if (!savedMoney) {
-                return 5000; // Valor padrão
+                return 3000; // Valor padrão
             }
             
             const money = parseInt(savedMoney);
             if (isNaN(money)) {
                 console.warn('Valor de dinheiro inválido, usando padrão');
-                return 5000;
+                return 3000;
             }
             
             return Math.max(0, money);
         } catch (error) {
             console.error('Erro ao carregar dinheiro:', error);
-            return 5000;
+            return 3000;
         }
     }
 
@@ -218,7 +218,7 @@ class PokemonStore {
     }
 
     // ============================================
-    // MÉTODOS AUXILIARES
+    //              MÉTODOS AUXILIARES
     // ============================================
 
     getProduct(productId) {
@@ -265,7 +265,7 @@ class PokemonStore {
     }
 
     // ============================================
-    // RENDERIZAÇÃO
+    //                  RENDERIZAÇÃO
     // ============================================
 
     createProductCard(product) {
@@ -389,7 +389,7 @@ class PokemonStore {
     }
 
     // ============================================
-    // MÉTODOS PARA O JOGO
+    //               MÉTODOS PARA O JOGO
     // ============================================
 
     usePokeball(type = 'pokeball') {
@@ -501,7 +501,7 @@ setupTabListener() {
 }
 
 // ============================================
-// INICIALIZAÇÃO GLOBAL
+//             INICIALIZAÇÃO GLOBAL
 // ============================================
 
 let pokemonStore = null;
