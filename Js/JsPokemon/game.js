@@ -48,7 +48,7 @@ function trocarMapa(novoMapa, respawnX, respawnY) {
 
 // ===== MAPA =====
 function renderMap() {
-  mapElement.style.backgroundImage = `url("/NickJogos//Img/ImagemPokemon/${mapaAtual}")`;
+  mapElement.style.backgroundImage = `url("/NickJogos/Img/ImagemPokemon/${mapaAtual}")`;
   mapElement.style.backgroundSize = `${collisionMap[0].length * MAP_TILE_SIZE}px ${collisionMap.length * MAP_TILE_SIZE}px`;
   mapElement.style.width = `${collisionMap[0].length * MAP_TILE_SIZE}px`;
   mapElement.style.height = `${collisionMap.length * MAP_TILE_SIZE}px`;
@@ -164,14 +164,14 @@ const pokemonsPorMapa  = {
   "Cemiterio.png": [
     { id: 63,  name: "Abra",      rarity: "comum",    chance: 50, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/63.png"},
     { id: 64,  name: "Kadabra",   rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/64.png"},
-    { id: 65,  name: "Alakazam",  rarity: "raro",     chance: 5, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/65.png"},
+    { id: 65,  name: "Alakazam",  rarity: "raro",     chance: 8, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/65.png"},
     { id: 92,  name: "Gastly",    rarity: "comum",    chance: 80, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/92.png"},
     { id: 93,  name: "Haunter",   rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/93.png"},
-    { id: 94,  name: "Gengar",    rarity: "raro",     chance: 5, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png"},
+    { id: 94,  name: "Gengar",    rarity: "raro",     chance: 8, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/94.png"},
     { id: 96,  name: "Drowzee",   rarity: "comum",    chance: 50, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/96.png"},
     { id: 97,  name: "Hypno",     rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/97.png"},
     { id: 104, name: "Cubone",    rarity: "comum",    chance: 50, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/104.png"},
     { id: 105, name: "Marowak",   rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/105.png"},
-    { id: 137, name: "Porygon",   rarity: "raro",     chance: 5, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/137.png"},
+    { id: 137, name: "Porygon",   rarity: "raro",     chance: 8, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/137.png"},
   ],
 };

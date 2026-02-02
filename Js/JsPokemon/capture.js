@@ -3,14 +3,14 @@ const TAXA_BASE_CAPTURA = {
     "comum": 0.6,       // 60% base
     "incomum": 0.30,    // 30% base  
     "raro": 0.1,        // 10% base
-    "mistico": 0.03,    // 5% base
-    "lendário": 0.01    // 1% base
+    "mistico": 0.03,    // 3% base
+    "lendario": 0.01    // 1% base
 };
 
 // Função principal de captura
 function calcularChanceCaptura(pokemonRaridade, pokebolaTaxa) {
     // 1. Pega a taxa base pela raridade
-    const taxaBase = TAXA_BASE_CAPTURA[pokemonRaridade] || 0.1;
+    const taxaBase = TAXA_BASE_CAPTURA[pokemonRaridade] || 0.01;
     
     // 2. Multiplica pela taxa da pokébola (1.0x, 1.5x, 2.0x)
     const chanceComPokebola = taxaBase * pokebolaTaxa;

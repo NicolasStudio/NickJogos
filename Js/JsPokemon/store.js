@@ -104,7 +104,7 @@ class PokemonStore {
 
     getDefaultInventory() {
         return {
-            pokeball: { count: 5, catchRate: 1.0 },
+            pokeball: { count: 0, catchRate: 1.0 },
             greatball: { count: 0, catchRate: 1.5 },
             ultraball: { count: 0, catchRate: 2.0 }
         };
