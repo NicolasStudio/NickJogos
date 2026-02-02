@@ -48,7 +48,7 @@ function trocarMapa(novoMapa, respawnX, respawnY) {
 
 // ===== MAPA =====
 function renderMap() {
-  mapElement.style.backgroundImage = `url("/NickJogos/Img/ImagemPokemon/${mapaAtual}")`;
+  mapElement.style.backgroundImage = `url("/NickJogos/Img/ImagemPokemon/Mapas/${mapaAtual}")`;
   mapElement.style.backgroundSize = `${collisionMap[0].length * MAP_TILE_SIZE}px ${collisionMap.length * MAP_TILE_SIZE}px`;
   mapElement.style.width = `${collisionMap[0].length * MAP_TILE_SIZE}px`;
   mapElement.style.height = `${collisionMap.length * MAP_TILE_SIZE}px`;

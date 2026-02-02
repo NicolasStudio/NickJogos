@@ -9,7 +9,7 @@ class PokemonStore {
                 description: 'Bola básica para captura',
                 price: 200,
                 catchRate: 1.0,
-                image: '/NickJogos/Img/ImagemPokemon/Pokebola/pokeball.png'
+                image: 'Img/ImagemPokemon/Pokebola/pokeball.png'
             },
             {
                 id: 'greatball',
@@ -17,7 +17,7 @@ class PokemonStore {
                 description: 'Taxa de captura melhorada',
                 price: 600,
                 catchRate: 1.5,
-                image: '/NickJogos/Img/ImagemPokemon/Pokebola/superball.png'
+                image: 'Img/ImagemPokemon/Pokebola/superball.png'
             },
             {
                 id: 'ultraball',
@@ -25,7 +25,7 @@ class PokemonStore {
                 description: 'Maior taxa de captura',
                 price: 1200,
                 catchRate: 2.0,
-                image: '/NickJogos/Img/ImagemPokemon/Pokebola/ultraball.png'
+                image: 'Img/ImagemPokemon/Pokebola/ultraball.png'
             },
             {
                 id: 'coming_soon_1',
@@ -119,7 +119,7 @@ class PokemonStore {
     }
 
     // ============================================
-    // MÉTODOS DE PERSISTÊNCIA
+    //            MÉTODOS DE PERSISTÊNCIA
     // ============================================
 
     saveMoney() {
@@ -140,7 +140,7 @@ class PokemonStore {
     }
 
     // ============================================
-    // MÉTODOS DE NEGÓCIO
+    //              MÉTODOS DE NEGÓCIO
     // ============================================
 
     increaseQuantity(productId) {
@@ -198,6 +198,16 @@ class PokemonStore {
             }
             
             this.inventory[productId].count += quantity;
+
+            // 🎁 Bônus Premier Ball
+            const bonusPremier = Math.floor(quantity / 10);
+            if (bonusPremier > 0) {
+                if (!this.inventory['premierball']) {
+                    this.inventory['premierball'] = { count: 0, catchRate: 1.0 };
+                }
+                this.inventory['premierball'].count += bonusPremier;
+                this.showMessage(`Você ganhou ${bonusPremier} Premier Ball(s) como bônus!`, 'success');
+            }
             
             // Salva os dados
             this.saveMoney();
@@ -441,63 +451,63 @@ class PokemonStore {
         this.setupTabListener();
     }
 
-setupTabListener() {
-    // Método mais seguro: usa um intervalo para verificar quando a aba é clicada
-    const checkAndSetupStore = () => {
-        // Verifica se estamos na aba da loja
-        const storeTabContent = document.getElementById('storeTabContent');
-        if (storeTabContent && storeTabContent.style.display !== 'none') {
-            this.updateStore();
-        }
-    };
-    
-    // Configura um MutationObserver para detectar mudanças nas tabs
-    const observer = new MutationObserver((mutations) => {
-        mutations.forEach((mutation) => {
-            if (mutation.type === 'attributes' && 
-                mutation.attributeName === 'style' &&
-                mutation.target.id === 'storeTabContent') {
-                if (mutation.target.style.display !== 'none') {
-                    this.updateStore();
+    setupTabListener() {
+        // Método mais seguro: usa um intervalo para verificar quando a aba é clicada
+        const checkAndSetupStore = () => {
+            // Verifica se estamos na aba da loja
+            const storeTabContent = document.getElementById('storeTabContent');
+            if (storeTabContent && storeTabContent.style.display !== 'none') {
+                this.updateStore();
+            }
+        };
+        
+        // Configura um MutationObserver para detectar mudanças nas tabs
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+                if (mutation.type === 'attributes' && 
+                    mutation.attributeName === 'style' &&
+                    mutation.target.id === 'storeTabContent') {
+                    if (mutation.target.style.display !== 'none') {
+                        this.updateStore();
+                    }
                 }
+            });
+        });
+        
+        // Observa mudanças no elemento da loja
+        const storeTabContent = document.getElementById('storeTabContent');
+        if (storeTabContent) {
+            observer.observe(storeTabContent, { attributes: true, attributeFilter: ['style'] });
+        }
+        
+        // Também adiciona listeners para elementos que possam ser tabs
+        const possibleTabElements = document.querySelectorAll(
+            'button, a, [role="tab"], .tab, .tab-btn, .nav-link, [data-tab]'
+        );
+        
+        possibleTabElements.forEach(element => {
+            // Verifica pelo texto ou atributos
+            const text = (element.textContent || element.innerText || '').toLowerCase();
+            const hasStoreText = text.includes('loja') || text.includes('store');
+            const hasStoreAttr = element.getAttribute('onclick')?.includes('store') || 
+                               element.getAttribute('data-tab')?.includes('store');
+            
+            if (hasStoreText || hasStoreAttr) {
+                element.addEventListener('click', () => {
+                    setTimeout(() => {
+                        this.updateStore();
+                    }, 200);
+                });
             }
         });
-    });
-    
-    // Observa mudanças no elemento da loja
-    const storeTabContent = document.getElementById('storeTabContent');
-    if (storeTabContent) {
-        observer.observe(storeTabContent, { attributes: true, attributeFilter: ['style'] });
-    }
-    
-    // Também adiciona listeners para elementos que possam ser tabs
-    const possibleTabElements = document.querySelectorAll(
-        'button, a, [role="tab"], .tab, .tab-btn, .nav-link, [data-tab]'
-    );
-    
-    possibleTabElements.forEach(element => {
-        // Verifica pelo texto ou atributos
-        const text = (element.textContent || element.innerText || '').toLowerCase();
-        const hasStoreText = text.includes('loja') || text.includes('store');
-        const hasStoreAttr = element.getAttribute('onclick')?.includes('store') || 
-                           element.getAttribute('data-tab')?.includes('store');
         
-        if (hasStoreText || hasStoreAttr) {
-            element.addEventListener('click', () => {
-                setTimeout(() => {
-                    this.updateStore();
-                }, 200);
-            });
-        }
-    });
-    
-    // Método alternativo: verifica a cada segundo se a loja está visível
-    setInterval(() => {
-        if (storeTabContent && storeTabContent.style.display !== 'none') {
-            this.updateStore();
-        }
-    }, 1000);
-}
+        // Método alternativo: verifica a cada segundo se a loja está visível
+        setInterval(() => {
+            if (storeTabContent && storeTabContent.style.display !== 'none') {
+                this.updateStore();
+            }
+        }, 1000);
+    }
 }
 
 // ============================================
@@ -543,7 +553,7 @@ if (document.readyState === 'loading') {
 }
 
 // Funções de debug (remova em produção)
-window.debugStore = function() {
+    window.debugStore = function() {
     console.log('=== DEBUG STORE ===');
     console.log('Dinheiro:', pokemonStore?.money);
     console.log('Inventário:', pokemonStore?.inventory);

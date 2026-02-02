@@ -246,6 +246,7 @@ function usarPokebolaParaCapturar(tipoPokebolaId, nomePokemon, taxaPokebola) {
 
     const tiposPokebolas = {
         'pokeball': { nome: 'POKÉBOLA', cor: '#c00' },
+        'premierball': { nome: 'PREMIER BALL', cor: '#c5c5c5' },
         'greatball': { nome: 'GREAT BALL', cor: '#2196F3' },
         'ultraball': { nome: 'ULTRA BALL', cor: '#FF9800' }
     };

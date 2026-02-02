@@ -44,7 +44,6 @@ function handleMovement(e) {
   e.preventDefault(); // bloqueia scroll da página
   movePlayer(dir);
 }
-// Adicione esta função no player.js ANTES da linha 53:
 
 function moverPlayer(direcao) {
     

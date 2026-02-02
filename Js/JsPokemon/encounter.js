@@ -350,6 +350,15 @@ function carregarPokebolasInventario(pokemon) {
             descricao: 'Taxa básica de captura'
         },
         { 
+            id: 'premierball', 
+            nome: 'PREMIUM BALL', 
+            cor: '#c5c5c5', 
+            corHover: '#fff',
+            taxa: 1.0, 
+            imagem: 'Img/ImagemPokemon/Pokebola/premierball.png',
+            descricao: 'Taxa básica de captura'
+        },
+        { 
             id: 'greatball', 
             nome: 'GREAT BALL', 
             cor: '#2196F3', 
@@ -542,6 +551,7 @@ function getCorRaridade(raridade) {
 function getNomePokebola(id) {
     const nomes = {
         'pokeball': 'Pokébola',
+        'premierball': 'Premier Ball',
         'greatball': 'Great Ball', 
         'ultraball': 'Ultra Ball'
     };

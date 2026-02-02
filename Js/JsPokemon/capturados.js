@@ -95,7 +95,6 @@ function processarVendaPokemon(nome) {
     return true;
 }
 
-
 // ===== MODAL BONITO DE VENDA =====
 function mostrarModalVenda(nome) {
     const p = capturados[nome];
