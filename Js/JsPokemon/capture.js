@@ -31,7 +31,6 @@ function tentarCapturarPokemon(pokemon, tipoPokebola, taxaPokebola) {
         mensagem: sucesso ? 
             `🎉 ${pokemon.name} capturado com sucesso!` :
             `😞 ${pokemon.name} escapou! Chance: ${(chance * 100).toFixed(1)}%`,
-            
     };
     
 }

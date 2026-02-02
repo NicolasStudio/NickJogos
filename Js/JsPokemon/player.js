@@ -1,7 +1,7 @@
 // ===== CONFIGURAÇÃO DO PLAYER =====
 PLAYER_TILE_SIZE = 16;
 const PLAYER_SIZE = 24;
-const moveDelay = 200;
+const moveDelay = 0;
 
 let playerPos = { x: 24, y: 23 }; // posição inicial
 let canMove = true;
@@ -117,15 +117,31 @@ function movePlayer(dir) {
     // ===== TELEPORTE =====
     const tile = collisionMap[newY][newX];
     if (tile === "tp") {
-      trocarMapa("Praia.png", 15, 30);
+      trocarMapa("Praia.png", 15, 30); // Teleporte da Floresta para Praia
     } else if (tile === "tf") {
-      trocarMapa("RotaFloresta.png", 15, 1);
+      trocarMapa("RotaFloresta.png", 15, 1); // Teleporte da Praia para Floresta
     } else if (tile === "tc") {
-      trocarMapa("Caverna.png", 16, 28);
+      trocarMapa("Caverna.png", 16, 28);    // Teleporte da Praia para Caverna
     } else if (tile === "tp2") {
-      trocarMapa("Praia.png", 16, 6);
+      trocarMapa("Praia.png", 16, 6);       // Teleporte da Caverna para praia
+    } else if (tile === "rb") {
+      trocarMapa("RotaBosque.png", 1, 13);  // Teleporte da Caverna para Rota Bosque
+    } else if (tile === "tc2") {
+      trocarMapa("Caverna.png", 30, 13);    // Teleporte da Rota bosque para Caverna
+    } else if (tile === "rb4") {
+      trocarMapa("RotaBosque.png", 26, 13); // Teleporte da Cemitério para Rota bosque
+    } else if (tile === "c") {
+      trocarMapa("Cemiterio.png", 15, 29);  // Teleporte da Rota bosque para Cemitério
+    } else if (tile === "rb2") {
+      trocarMapa("RotaBosque.png", 9, 10); // Teleporte da Casa dos eletricos para Rota bosque
+    } else if (tile === "e") {
+      trocarMapa("CasadosEletricos.png", 3, 29);  // Teleporte da Rota bosque para Casa dos eletricos
+    } else if (tile === "rb3") {
+      trocarMapa("RotaBosque.png", 3, 6); // Teleporte da Casa dos eletricos para Rota bosque
+    } else if (tile === "e2") {
+      trocarMapa("CasadosEletricos.png", 2, 13);  // Teleporte da Rota bosque para Casa dos eletricos
     }
-
+    
     canMove = false;
     
     setTimeout(() => {
