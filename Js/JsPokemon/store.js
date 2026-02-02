@@ -9,7 +9,7 @@ class PokemonStore {
                 description: 'Bola básica para captura',
                 price: 200,
                 catchRate: 1.0,
-                image: 'Img/ImagemPokemon/Pokebola/pokeball.png'
+                image: '/NickJogos/Img/ImagemPokemon/Pokebola/pokeball.png'
             },
             {
                 id: 'greatball',
@@ -17,7 +17,7 @@ class PokemonStore {
                 description: 'Taxa de captura melhorada',
                 price: 600,
                 catchRate: 1.5,
-                image: 'Img/ImagemPokemon/Pokebola/superball.png'
+                image: '/NickJogos/Img/ImagemPokemon/Pokebola/superball.png'
             },
             {
                 id: 'ultraball',
@@ -25,7 +25,7 @@ class PokemonStore {
                 description: 'Maior taxa de captura',
                 price: 1200,
                 catchRate: 2.0,
-                image: 'Img/ImagemPokemon/Pokebola/ultraball.png'
+                image: '/NickJogos/Img/ImagemPokemon/Pokebola/ultraball.png'
             },
             {
                 id: 'coming_soon_1',
