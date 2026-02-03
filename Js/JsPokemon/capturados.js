@@ -105,14 +105,14 @@ function mostrarModalVenda(nome) {
     
     // Valores de venda
     const valores = {
-        "comum": 100,
-        "incomum": 300,
+        "comum": 250,
+        "incomum": 380,
         "raro": 800,
         "mistico": 8000,
         "lendario": 10000
     };
     
-    const valorVenda = valores[p.rarity] || 100;
+    const valorVenda = valores[p.rarity] || 250;
     
     // Cores por raridade
     const coresRaridade = {
