@@ -1,7 +1,7 @@
 // ===== CONFIGURAÇÃO DO PLAYER =====
 PLAYER_TILE_SIZE = 16;
 const PLAYER_SIZE = 24;
-const moveDelay = 200;
+const moveDelay = 10;
 
 let playerPos = { x: 24, y: 23 }; // posição inicial
 let canMove = true;
@@ -139,7 +139,30 @@ function movePlayer(dir) {
       trocarMapa("RotaBosque.png", 3, 6); // Teleporte da Casa dos eletricos para Rota bosque
     } else if (tile === "e2") {
       trocarMapa("CasadosEletricos.png", 2, 13);  // Teleporte da Rota bosque para Casa dos eletricos
+    } else if (tile === "rb5") {
+      trocarMapa("RotaBosque.png", 20, 5);  // Teleporte da Rota 003 para Rota Bosque 
+    } else if (tile === "r03") {
+      trocarMapa("Rota003.png", 15, 28);  // Teleporte da Rota bosque para Rota 003 
+    } else if (tile === "r04") {
+      trocarMapa("Rota004.png", 27, 28);  // Teleporte da Rota 003 para Rota 004 - Sentido vulcão
+    } else if (tile === "r03.2") {
+      trocarMapa("Rota003.png", 5, 5);  // Teleporte da Rota 004 para Rota 003 - Voltado do vulcão
+    } else if (tile === "f") {
+      trocarMapa("CavernaFogo.png", 16, 29);  // Teleporte da Rota 004 para o Vulcão
+    } else if (tile === "r04.2") {
+      trocarMapa("Rota004.png", 16 , 3);  // Teleporte do Vulcão para Rota 004
+    } else if (tile === "r05") {
+      trocarMapa("Rota005.png", 5, 5);  // Teleporte da Rota 003 para o Rota005
+    } else if (tile === "r03.3") {
+      trocarMapa("Rota003.png", 26 , 5);  // Teleporte da Rota005 para Rota 003
+    } else if (tile === "ge") {
+      trocarMapa("CavernaGelo.png", 14 , 6);  // Teleporte do Rota 005 para Caverna Gelo
+    } else if (tile === "r05.2") {
+      trocarMapa("Rota005.png", 15 , 11);  // Teleporte da Caverna Gelo para Rota 005  
     }
+
+
+// horizontal - Vertical
     
     canMove = false;
     
