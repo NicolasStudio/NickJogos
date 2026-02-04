@@ -44,6 +44,12 @@ function trocarMapa(novoMapa, respawnX, respawnY) {
     collisionMap = collisionMapRota005;
   } else if (mapaAtual === "CavernaGelo.png") {
     collisionMap = collisionMapCavernaGelo;
+  } else if (mapaAtual === "Rota006.png") {
+    collisionMap = collisionMapRota006;
+  } else if (mapaAtual === "Safari.png") {
+    collisionMap = collisionMapSafari;
+  } else if (mapaAtual === "Rota007.png") {
+    collisionMap = collisionMapRota007;
   }
 
   // se coordenadas foram passadas, usa elas
@@ -73,6 +79,7 @@ const pokemonsPorMapa  = {
   "RotaFloresta.png": [ 
     { id: 1,   name: "Bulbasaur",  rarity: "comum",    chance: 50, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png"},
     { id: 2,   name: "Ivysaur",    rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/2.png"},
+    { id: 3,   name: "Venusaur",   rarity: "raro",     chance: 8, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/3.png"},
     { id: 10,  name: "Caterpie",   rarity: "comum",    chance: 50, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/10.png"},
     { id: 11,  name: "Metapod",    rarity: "comum",    chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/11.png"},
     { id: 13,  name: "Weedle",     rarity: "comum",    chance: 50, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/13.png"},
@@ -96,6 +103,7 @@ const pokemonsPorMapa  = {
   "Praia.png": [
     { id: 7,   name: "Squirtle",   rarity: "comum",    chance: 50, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/7.png"},
     { id: 8,   name: "Wartortle",  rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/8.png"},
+    { id: 9,   name: "Blastoise",  rarity: "raro",     chance: 8, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/9.png"},
     { id: 54,  name: "Psyduck",    rarity: "comum",    chance: 50, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/54.png"},
     { id: 55,  name: "Golduck",    rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/55.png"},
     { id: 60,  name: "Poliwag",    rarity: "comum",    chance: 50, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/60.png"},
@@ -133,11 +141,15 @@ const pokemonsPorMapa  = {
     { id: 66,  name: "Machop",     rarity: "comum",    chance: 50, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/66.png"},
     { id: 74,  name: "Geodude",    rarity: "comum",    chance: 70, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/74.png"},
     { id: 75,  name: "Graveler",   rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/75.png"},
+    { id: 76,  name: "Golem",      rarity: "raro",     chance: 10, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/76.png"},
     { id: 95,  name: "Onix",       rarity: "comum",    chance: 50, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/95.png"},
     { id: 104, name: "Cubone",     rarity: "comum",    chance: 50, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/104.png"},
     { id: 111, name: "Rhyhorn",    rarity: "comum",    chance: 50, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/111.png"},
-    { id: 138, name: "Omanyte",    rarity: "raro",     chance: 8, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/138.png"},
-    { id: 140, name: "Kabuto",     rarity: "raro",     chance: 8, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/140.png"},
+    { id: 138, name: "Omanyte",    rarity: "raro",     chance: 8,  img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/138.png"},
+    { id: 140, name: "Kabuto",     rarity: "raro",     chance: 8,  img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/140.png"},
+    { id: 139, name: "Omastar",    rarity: "raro",     chance: 8,  img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/139.png"},
+    { id: 141, name: "Kabutops",   rarity: "raro",     chance: 8,  img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/141.png"},
+    { id: 142, name: "Aerodactyl", rarity: "raro",     chance: 8,  img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/142.png"},
   ],
   "RotaBosque.png": [
     { id: 12,  name: "Butterfree", rarity: "incomum",  chance: 10, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/12.png"},
@@ -146,13 +158,14 @@ const pokemonsPorMapa  = {
     { id: 24,  name: "Arbok",      rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/24.png"},
     { id: 29,  name: "Nidoran♀",   rarity: "comum",    chance: 50, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/29.png"},
     { id: 30,  name: "Nidorina",   rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/30.png"},
-    { id: 31,  name: "Nidoqueen",  rarity: "raro",     chance: 8, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/31.png"},
+    { id: 34,  name: "Nidoking",   rarity: "raro",     chance: 8,  img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/34.png"},
     { id: 32,  name: "Nidoran♂",   rarity: "comum",    chance: 50, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/32.png"},
     { id: 33,  name: "Nidorino",   rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/33.png"},
-    { id: 34,  name: "Nidoking",   rarity: "raro",     chance: 8, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/34.png"},
+    { id: 34,  name: "Nidoking",   rarity: "raro",     chance: 8,  img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/34.png"},
     { id: 41,  name: "Zubat",      rarity: "comum",    chance: 60, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/41.png"},
     { id: 42,  name: "Golbat",     rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/42.png"},
     { id: 44,  name: "Gloom",      rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/44.png"},
+    { id: 45,  name: "Vileplume",  rarity: "raro",     chance: 8,  img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/45.png"},
     { id: 46,  name: "Paras",      rarity: "comum",    chance: 50, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/46.png"},
     { id: 47,  name: "Parasect",   rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/47.png"},
     { id: 48,  name: "Venonat",    rarity: "comum",    chance: 50, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/48.png"},
@@ -190,6 +203,7 @@ const pokemonsPorMapa  = {
   "CavernaFogo.png": [
     { id: 4,   name: "Charmander",  rarity: "comum",    chance: 50, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png"},
     { id: 5,   name: "Charmeleon",  rarity: "incomum",  chance: 20, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/5.png"},
+    { id: 6,   name: "Charizard",   rarity: "raro",     chance: 8,  img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/6.png"},
     { id: 37,  name: "Vulpix",      rarity: "comum",    chance: 50, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/37.png"},
     { id: 38,  name: "Ninetales",   rarity: "incomum",  chance: 50, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/38.png"},
     { id: 58,  name: "Growlithe",   rarity: "comum",    chance: 80, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/58.png"},
@@ -211,6 +225,43 @@ const pokemonsPorMapa  = {
     { id: 117, name: "Seadra",     rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/117.png"},
     { id: 124, name: "Jynx",       rarity: "raro",     chance: 8,  img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/124.png"},
     { id: 131, name: "Lapras",     rarity: "raro",     chance: 8,  img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/131.png"},
-   { id: 144,  name: "Articuno",   rarity: "lendario", chance: 1,  img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/144.png"},
+    { id: 144, name: "Articuno",   rarity: "lendario", chance: 1,  img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/144.png"},
+  ],
+  "Rota007.png": [
+    { id: 18,  name: "Pidgeot",    rarity: "raro",     chance: 10, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/18.png"},
+    { id: 22,  name: "Fearow",     rarity: "incomum",  chance: 10, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/22.png"},
+    { id: 40,  name: "Wigglytuff", rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/40.png"},
+    { id: 56,  name: "Mankey",     rarity: "comum",    chance: 50, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/56.png"},
+    { id: 57,  name: "Primeape",   rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/57.png"},
+    { id: 67,  name: "Machoke",    rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/67.png"},
+    { id: 68,  name: "Machamp",    rarity: "raro",     chance: 10, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/68.png"},
+    { id: 70,  name: "Weepinbell", rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/70.png"},
+    { id: 85,  name: "Dodrio",     rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/85.png"},
+    { id: 102, name: "Exeggcute",  rarity: "comum",    chance: 50, img:"https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/102.png"},
+    { id: 103, name: "Exeggutor",  rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/103.png"},
+    { id: 106, name: "Hitmonlee",  rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/106.png"},
+    { id: 107, name: "Hitmonchan", rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/107.png"},
+  ],
+  "Safari.png": [
+    { id: 29,  name: "Nidoran♀",   rarity: "comum",    chance: 80, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/29.png"},
+    { id: 30,  name: "Nidorina",   rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/30.png"},
+    { id: 34,  name: "Nidoking",   rarity: "raro",     chance: 8, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/34.png"},
+    { id: 32,  name: "Nidoran♂",   rarity: "comum",    chance: 80, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/32.png"},
+    { id: 33,  name: "Nidorino",   rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/33.png"},
+    { id: 34,  name: "Nidoking",   rarity: "raro",     chance: 8, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/34.png"},
+    { id: 71,  name: "Victreebel", rarity: "raro",     chance: 10, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/71.png"},
+    { id: 83,  name: "Farfetch'd", rarity: "raro",     chance: 10, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/83.png"},
+    { id: 108, name: "Lickitung",  rarity: "comum",    chance: 50, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/108.png"},
+    { id: 112, name: "Rhydon",     rarity: "incomum",  chance: 30, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/112.png"},
+    { id: 113, name: "Chansey",    rarity: "raro",     chance: 10, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/113.png"},
+    { id: 115, name: "kangaskhan", rarity: "raro",     chance: 15, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/115.png"},
+    { id: 122, name: "Mr. Mime",   rarity: "raro",     chance: 15, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/122.png"},
+    { id: 123, name: "Scyther",    rarity: "raro",     chance: 15, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/123.png"},
+    { id: 127, name: "Pinsir",     rarity: "raro",     chance: 15, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/127.png"},
+    { id: 128, name: "Tauros",     rarity: "raro",     chance: 15, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/128.png"},
+    { id: 143, name: "Snorlax",    rarity: "raro",     chance: 10, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/143.png"},
+    { id: 147, name: "Dratini",    rarity: "incomum",  chance: 20, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/147.png"},
+    { id: 148, name: "Dragonair",  rarity: "raro",     chance: 8, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/148.png"},
+    { id: 149, name: "Dragonite",  rarity: "raro",     chance: 8,  img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/149.png"},
   ],
 };

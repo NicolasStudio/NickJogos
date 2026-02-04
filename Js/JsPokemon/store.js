@@ -197,7 +197,8 @@ class PokemonStore {
                 };
             }
             
-            this.inventory[productId].count += quantity;
+            // CORREÇÃO DO BUG: Usar o valor atual do inventário ou 0
+            this.inventory[productId].count = (this.inventory[productId].count || 0) + quantity;
 
             // 🎁 Bônus Premier Ball
             const bonusPremier = Math.floor(quantity / 10);
@@ -407,7 +408,7 @@ class PokemonStore {
             if (this.inventory[type] && this.inventory[type].count > 0) {
                 this.inventory[type].count--;
                 this.saveInventory();
-                return this.inventory[type].catchRate;
+                return this.inventory[type].catchRate;  // ← Retorna a catchRate
             }
             return 0;
         } catch (error) {

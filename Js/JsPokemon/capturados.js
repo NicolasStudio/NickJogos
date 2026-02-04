@@ -20,7 +20,57 @@ function updateCaptured() {
 
   // Se não houver nenhum capturado
   if (Object.keys(capturados).length === 0) {
-    capturedDiv.innerHTML += "<p>Nenhum Pokémon capturado no momento.</p>";
+    capturedDiv.innerHTML += `
+        <div style="
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            text-align: center;
+            min-height: 200px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border: 2px dashed #dee2e6;
+            margin: 20px 0;
+        ">
+            <div style="
+                width: 80px;
+                height: 80px;
+                background: linear-gradient(135deg, #e9ecef 0%, #dee2e6 100%);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-bottom: 20px;
+                border: 2px solid #ced4da;
+            ">
+                <span style="font-size: 2.5rem; color: #6c757d;">📭</span>
+            </div>
+            
+            <h4 style="
+                color: #495057;
+                margin: 0 0 8px 0;
+                font-size: 1.25rem;
+                font-weight: 600;
+            ">
+                Pokédex Vazia
+            </h4>
+            
+            <p style="
+                color: #6c757d;
+                margin: 0;
+                font-size: 1rem;
+                max-width: 300px;
+                line-height: 1.5;
+            ">
+                Nenhum Pokémon capturado no momento.<br><br>
+                <span style="color: #0d6efd; font-weight: 500;">
+                    Dica:</span> Capture Pokémon raros para ganhar mais pokecoins!
+            </p>
+        </div>
+    `;
+
     return;
   }
 

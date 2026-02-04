@@ -230,7 +230,7 @@ function fecharResultadoCaptura(sucesso, nomePokemon) {
 }
 
 // ===== USAR POKÉBOLA =====
-function usarPokebolaParaCapturar(tipoPokebolaId, nomePokemon, taxaPokebola) {
+function usarPokebolaParaCapturar(tipoPokebolaId, nomePokemon) {  // ← Remova taxaPokebola do parâmetro
     const pokemon = getPokemonByName(nomePokemon);
     if (!pokemon) {
         alert('Pokémon não encontrado!');
@@ -238,31 +238,46 @@ function usarPokebolaParaCapturar(tipoPokebolaId, nomePokemon, taxaPokebola) {
     }
     window.pokemonAtual = pokemon;
 
-    const inventario = JSON.parse(localStorage.getItem('pokemonInventory')) || {};
-    if (!inventario[tipoPokebolaId] || inventario[tipoPokebolaId].count <= 0) {
+    // VERIFICA se a pokemonStore existe
+    if (!window.pokemonStore) {
+        alert('Loja não inicializada!');
+        return;
+    }
+
+    // Usa o método da classe PokemonStore (que retorna a taxa)
+    const taxaPokebola = window.pokemonStore.usePokeball(tipoPokebolaId);
+    
+    if (taxaPokebola === 0) {
         alert('Você não tem mais ' + tipoPokebolaId + '!');
         return;
     }
 
     const tiposPokebolas = {
-        'pokeball': { nome: 'POKÉBOLA', cor: '#c00' },
-        'premierball': { nome: 'PREMIER BALL', cor: '#c5c5c5' },
-        'greatball': { nome: 'GREAT BALL', cor: '#2196F3' },
-        'ultraball': { nome: 'ULTRA BALL', cor: '#FF9800' }
+        'pokeball': { nome: 'POKÉBOLA', cor: '#c00', taxa: 1.0 },
+        'premierball': { nome: 'PREMIER BALL', cor: '#c5c5c5', taxa: 1.0 },
+        'greatball': { nome: 'GREAT BALL', cor: '#2196F3', taxa: 1.5 },
+        'ultraball': { nome: 'ULTRA BALL', cor: '#FF9800', taxa: 2.0 }
     };
-    const tipoPokebola = tiposPokebolas[tipoPokebolaId] || { nome: 'Pokébola', cor: '#c00' };
+    
+    const tipoPokebola = tiposPokebolas[tipoPokebolaId] || { 
+        nome: 'Pokébola', 
+        cor: '#c00',
+        taxa: 1.0 
+    };
 
-    // Gasta SEMPRE
-    removerPokebolaDoInventario(tipoPokebolaId);
+    // Atualiza visual (se necessário)
+    if (typeof carregarPokebolasInventario === 'function') {
+        carregarPokebolasInventario(pokemon);
+    }
 
-    // Atualiza visual
-    carregarPokebolasInventario(pokemon);
-
-    // Tenta captura
+    // Tenta captura com a taxa retornada pelo pokemonStore
     const resultado = tentarCapturarPokemon(pokemon, tipoPokebola, taxaPokebola);
 
     // Mostra resultado
-    mostrarResultadoCaptura(pokemon, resultado, { ...tipoPokebola, taxa: taxaPokebola });
+    mostrarResultadoCaptura(pokemon, resultado, { 
+        ...tipoPokebola, 
+        taxa: taxaPokebola 
+    });
 }
 
 // ===== REMOVER POKÉBOLA =====

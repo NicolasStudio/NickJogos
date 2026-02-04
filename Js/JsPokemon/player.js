@@ -1,7 +1,7 @@
 // ===== CONFIGURAÇÃO DO PLAYER =====
 PLAYER_TILE_SIZE = 16;
 const PLAYER_SIZE = 24;
-const moveDelay = 200;
+const moveDelay = 20;
 
 let playerPos = { x: 24, y: 23 }; // posição inicial
 let canMove = true;
@@ -159,8 +159,23 @@ function movePlayer(dir) {
       trocarMapa("CavernaGelo.png", 14 , 6);  // Teleporte do Rota 005 para Caverna Gelo
     } else if (tile === "r05.2") {
       trocarMapa("Rota005.png", 15 , 11);  // Teleporte da Caverna Gelo para Rota 005  
+    } else if (tile === "r06") {
+      trocarMapa("Rota006.png", 29 , 5);  // Teleporte da Caverna para Rota 006
+    } else if (tile === "tc3") {
+      trocarMapa("Caverna.png", 1 , 13);  // Teleporte da Rota 006 para Caverna
+    } else if (tile === "ts") {
+      trocarMapa("Safari.png", 26 , 3);  // Teleporte da Rota 006 para Safari
+    } else if (tile === "r06.2") {
+      trocarMapa("Rota006.png", 5, 5);  // Teleporte do Safari rota Rota 006 
+    } else if (tile === "r07") {
+      trocarMapa("Rota007.png", 30, 3);  // Teleporte do Safari rota Rota 007 
+    } else if (tile === "ts2") {
+      trocarMapa("Safari.png", 1, 3);  // Teleporte do Rota 007 rota Safari superior
+    } else if (tile === "ts3") {
+      trocarMapa("Safari.png", 3, 20);  // Teleporte da Rota 007 para Safari
+    } else if (tile === "r07.2") {
+      trocarMapa("Rota007.png", 28, 20);// Teleporte do Safari rota  007
     }
-
 
 // horizontal - Vertical
     
