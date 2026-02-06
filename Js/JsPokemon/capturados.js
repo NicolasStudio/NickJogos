@@ -116,9 +116,9 @@ function processarVendaPokemon(nome) {
     }
     
     const valores = {
-        "comum": 250,
-        "incomum": 380,
-        "raro": 1000,
+        "comum": 500,
+        "incomum": 800,
+        "raro": 1200,
         "mistico": 8000,
         "lendario": 10000
     };
@@ -155,9 +155,9 @@ function mostrarModalVenda(nome) {
     
     // Valores de venda
     const valores = {
-        "comum": 250,
-        "incomum": 380,
-        "raro": 1000,
+        "comum": 500,
+        "incomum": 800,
+        "raro": 1200,
         "mistico": 8000,
         "lendario": 10000
     };

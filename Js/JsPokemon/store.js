@@ -64,19 +64,19 @@ class PokemonStore {
         try {
             const savedMoney = localStorage.getItem('pokemonMoney');
             if (!savedMoney) {
-                return 4000; // Valor padrão
+                return 5000; // Valor padrão
             }
             
             const money = parseInt(savedMoney);
             if (isNaN(money)) {
                 console.warn('Valor de dinheiro inválido, usando padrão');
-                return 4000;
+                return 5000;
             }
             
             return Math.max(0, money);
         } catch (error) {
             console.error('Erro ao carregar dinheiro:', error);
-            return 4000;
+            return 5000;
         }
     }
 
