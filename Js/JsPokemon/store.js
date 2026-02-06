@@ -64,19 +64,19 @@ class PokemonStore {
         try {
             const savedMoney = localStorage.getItem('pokemonMoney');
             if (!savedMoney) {
-                return 3000; // Valor padrão
+                return 4000; // Valor padrão
             }
             
             const money = parseInt(savedMoney);
             if (isNaN(money)) {
                 console.warn('Valor de dinheiro inválido, usando padrão');
-                return 3000;
+                return 4000;
             }
             
             return Math.max(0, money);
         } catch (error) {
             console.error('Erro ao carregar dinheiro:', error);
-            return 3000;
+            return 4000;
         }
     }
 
@@ -89,10 +89,12 @@ class PokemonStore {
             
             const inventory = JSON.parse(savedInventory);
             
-            // Valida a estrutura do inventário
-            if (typeof inventory !== 'object' || inventory === null) {
-                console.warn('Inventário inválido, usando padrão');
-                return this.getDefaultInventory();
+            // Garante que todos os tipos de pokébolas existam
+            const defaultInventory = this.getDefaultInventory();
+            for (const [key, value] of Object.entries(defaultInventory)) {
+                if (!inventory[key]) {
+                    inventory[key] = value;
+                }
             }
             
             return inventory;
@@ -269,7 +271,7 @@ class PokemonStore {
                 if (message.parentNode) {
                     message.remove();
                 }
-            }, 3000);
+            }, 4000);
         } catch (error) {
             console.error('Erro ao mostrar mensagem:', error);
         }

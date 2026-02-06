@@ -375,6 +375,15 @@ function carregarPokebolasInventario(pokemon) {
             taxa: 2.0, 
             imagem: 'Img/ImagemPokemon/Pokebola/ultraball.png',
             descricao: 'Alta taxa de captura'
+        },
+        { 
+            id: 'masterball', 
+            nome: 'MASTER BALL', 
+            cor: '#c300ff', 
+            corHover: '#d54aff',
+            taxa: 2.5, 
+            imagem: 'Img/ImagemPokemon/Pokebola/masterball.png',
+            descricao: 'Taxa máxima de captura'
         }
     ];
 
@@ -553,7 +562,9 @@ function getNomePokebola(id) {
         'pokeball': 'Pokébola',
         'premierball': 'Premier Ball',
         'greatball': 'Great Ball', 
-        'ultraball': 'Ultra Ball'
+        'ultraball': 'Ultra Ball',
+        'masterball': 'Master Ball'
+        
     };
     return nomes[id] || 'Pokébola';
 }
@@ -595,7 +606,6 @@ function showEncounter(pokemon) {
     `;
 
     // VERIFICA SE JÁ TEM CAPTURADO (não se viu, mas se TEM)
-    // Carrega capturados do localStorage para ter certeza
     let capturadosAtuais = {};
     try {
         const saved = localStorage.getItem("capturados");

@@ -9,15 +9,12 @@ const TAXA_BASE_CAPTURA = {
 
 // Função principal de captura
 function calcularChanceCaptura(pokemonRaridade, pokebolaTaxa) {
-    // 1. Pega a taxa base pela raridade
+    // Se for Master Ball (taxa 100), captura garantida
+    if (pokebolaTaxa >= 100) return 1.0;
+
     const taxaBase = TAXA_BASE_CAPTURA[pokemonRaridade] || 0.01;
-    
-    // 2. Multiplica pela taxa da pokébola (1.0x, 1.5x, 2.0x)
     const chanceComPokebola = taxaBase * pokebolaTaxa;
-    
-    // 3. Limita entre 0.01% e 95% (nunca 0% ou 100%)
     const chanceFinal = Math.max(0.01, Math.min(0.95, chanceComPokebola));
-    
     return chanceFinal;
 }
 
@@ -256,8 +253,10 @@ function usarPokebolaParaCapturar(tipoPokebolaId, nomePokemon) {  // ← Remova 
         'pokeball': { nome: 'POKÉBOLA', cor: '#c00', taxa: 1.0 },
         'premierball': { nome: 'PREMIER BALL', cor: '#c5c5c5', taxa: 1.0 },
         'greatball': { nome: 'GREAT BALL', cor: '#2196F3', taxa: 1.5 },
-        'ultraball': { nome: 'ULTRA BALL', cor: '#FF9800', taxa: 2.0 }
+        'ultraball': { nome: 'ULTRA BALL', cor: '#FF9800', taxa: 2.0 },
+        'masterball': { nome: 'MASTER BALL', cor: '#c300ff', taxa: 100 }
     };
+
     
     const tipoPokebola = tiposPokebolas[tipoPokebolaId] || { 
         nome: 'Pokébola', 

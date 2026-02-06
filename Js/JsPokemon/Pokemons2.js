@@ -1,3 +1,0 @@
-//   { id: 132, name: "Ditto",     rarity: "comum",    chance: 50, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png"},
-//   { id: 150, name: "Mewtwo",    rarity: "lendario", chance: 3,  img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/150.png"},
-//   { id: 151, name: "Mew",       rarity: "mistico", chance: 3,  img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/151.png"},

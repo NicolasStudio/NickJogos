@@ -3,11 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta author="Nicolas de Almeida Sousa">
     <title>NickJogos - Jogos Grátis</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="Css/StylesPokemon/Style.css">
+    <link rel="stylesheet" href="Css/StylesPokemon/foother.css">
     <link rel="stylesheet" href="Css/header.css">
-    <link rel="stylesheet" href="Css/StylesPokemon/Game.css">
+    <link rel="stylesheet" href="Css/StylesPokemon/Mensagem.css">
     <link rel="stylesheet" href="Css/StylesPokemon/Loja.css">
     <link rel="stylesheet" href="Css/StylesPokemon/Options.css">
     <link rel="stylesheet" href="Css/StylesPokemon/OptionsSalvamento.css">
@@ -170,7 +172,14 @@
         <!-- Área principal do jogo -->
         <div id="game-container">
             <!-- Mapa -->
-            <div id="map"></div>
+            <div id="map">
+                <div class="dialog-box">
+                    <div class="dialog-content">
+                        <p class="dialog-text" id="dialogTxt"></p>
+                        <div class="dialog-continue">▼</div>
+                    </div>
+                </div>
+            </div>
             
             <!-- Sidebar -->
             <div id="sidebar">
@@ -191,7 +200,15 @@
             </div>
         </div>
     </div>
-    
+
+    <footer class="game-footer">
+        <div class="footer-content">
+            <p>© 2026 - Projeto desenvolvido por Nicolas de Almeida Sousa</p>
+            <p>Projeto acadêmico sem fins lucrativos</p>
+            <p class="footer-note">Pokémon é uma marca registrada da Nintendo</p>
+        </div>
+    </footer>
+        
     <script src="Js/JsPokemon/maps.js"></script>
     <script src="Js/JsPokemon/encounter.js"></script>
     <script src="Js/JsPokemon/capture.js"></script>

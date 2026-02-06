@@ -175,22 +175,68 @@ function movePlayer(dir) {
       trocarMapa("Safari.png", 3, 20);  // Teleporte da Rota 007 para Safari
     } else if (tile === "r07.2") {
       trocarMapa("Rota007.png", 28, 20);// Teleporte do Safari rota  007
+    } else if (tile === "tms") {
+      trocarMapa("MapaSecreto.png", 15, 17); // Teleporte do mapa secreto
+    } else if (tile === "tce") {
+      trocarMapa("Cemiterio.png", 17, 14); // Teleporte do mapa secreto
     }
 
-// horizontal - Vertical
-    
-    canMove = false;
-    
-    setTimeout(() => {
-        // Verifica encontro usando a função global
-        if (typeof checkEncounter === 'function') {
-            checkEncounter();
+    // ===== MASTER BALL =====
+    if (tile === "master") {
+        const inventario = JSON.parse(localStorage.getItem("pokemonInventory")) || {};
+        const masterBallColetada = localStorage.getItem("masterBallColetada") === "true";
+        
+        // Verifica se já pegou a Master Ball alguma vez
+        if (masterBallColetada) {
+            // Já pegou antes, não faz nada
+            return;
         }
         
-        canMove = true;
-    }, moveDelay);
-  }
-}
+        // Marca que pegou a Master Ball
+        localStorage.setItem("masterBallColetada", "true");
+        
+        // Adiciona ao inventário
+        inventario.masterball = { count: 1, catchRate: 100 };
+        localStorage.setItem("pokemonInventory", JSON.stringify(inventario));
+        
+        // Mostra mensagem
+        if (dialogBox && dialogText) {
+            dialogBox.style.display = "block";
+            dialogContinue.style.display = "none";
+
+            typeWriter("Você ganhou 1 MASTER BALL!", () => {
+                setTimeout(() => {
+                    if (dialogContinue) dialogContinue.style.display = "block";
+                    setTimeout(() => {
+                        clearDialog();
+                    }, 3000);
+                }, 500);
+            });
+        }
+        
+        // Muda o tile para não permitir pegar novamente
+        setTimeout(() => {
+            if (collisionMapCemiterio && collisionMapCemiterio[19]) {
+                collisionMapCemiterio[19][15] = "g"; 
+                trocarMapa("Cemiterio2.png"); 
+            }
+        }, 3000);
+    }
+          
+        checkMission(tile);
+        canMove = false;
+        
+        setTimeout(() => {
+            // Verifica encontro usando a função global
+            if (typeof checkEncounter === 'function') {
+                checkEncounter();
+            }
+            
+            canMove = true;
+        }, moveDelay);
+      }
+    }
+
 
 // ===== CHECAGEM DE COLISÃO =====
 function isWalkable(x, y) {
@@ -201,4 +247,220 @@ function isWalkable(x, y) {
     x < collisionMap[0].length &&
     collisionMap[y][x] !== "x"
   );
+}
+
+// ===== Missões =====
+const dialogBox = document.querySelector('.dialog-box');
+const dialogText = document.getElementById('dialogTxt');
+const dialogContinue = document.querySelector('.dialog-continue');
+
+// Estado das travas (sem localStorage)
+let travasDesbloqueadas = 0;
+const totalTravas = 2;
+let missionStatus = false;
+let typingInterval = null;
+
+// Array para controlar quais travas já foram desbloqueadas
+const travas = {
+    leste: false,
+    oeste: false
+};
+
+function checkMission(tile) {
+    // Verifica se é uma tile de trava válida
+    const travaValida = tile === "pt1" || tile === "pt2";
+    if (!travaValida) return;
+    
+    // Determina qual trava é esta
+    const nomeTrava = tile === "pt1" ? "Leste" : "Oeste";
+    const chaveTrava = tile === "pt1" ? "leste" : "oeste";
+    
+    // Verifica se já tem Pokémon suficientes
+    const pokedexMission = JSON.parse(localStorage.getItem("pokedex")) || {};
+    const quantidadeTrue = Object.values(pokedexMission).filter(v => v === true).length;
+    
+    if (quantidadeTrue >= 60) {
+        // Se a missão já foi completada, não faz nada
+        if (missionStatus) return;
+        
+        // Verifica se esta trava específica já foi desbloqueada
+        if (!travas[chaveTrava]) {
+            // Desbloqueia esta trava
+            travas[chaveTrava] = true;
+            travasDesbloqueadas++;
+            
+            // Para qualquer digitação em andamento
+            if (typingInterval) clearInterval(typingInterval);
+            
+            dialogBox.style.display = "block";
+            dialogContinue.style.display = "none";
+            
+            // Determina se é a primeira ou segunda trava
+            let mensagem = "";
+            if (travasDesbloqueadas === 1) {
+                mensagem = `Primeira trava (${nomeTrava}) desbloqueada!`;
+            } else if (travasDesbloqueadas === 2) {
+                mensagem = `Segunda trava (${nomeTrava}) desbloqueada!\nTodas as travas foram liberadas!`;
+            }
+            
+            // Efeito de máquina de escrever
+            typeWriter(mensagem, () => {
+                // Após terminar de digitar, mostra o indicador
+                setTimeout(() => {
+                    if (dialogContinue) dialogContinue.style.display = "block";
+                }, 500);
+                
+                // Esconde tudo após 5 segundos
+                setTimeout(() => {
+                    clearDialog();
+                }, 5000);
+            });
+            
+            // Verifica se ambas as travas foram desbloqueadas
+            if (travasDesbloqueadas === totalTravas && !missionStatus) {
+                missionStatus = true;
+                
+                // Altera o mapa após um delay
+                setTimeout(() => {
+                    if (collisionMapCemiterio && collisionMapCemiterio[19]) {
+                        collisionMapCemiterio[19][15] = "master"; 
+                        console.log("Evento liberado no cemitério!");
+                        
+                        // Mostra mensagem final após 1 segundo
+                        setTimeout(() => {
+                            if (typingInterval) clearInterval(typingInterval);
+                            
+                            dialogBox.style.display = "block";
+                            dialogContinue.style.display = "none";
+                            
+                            typeWriter("Algo misterioso aconteceu no cemitério...\nUma passagem secreta foi revelada!", () => {
+                                setTimeout(() => {
+                                    if (dialogContinue) dialogContinue.style.display = "block";
+                                }, 500);
+                                
+                                setTimeout(() => {
+                                    clearDialog();
+                                }, 5000);
+                            });
+                            
+                        }, 1000);
+                    }
+                }, 2000);
+            }
+            
+        } else {
+            // Esta trava já estava desbloqueada
+            if (typingInterval) clearInterval(typingInterval);
+            
+            dialogBox.style.display = "block";
+            dialogContinue.style.display = "none";
+            
+            typeWriter(`Trava ${nomeTrava} já estava desbloqueada.`, () => {
+                setTimeout(() => {
+                    if (dialogContinue) dialogContinue.style.display = "block";
+                }, 500);
+                
+                setTimeout(() => {
+                    clearDialog();
+                }, 3000);
+            });
+        }
+        
+    } else {
+        // Não tem pokémons suficientes
+        if (typingInterval) clearInterval(typingInterval);
+        
+        dialogBox.style.display = "block";
+        dialogContinue.style.display = "none";
+        
+        const faltam = 60 - quantidadeTrue;
+        typeWriter(`Você precisa capturar mais ${faltam} Pokémon(s)\npara desbloquear as travas. (${quantidadeTrue}/60)`, () => {
+            setTimeout(() => {
+                if (dialogContinue) dialogContinue.display = "block";
+            }, 500);
+            
+            setTimeout(() => {
+                clearDialog();
+            }, 5000);
+        });
+    }
+}
+
+// Função para verificar estado das travas
+function getTravaStatus() {
+    const pokedexMission = JSON.parse(localStorage.getItem("pokedex")) || {};
+    const quantidadeTrue = Object.values(pokedexMission).filter(v => v === true).length;
+    
+    return {
+        travas: {
+            leste: travas.leste,
+            oeste: travas.oeste
+        },
+        travasDesbloqueadas: travasDesbloqueadas,
+        totalTravas: totalTravas,
+        missionStatus: missionStatus,
+        pokemonNecessarios: 45,
+        pokemonAtuais: quantidadeTrue
+    };
+}
+
+// Função para resetar as travas (para debug ou novo jogo)
+function resetTravas() {
+    travas.leste = false;
+    travas.oeste = false;
+    travasDesbloqueadas = 0;
+    missionStatus = false;
+    console.log("Travas resetadas!");
+    
+    // Também reseta a posição no mapa se necessário
+    if (collisionMapCemiterio && collisionMapCemiterio[19]) {
+        collisionMapCemiterio[19][15] = "x"; // ou o valor original
+    }
+}
+
+// Funções auxiliares (mantém as mesmas)
+function typeWriter(text, onComplete = null, speed = 50) {
+    let i = 0;
+    dialogText.textContent = "";
+    
+    typingInterval = setInterval(() => {
+        if (i < text.length) {
+            dialogText.textContent += text.charAt(i);
+            i++;
+        } else {
+            clearInterval(typingInterval);
+            typingInterval = null;
+            
+            if (onComplete && typeof onComplete === 'function') {
+                onComplete();
+            }
+        }
+    }, speed);
+}
+
+function clearDialog() {
+    if (dialogBox && dialogText) {
+        if (typingInterval) {
+            clearInterval(typingInterval);
+            typingInterval = null;
+        }
+        
+        dialogText.textContent = "";
+        dialogBox.style.display = "none";
+        
+        if (dialogContinue) {
+            dialogContinue.style.display = "block";
+        }
+    }
+}
+
+// Função para debug (opcional)
+function debugTravas() {
+    const status = getTravaStatus();
+    console.log("=== STATUS TRAVAS ===");
+    console.log(`Pokémon: ${status.pokemonAtuais}/45`);
+    console.log(`Trava Leste: ${status.travas.leste ? '✅' : '❌'}`);
+    console.log(`Trava Oeste: ${status.travas.oeste ? '✅' : '❌'}`);
+    console.log(`Travas desbloqueadas: ${status.travasDesbloqueadas}/2`);
+    console.log(`Missão completa: ${status.missionStatus ? '✅' : '❌'}`);
 }

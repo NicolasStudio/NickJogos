@@ -50,6 +50,8 @@ function trocarMapa(novoMapa, respawnX, respawnY) {
     collisionMap = collisionMapSafari;
   } else if (mapaAtual === "Rota007.png") {
     collisionMap = collisionMapRota007;
+  } else if (mapaAtual === "MapaSecreto.png") {
+    collisionMap = collisionMapMapaSecreto;
   }
 
   // se coordenadas foram passadas, usa elas
@@ -264,4 +266,9 @@ const pokemonsPorMapa  = {
     { id: 148, name: "Dragonair",  rarity: "raro",     chance: 8, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/148.png"},
     { id: 149, name: "Dragonite",  rarity: "raro",     chance: 8,  img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/149.png"},
   ],
+    "MapaSecreto.png": [
+    { id: 132, name: "Ditto",     rarity: "comum",    chance: 98, img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/132.png"},
+    { id: 150, name: "Mewtwo",    rarity: "lendario", chance: 1,  img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/150.png"},
+    { id: 151, name: "Mew",       rarity: "mistico", chance: 1,  img: "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/151.png"},
+  ]
 };

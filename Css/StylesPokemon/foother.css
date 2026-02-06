@@ -1,0 +1,54 @@
+.game-footer {
+    background: rgba(0, 0, 0, 0.7);
+    color: #ecf0f1;
+    padding: 20px 0;
+    text-align: center;
+    font-family: 'Oxanium', 'Courier New', monospace;
+    border-top: 3px solid #4ecdc4;
+    box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
+    position: relative;
+    z-index: 100;
+    margin-top: auto;
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.game-footer p {
+    margin: 8px 0;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+    line-height: 1.5;
+}
+
+.game-footer p:first-child {
+    font-weight: 600;
+    color: #ff6b6b;
+    font-size: 15px;
+}
+
+.footer-note {
+    font-size: 12px !important;
+    color: #95a5a6 !important;
+    font-style: italic;
+    margin-top: 15px !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 10px !important;
+}
+
+/* Efeito de brilho sutil */
+.game-footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(52, 152, 219, 0.5), 
+        transparent);
+}

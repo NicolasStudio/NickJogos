@@ -1,0 +1,66 @@
+.dialog-box {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    width: 450px;
+    height: 96px;
+    background: #ffffff;
+    border: 4px solid #000000;
+    border-radius: 12px;
+    box-shadow: 
+        0 0 0 2px #ffffff,
+        0 4px 8px rgba(0, 0, 0, 0.3);
+    z-index: 1000;
+    font-family: 'Pokemon GB', 'Courier New', monospace;
+    padding: 16px;
+    box-sizing: border-box;
+    display: none;
+}
+
+.dialog-content {
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.dialog-text {
+    color: #000000;
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: 0.5px;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+    font-weight: 400;
+    font-family: 'Pokemon GB', 'Courier New', monospace;
+    image-rendering: pixelated;
+}
+
+/* Cursor piscante */
+.dialog-text::after {
+    content: "|";
+    animation: blink 1s infinite;
+    color: #000000;
+    margin-left: 2px;
+}
+
+.dialog-continue {
+    position: absolute;
+    bottom: -4px;
+    right: 0;
+    color: #000000;
+    font-size: 16px;
+    animation: bounce 0.8s infinite alternate;
+    opacity: 0.8;
+}
+
+/* Animações */
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+@keyframes bounce {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-4px); }
+}
