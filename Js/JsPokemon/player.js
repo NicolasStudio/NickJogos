@@ -1,7 +1,7 @@
 // ===== CONFIGURAÇÃO DO PLAYER =====
 PLAYER_TILE_SIZE = 16;
 const PLAYER_SIZE = 24;
-const moveDelay = 20;
+const moveDelay = 200;
 
 let playerPos = { x: 24, y: 23 }; // posição inicial
 let canMove = true;
