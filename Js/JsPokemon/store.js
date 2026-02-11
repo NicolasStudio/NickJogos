@@ -106,7 +106,7 @@ class PokemonStore {
 
     getDefaultInventory() {
         return {
-            pokeball: { count: 0, catchRate: 1.0 },
+            pokeball: { count: 5, catchRate: 1.0 },
             greatball: { count: 0, catchRate: 1.5 },
             ultraball: { count: 0, catchRate: 2.0 }
         };
@@ -439,18 +439,40 @@ class PokemonStore {
         }
     }
 
+    ensureMinimumPokeballs() {
+    try {
+        // Garante que sempre tenha pelo menos 5 pokebolas no início
+        if (!this.inventory.pokeball) {
+            this.inventory.pokeball = { count: 5, catchRate: 1.0 };
+            console.log('➕ Criado inventário de pokeball com 5 unidades');
+        } else if (this.inventory.pokeball.count === 0) {
+            // Só adiciona se for um novo jogo (primeira vez)
+            const hasPlayedBefore = localStorage.getItem('hasPlayedBefore');
+            if (!hasPlayedBefore) {
+                this.inventory.pokeball.count = 5;
+                localStorage.setItem('hasPlayedBefore', 'true');
+                console.log('🔄 Pokebolas resetadas para 5 (primeiro jogo)');
+            }
+        }
+            this.saveInventory();
+        } catch (error) {
+            console.error('Erro ao garantir pokebolas mínimas:', error);
+        }
+    }
     // ============================================
     //                INICIALIZAÇÃO
     // ============================================
 
     init() {
         console.log('🏪 Loja Pokémon inicializada!');
+        
+        // ✅ Garante 5 Pokébolas no primeiro acesso
+        this.ensureMinimumPokeballs();
+        
         console.log('💰 Dinheiro:', this.money);
         console.log('📦 Inventário:', this.inventory);
         
         this.updateStore();
-        
-        // Configura listener para a aba da loja
         this.setupTabListener();
     }
 

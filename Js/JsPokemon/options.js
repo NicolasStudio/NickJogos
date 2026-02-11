@@ -476,13 +476,50 @@ function migrarDadosAntigos() {
             console.log('💰 Dinheiro antigo migrado:', dinheiroAntigo);
         }
         
-        // Garantir que o inventário existe
-        if (!localStorage.getItem('pokemonInventory')) {
+        // ✅ CORREÇÃO: Só cria inventário se NÃO EXISTIR e NÃO TIVER DADOS
+        const inventoryExistente = localStorage.getItem('pokemonInventory');
+        if (!inventoryExistente || inventoryExistente === 'null' || inventoryExistente === 'undefined') {
             localStorage.setItem('pokemonInventory', JSON.stringify({
                 "pokeball": {"count": 5, "catchRate": 1.0},
                 "greatball": {"count": 0, "catchRate": 1.5},
                 "ultraball": {"count": 0, "catchRate": 2.0}
             }));
+            console.log('📦 Inventário inicial criado com 5 Pokébolas');
+        } else {
+            // ✅ Verifica se já tem pokeball e adiciona 5 se não tiver
+            try {
+                const inventory = JSON.parse(inventoryExistente);
+                let modificado = false;
+                
+                // Se não tiver pokeball, adiciona com 5
+                if (!inventory.pokeball) {
+                    inventory.pokeball = {"count": 5, "catchRate": 1.0};
+                    modificado = true;
+                    console.log('➕ Adicionando 5 Pokébolas ao inventário existente');
+                } 
+                // Se tiver pokeball mas count = 0, adiciona 5
+                else if (inventory.pokeball.count === 0) {
+                    inventory.pokeball.count = 5;
+                    modificado = true;
+                    console.log('🔄 Atualizando Pokébolas de 0 para 5');
+                }
+                
+                // Garante greatball e ultraball existem
+                if (!inventory.greatball) {
+                    inventory.greatball = {"count": 0, "catchRate": 1.5};
+                    modificado = true;
+                }
+                if (!inventory.ultraball) {
+                    inventory.ultraball = {"count": 0, "catchRate": 2.0};
+                    modificado = true;
+                }
+                
+                if (modificado) {
+                    localStorage.setItem('pokemonInventory', JSON.stringify(inventory));
+                }
+            } catch (e) {
+                console.error('Erro ao verificar inventário existente:', e);
+            }
         }
         
         // Garantir que o zoom level existe
@@ -491,6 +528,7 @@ function migrarDadosAntigos() {
         }
         
         // Remover dados obsoletos
+        const OBSOLETE_KEYS = []; // Defina suas chaves obsoletas aqui
         OBSOLETE_KEYS.forEach(key => {
             localStorage.removeItem(key);
         });
