@@ -111,7 +111,7 @@ function atualizarImagem() {
     
     // Monta o nome do arquivo
     const imagemNome = `${faseCapitalizada}${estadoCorrigido}.jpg`;
-    petImage.src = `/NickJogos/Img/ImageTamagotchi/dog/${imagemNome}`;
+    // petImage.src = `/NickJogos/Img/ImageTamagotchi/dog/${imagemNome}`;
     
     // Atualiza as barras de status
     fomeBar.style.width = pet.fome + '%';
