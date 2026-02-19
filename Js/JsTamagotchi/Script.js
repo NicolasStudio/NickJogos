@@ -80,7 +80,7 @@ function determinarEstado() {
     else return 'Feliz';
 }
 
-// Função para atualizar a imagem
+// Função para atualizar a imagem - CORRIGIDA para maiúsculas
 function atualizarImagem() {
     // Verifica se todos os elementos existem
     const petImage = document.getElementById('petImage');
@@ -99,20 +99,22 @@ function atualizarImagem() {
     pet.fase = determinarFase();
     pet.estado = determinarEstado();
     
-    // Tudo para minúsculo
-    const faseLower = pet.fase.toLowerCase();
-    let estadoLower = pet.estado.toLowerCase();
+    // CORREÇÃO: Garantir primeira letra maiúscula e resto minúsculo
+    const faseFormatada = pet.fase.charAt(0).toUpperCase() + pet.fase.slice(1).toLowerCase();
+    let estadoFormatado = pet.estado.charAt(0).toUpperCase() + pet.estado.slice(1).toLowerCase();
     
     // Corrigindo possíveis erros de digitação
-    if (estadoLower === "feiiz") {
-        estadoLower = "feliz";
+    if (estadoFormatado === "Feiiz") {
+        estadoFormatado = "Feliz";
     }
     
-    // Monta o nome do arquivo
-    const imagemNome = `${faseLower}${estadoLower}.jpg`;
+    // Monta o nome do arquivo com primeira letra maiúscula
+    const imagemNome = `${faseFormatada}${estadoFormatado}.jpg`;
+    
+    // Caminho completo
     const caminhoCompleto = `Img/ImageTamagotchi/dog/${imagemNome}`;
     
-    // Só atualiza se for diferente da imagem atual (evita loops desnecessários)
+    // Só atualiza se for diferente da imagem atual
     if (!petImage.src.endsWith(imagemNome)) {
         console.log('Mudando imagem para:', caminhoCompleto);
         petImage.src = caminhoCompleto;
@@ -172,7 +174,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Sistema de envelhecimento e degradação - ÚNICO INTERVALO
     setInterval(() => {
-        // Atualiza a fase antes de aplicar degradação
+        // Guarda a fase antiga para comparar
         const faseAntiga = pet.fase;
         
         // Envelhece
@@ -219,9 +221,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Atualiza a tela
         atualizarImagem();
-    }, 3000); // ← Mudei para 3 segundos para testes (depois volte para 30000)
-    
-    // REMOVIDO: setInterval(atualizarImagem, 1000); <-- ISSO CAUSAVA O PROBLEMA!
+    }, 30000); // 30 segundos
 });
 
 // Tornando as funções globais para os botões
