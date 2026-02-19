@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" sizes="16x16" href="Image/iconMusic.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="Css/StylesTamagotchi/Style.css">
+    <link rel="stylesheet" href="Css/header.css">
+    <link rel="stylesheet" href="Css/footer.css">
+    <title>NickJogos - Tamagotchi</title>
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-gamepad"></i>
+                    NickJogos
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="game-container">
+        <div class="pet-container">
+            <div class="pet-display">
+                <img id="petImage" src="Img/ImageTamagotchi/dog/filhoteFeliz.jpg" alt="Pet">
+            </div>
+            
+            <div class="status-bars">
+                <div class="status-item">
+                    <label>Fome:</label>
+                    <div class="progress-bar">
+                        <div id="fomeBar" class="progress-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+                
+                <div class="status-item">
+                    <label>Higiene:</label>
+                    <div class="progress-bar">
+                        <div id="higieneBar" class="progress-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+                
+                <div class="status-item">
+                    <label>Saúde:</label>
+                    <div class="progress-bar">
+                        <div id="saudeBar" class="progress-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+                
+                <div class="status-item">
+                    <label>Felicidade:</label>
+                    <div class="progress-bar">
+                        <div id="felicidadeBar" class="progress-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="age-indicator">
+                <span>Idade: <span id="idadeValor">1</span> dias</span>
+                <span>Fase: <span id="faseAtual">Filhote</span></span>
+            </div>
+            
+            <div class="action-buttons">
+                <button onclick="alimentar()" class="btn">🍖 Comida</button>
+                <button onclick="medicar()" class="btn">💊 Medicar</button>
+                <button onclick="banho()" class="btn">🧼 Banho</button>
+                <button onclick="brincar()" class="btn">🎾 Brincar</button>
+            </div>
+        </div>
+    </div>
+
+    <footer class="game-footer">
+        <div class="footer-content">
+            <p>© 2026 - Projeto desenvolvido por Nicolas de Almeida Sousa</p>
+            <p>Projeto acadêmico sem fins lucrativos</p>
+            <p class="footer-note">Tamagotchi é uma marca registrada da Bandai</p>
+        </div>
+    </footer>
+    
+    <script src="Js/JsTamagotchi/Script.js"></script>
+</body>
+</html>

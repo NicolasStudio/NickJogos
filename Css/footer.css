@@ -3,12 +3,12 @@
     color: #ecf0f1;
     padding: 20px 0;
     text-align: center;
-    font-family: 'Oxanium', 'Courier New', monospace;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     border-top: 3px solid #4ecdc4;
     box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.2);
     position: relative;
-    z-index: 100;
-    margin-top: auto;
+    z-index: 0;
+    margin-top: 5%;
 }
 
 .footer-content {

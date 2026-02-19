@@ -1,0 +1,133 @@
+.game-container {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    margin-top: 2%;
+}
+
+.pet-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.pet-display {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.pet-display img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid rgba(0, 0, 0, 0.7);;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.pet-display img:hover {
+    transform: scale(1.05);
+}
+
+.status-bars {
+    margin: 25px 0;
+}
+
+.status-item {
+    margin-bottom: 15px;
+}
+
+.status-item label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #333;
+    font-size: 14px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 20px;
+    background: #e0e0e0;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.progress-fill {
+    height: 100%;
+    transition: width 0.3s ease;
+}
+
+#fomeBar { background: linear-gradient(90deg, #ff9800, #ff5722); }
+#higieneBar { background: linear-gradient(90deg, #2196f3, #1976d2); }
+#saudeBar { background: linear-gradient(90deg, #4caf50, #388e3c); }
+#felicidadeBar { background: linear-gradient(90deg, #ff69b4, #e91e63); }
+
+.age-indicator {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+    padding: 15px 20px;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border-radius: 15px;
+    font-weight: bold;
+    color: #333;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
+}
+
+.action-buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.btn {
+    padding: 15px 20px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
+}
+
+.btn:active {
+    transform: translateY(0);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+/* Efeitos especiais para cada botão */
+.btn:first-child { background: linear-gradient(135deg, #ff9800, #ff5722); }
+.btn:nth-child(2) { background: linear-gradient(135deg, #4caf50, #388e3c); }
+.btn:nth-child(3) { background: linear-gradient(135deg, #2196f3, #1976d2); }
+.btn:last-child { background: linear-gradient(135deg, #ff69b4, #e91e63); }
+
+/* Responsividade */
+@media (max-width: 500px) {
+    .pet-display img {
+        width: 150px;
+        height: 150px;
+    }
+    
+    .action-buttons {
+        grid-template-columns: 1fr;
+    }
+    
+    .btn {
+        padding: 12px;
+        font-size: 14px;
+    }
+}

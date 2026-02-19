@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="Css/stylePadrao.css">
     <link rel="stylesheet" href="Css/header.css">
+    <link rel="stylesheet" href="Css/footer.css">
     <script src="Js/scriptPadrao.js"></script>
 
 </head>
@@ -46,8 +47,9 @@
                 <button class="category-btn">Esportes</button>
                 <button class="category-btn">Corrida</button>
                 <button class="category-btn">Puzzle</button>
-                <button class="category-btn">Meninas</button>
-                <button class="category-btn">Clássicos</button>
+                <button class="category-btn">Virtual Pet</button>
+                <button class="category-btn">Musical</button>
+                <button class="category-btn">Jogos de Cartas</button>
                 <button class="category-btn">Multiplayer</button>
             </div>
         </div>
@@ -86,7 +88,7 @@
                     <div class="game-content">
                         <h3 class="game-title">Jogo da Memória</h3>
                         <div class="game-info">
-                            <span>Jogo de Carta</span>
+                            <span>Jogos de Cartas</span>
                             <div class="game-rating">
                                 <i class="fas fa-star"></i>
                                 <span>4.5</span>
@@ -147,21 +149,21 @@
                 </div>
                 
                 <!-- Game 6 -->
-                <!-- <div class="game-card">
+                <div class="game-card" onclick="abrirJogoTamagotchi()">
                     <div class="game-image">
-                        <img src="https://images.unsplash.com/photo-1552820728-8b83bb6b773f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80" alt="Jogo de Puzzle">
+                        <img src="Img/jogoTamagotchi.png" alt="Jogo de Puzzle">
                     </div>
-                    <div class="game-content">
-                        <h3 class="game-title">Quebra-Cabeça Mágico</h3>
+                    <div class="game-content" >
+                        <h3 class="game-title">Tamagotchi</h3>
                         <div class="game-info">
-                            <span>Puzzle</span>
+                            <span>Virtual Pet</span>
                             <div class="game-rating">
                                 <i class="fas fa-star"></i>
                                 <span>4.4</span>
                             </div>
                         </div>
                     </div>
-                </div> -->
+                </div>
                 
                 <!-- Game 7 -->
                 <!-- <div class="game-card">
@@ -212,7 +214,7 @@
                     <div class="game-content">
                         <h3 class="game-title">Head Soccer</h3>
                         <div class="game-info">
-                            <span>Futebol</span>
+                            <span>Esportes</span>
                             <div class="game-rating">
                                 <i class="fas fa-star"></i>
                                 <span>4.9</span>
@@ -241,40 +243,14 @@
         </div>
     </section>
 
+    <br><br><br><br><br><br><br><br><br><br><br>
     <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p>NickJogos &copy; 2025 - Todos os jogos são gratuitos e online</p>
+    <footer class="game-footer">
+        <div class="footer-content">
+            <p>© 2026 - Projeto desenvolvido por Nicolas de Almeida Sousa</p>
+            <p>Projeto acadêmico sem fins lucrativos</p>
         </div>
-    </footer> 
+    </footer>
     
-
-    <!-- <script>
-        // Simples funcionalidade para as categorias
-        document.addEventListener('DOMContentLoaded', function() {
-            const categoryButtons = document.querySelectorAll('.category-btn');
-            
-            categoryButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    // Remove a classe active de todos os botões
-                    categoryButtons.forEach(btn => btn.classList.remove('active'));
-                    
-                    // Adiciona a classe active ao botão clicado
-                    this.classList.add('active');
-                    
-                    // Aqui você implementaria a filtragem dos jogos por categoria
-                    // Por simplicidade, estamos apenas mudando a classe active
-                });
-            });
-            
-            // Simulação de clique nos cards de jogo
-            const gameCards = document.querySelectorAll('.game-card');
-            gameCards.forEach(card => {
-                card.addEventListener('click', function() {
-                    alert('Jogo iniciado! Em um site real, o jogo seria carregado aqui.');
-                });
-            });
-        });
-    </script> -->
 </body>
 </html>
