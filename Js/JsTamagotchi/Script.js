@@ -99,19 +99,24 @@ function atualizarImagem() {
     pet.fase = determinarFase();
     pet.estado = determinarEstado();
     
-    // Capitaliza a primeira letra da fase e estado
-    const faseCapitalizada = pet.fase.charAt(0).toUpperCase() + pet.fase.slice(1);
-    const estadoCapitalizado = pet.estado.charAt(0).toUpperCase() + pet.estado.slice(1);
+    // CORREÇÃO: Converter TUDO para minúsculo
+    const faseLower = pet.fase.toLowerCase();
+    let estadoLower = pet.estado.toLowerCase();
     
-    // Corrigindo o nome do arquivo para jovemFeliz.jpg (sem o "e" maiúsculo)
-    let estadoCorrigido = estadoCapitalizado;
-    if (estadoCapitalizado === "FeIiz") {
-        estadoCorrigido = "Feliz";
+    // Corrigindo possíveis erros de digitação nos nomes dos arquivos
+    if (estadoLower === "feiiz") {  // caso tenha esse erro nos arquivos
+        estadoLower = "feliz";
     }
     
-    // Monta o nome do arquivo
-    const imagemNome = `${faseCapitalizada}${estadoCorrigido}.jpg`;
-    petImage.src = `Img/ImageTamagotchi/dog/${imagemNome}`;
+    // Monta o nome do arquivo TUDO EM MINÚSCULO
+    const imagemNome = `${faseLower}${estadoLower}.jpg`;
+    
+    // Caminho correto (sem "NickJogos/" no início)
+    const caminhoCompleto = `Img/ImageTamagotchi/dog/${imagemNome}`;
+    
+    console.log('Tentando carregar:', caminhoCompleto); // Para debug
+    
+    petImage.src = caminhoCompleto;
     
     // Atualiza as barras de status
     fomeBar.style.width = pet.fome + '%';
