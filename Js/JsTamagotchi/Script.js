@@ -12,21 +12,21 @@ let pet = {
 // Fatores de degradação por fase
 const fatoresFase = {
     filhote: {
-        degradacaoFome: 3,      // Sente mais fome
-        degradacaoHigiene: 2.5,  // Precisa mais banho
-        degradacaoSaude: 0.5,    // Saúde boa, não fica doente fácil
-        ganhoFelicidadeBrincar: 40, // Adora brincar
-        custoFomeBrincar: 15,    // Gasta mais energia brincando
-        custoHigieneBrincar: 8,   // Fica mais sujo brincando
-        limiteFomeCritico: 40,    // Fica doente se fome < 40
-        limiteHigieneCritico: 40,  // Fica doente se higiene < 40
-        recuperacaoMedicamento: 30 // Medicamento é menos eficaz?
+        degradacaoFome: 3,
+        degradacaoHigiene: 2.5,
+        degradacaoSaude: 0.5,
+        ganhoFelicidadeBrincar: 40,
+        custoFomeBrincar: 15,
+        custoHigieneBrincar: 8,
+        limiteFomeCritico: 40,
+        limiteHigieneCritico: 40,
+        recuperacaoMedicamento: 30
     },
     jovem: {
-        degradacaoFome: 2,        // Fome moderada
-        degradacaoHigiene: 2,      // Higiene moderada
-        degradacaoSaude: 1,        // Saúde começa a oscilar
-        ganhoFelicidadeBrincar: 35, // Ainda gosta de brincar
+        degradacaoFome: 2,
+        degradacaoHigiene: 2,
+        degradacaoSaude: 1,
+        ganhoFelicidadeBrincar: 35,
         custoFomeBrincar: 12,
         custoHigieneBrincar: 6,
         limiteFomeCritico: 35,
@@ -34,10 +34,10 @@ const fatoresFase = {
         recuperacaoMedicamento: 40
     },
     adulto: {
-        degradacaoFome: 2,         // Estável
-        degradacaoHigiene: 2,       // Estável
-        degradacaoSaude: 1.5,       // Precisa mais cuidado
-        ganhoFelicidadeBrincar: 20,  // Não brinca tanto
+        degradacaoFome: 2,
+        degradacaoHigiene: 2,
+        degradacaoSaude: 1.5,
+        ganhoFelicidadeBrincar: 20,
         custoFomeBrincar: 8,
         custoHigieneBrincar: 4,
         limiteFomeCritico: 30,
@@ -45,15 +45,15 @@ const fatoresFase = {
         recuperacaoMedicamento: 45
     },
     velho: {
-        degradacaoFome: 1,          // Come pouco
-        degradacaoHigiene: 3,        // Precisa mais higiene
-        degradacaoSaude: 2.5,        // Fica doente fácil
-        ganhoFelicidadeBrincar: 10,   // Quase não brinca
+        degradacaoFome: 1,
+        degradacaoHigiene: 3,
+        degradacaoSaude: 2.5,
+        ganhoFelicidadeBrincar: 10,
         custoFomeBrincar: 5,
         custoHigieneBrincar: 2,
-        limiteFomeCritico: 25,        // Mais resistente à fome
-        limiteHigieneCritico: 45,      // Muito sensível à sujeira
-        recuperacaoMedicamento: 25     // Medicamento é menos eficaz
+        limiteFomeCritico: 25,
+        limiteHigieneCritico: 45,
+        recuperacaoMedicamento: 25
     }
 };
 
@@ -99,24 +99,24 @@ function atualizarImagem() {
     pet.fase = determinarFase();
     pet.estado = determinarEstado();
     
-    // CORREÇÃO: Converter TUDO para minúsculo
+    // Tudo para minúsculo
     const faseLower = pet.fase.toLowerCase();
     let estadoLower = pet.estado.toLowerCase();
     
-    // Corrigindo possíveis erros de digitação nos nomes dos arquivos
-    if (estadoLower === "feiiz") {  // caso tenha esse erro nos arquivos
+    // Corrigindo possíveis erros de digitação
+    if (estadoLower === "feiiz") {
         estadoLower = "feliz";
     }
     
-    // Monta o nome do arquivo TUDO EM MINÚSCULO
+    // Monta o nome do arquivo
     const imagemNome = `${faseLower}${estadoLower}.jpg`;
-    
-    // Caminho correto (sem "NickJogos/" no início)
     const caminhoCompleto = `Img/ImageTamagotchi/dog/${imagemNome}`;
     
-    console.log('Tentando carregar:', caminhoCompleto); // Para debug
-    
-    petImage.src = caminhoCompleto;
+    // Só atualiza se for diferente da imagem atual (evita loops desnecessários)
+    if (!petImage.src.endsWith(imagemNome)) {
+        console.log('Mudando imagem para:', caminhoCompleto);
+        petImage.src = caminhoCompleto;
+    }
     
     // Atualiza as barras de status
     fomeBar.style.width = pet.fome + '%';
@@ -138,7 +138,6 @@ function atualizarImagem() {
 
 // Funções de ação
 function alimentar() {
-    const fatores = getFatoresAtuais();
     pet.fome = Math.min(100, pet.fome + 30);
     pet.saude = Math.min(100, pet.saude + 5);
     pet.felicidade = Math.min(100, pet.felicidade + 5);
@@ -168,12 +167,18 @@ function brincar() {
 
 // Inicialização quando a página carregar
 document.addEventListener('DOMContentLoaded', function() {
+    // Atualiza uma vez no início
     atualizarImagem();
     
-    // Sistema de envelhecimento e degradação
+    // Sistema de envelhecimento e degradação - ÚNICO INTERVALO
     setInterval(() => {
         // Atualiza a fase antes de aplicar degradação
         const faseAntiga = pet.fase;
+        
+        // Envelhece
+        pet.idade++;
+        
+        // Atualiza a fase
         pet.fase = determinarFase();
         
         // Se mudou de fase, avisa o jogador
@@ -187,9 +192,6 @@ document.addEventListener('DOMContentLoaded', function() {
             alert(`🎉 Parabéns! Seu pet cresceu e agora é ${fases[pet.fase]}!`);
         }
         
-        // Envelhece a cada 30 segundos
-        pet.idade++;
-        
         // Pega os fatores da fase atual
         const fatores = getFatoresAtuais();
         
@@ -197,7 +199,7 @@ document.addEventListener('DOMContentLoaded', function() {
         pet.fome = Math.max(0, pet.fome - fatores.degradacaoFome);
         pet.higiene = Math.max(0, pet.higiene - fatores.degradacaoHigiene);
         
-        // Se estiver com fome ou sujo (baseado nos limites da fase), afeta a saúde
+        // Se estiver com fome ou sujo, afeta a saúde mais rapidamente
         if (pet.fome < fatores.limiteFomeCritico || pet.higiene < fatores.limiteHigieneCritico) {
             pet.saude = Math.max(0, pet.saude - fatores.degradacaoSaude * 2);
         } else {
@@ -215,11 +217,11 @@ document.addEventListener('DOMContentLoaded', function() {
             pet.saude = Math.min(100, pet.saude + 1);
         }
         
+        // Atualiza a tela
         atualizarImagem();
-    }, 30000); // 30 segundos
-
-    // Atualização rápida dos status visuais a cada segundo
-    setInterval(atualizarImagem, 1000);
+    }, 3000); // ← Mudei para 3 segundos para testes (depois volte para 30000)
+    
+    // REMOVIDO: setInterval(atualizarImagem, 1000); <-- ISSO CAUSAVA O PROBLEMA!
 });
 
 // Tornando as funções globais para os botões
