@@ -519,7 +519,6 @@ function carregarPokebolasInventario(pokemon) {
     semPokebolasDiv.style.display = temPokebolas ? 'none' : 'block';
 }
 
-
 // ===== FUNÇÃO AUXILIAR - FECHAR MODAL E IR PARA LOJA =====
 function fecharModalEIrParaLoja() {
     const modal = document.getElementById('modalInventarioCaptura');
@@ -601,30 +600,38 @@ function showEncounter(pokemon) {
         <p>
             Você encontrou ${pokemon.name} 
             (<span class="rarity-${pokemon.rarity}">${pokemon.rarity}</span>)!
+            // MOSTRAR A IMAGEM AQUI
         </p>
         <img src="${pokemon.img}" alt="${pokemon.name}" style="width: 100px; height: 100px;">
     `;
 
-    // VERIFICA SE JÁ TEM CAPTURADO (não se viu, mas se TEM)
-    let capturadosAtuais = {};
+    // VERIFICA SE JÁ ESTÁ NA POKEDEX
+    let pokedexAtual = {};
     try {
-        const saved = localStorage.getItem("capturados");
-        capturadosAtuais = saved ? JSON.parse(saved) : {};
+        const saved = localStorage.getItem("pokedex");
+        pokedexAtual = saved ? JSON.parse(saved) : {};
     } catch (error) {
-        capturadosAtuais = {};
-        console.error("Erro ao carregar capturados:", error);
+        pokedexAtual = {};
+        console.error("Erro ao carregar pokedex:", error);
     }
 
-    // Verifica se o Pokémon está na lista de CAPTURADOS (não na pokedex)
-    if (capturadosAtuais[pokemon.name]) {
-        // JÁ TEM CAPTURADO - mostra mensagem e esconde botão
+    // Verifica se o Pokémon já está registrado na POKEDEX
+    let iconeCapturado = pokedexAtual[pokemon.name] ? '<img src="/NickJogos/Img/ImagemPokemon/Pego.png" style="width: 16px; height: 16px; margin-left: 10px;">' : '';
+
+    encounterDiv.innerHTML = `
+        <p>
+            Você encontrou ${pokemon.name} 
+            (<span class="rarity-${pokemon.rarity}">${pokemon.rarity}</span>)! <br>
+            ${iconeCapturado}
+        </p>
+        <img src="${pokemon.img}" alt="${pokemon.name}" style="width: 100px; height: 100px;">
+    `;
+
+    // Esconde o botão se já tiver capturado
+    if (pokedexAtual[pokemon.name]) {
         btn.style.display = "none";
-        encounterDiv.innerHTML += `<p style="color: #4CAF50; font-weight: bold;">✨ Você já pegou esse Pokémon!</p>`;
     } else {
-        // NÃO TEM CAPTURADO - mostra botão de capturar
         btn.style.display = "block";
-        // Altera para abrir o modal de inventário
         btn.onclick = () => mostrarModalInventarioCaptura(pokemon);
-        
     }
 }
