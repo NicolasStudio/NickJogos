@@ -173,7 +173,7 @@ button, a {
   margin: 0;
 }
 
-#pokedexTabContent h2, #capturedTabContent h2, #storeTabContent h2, #optionsTabContent h2 {
+#pokedexTabContent h2, #capturedTabContent h2, #achievementsTabContent h2, #storeTabContent h2, #optionsTabContent h2 {
   display: flex;
   background-color: #111;
   color: #fff;

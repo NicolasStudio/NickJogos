@@ -212,6 +212,7 @@ function mostrarResultadoCaptura(pokemon, resultado, tipoPokebola) {
 }
 
 // Função para fechar resultado
+// Função para fechar resultado
 function fecharResultadoCaptura(sucesso, nomePokemon) {
   const modal = document.getElementById('modalResultadoCaptura');
   if (modal) modal.remove();
@@ -219,10 +220,18 @@ function fecharResultadoCaptura(sucesso, nomePokemon) {
   const pokemon = getPokemonByName(nomePokemon);
 
   if (sucesso) {
-    if (pokemon) capturePokemon(pokemon); // continua fluxo de captura
+    if (pokemon) {
+      capturePokemon(pokemon); // continua fluxo de captura
+      
+      // DISPARAR EVENTO DE CAPTURA BEM-SUCEDIDA
+      document.dispatchEvent(new CustomEvent('pokemonCaptured', {
+        detail: { pokemon: pokemon }
+      }));
+      
+      console.log('Evento pokemonCaptured disparado para:', pokemon.name);
+    }
   } else {
     if (pokemon) mostrarModalInventarioCaptura(pokemon); // abre inventário
-    // ou showEncounter(pokemon), se preferir voltar ao encontro
   }
 }
 

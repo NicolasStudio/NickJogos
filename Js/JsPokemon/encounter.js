@@ -595,43 +595,43 @@ function showEncounter(pokemon) {
     const encounterDiv = document.getElementById("encounter");
     const btn = document.getElementById("capture-btn");
 
+    // Carrega as duas listas
+    let capturados = {}; // Pokémon que você tem atualmente
+    let pokedex = {};    // Pokémon que você já pegou (histórico)
+    
+    try {
+        const savedCapturados = localStorage.getItem("capturados");
+        capturados = savedCapturados ? JSON.parse(savedCapturados) : {};
+        
+        const savedPokedex = localStorage.getItem("pokedex");
+        pokedex = savedPokedex ? JSON.parse(savedPokedex) : {};
+    } catch (error) {
+        console.error("Erro ao carregar dados:", error);
+    }
+
+    // Verificações
+    const estaNaPokedex = pokedex[pokemon.name] ? true : false;  // Já pegou alguma vez?
+    const estaNosCapturados = capturados[pokemon.name] ? true : false;  // Tem atualmente?
+
+    // Ícone de "já foi pego" (baseado na pokedex)
+    let iconeJaPego = estaNaPokedex ? 
+        '<img src="/NickJogos/Img/ImagemPokemon/Pego.png" style="width: 16px; height: 16px;" title="Já foi capturado anteriormente!">' : '';
+
     // HTML do Pokémon encontrado
     encounterDiv.innerHTML = `
         <p>
             Você encontrou ${pokemon.name} 
-            (<span class="rarity-${pokemon.rarity}">${pokemon.rarity}</span>)!
-            // MOSTRAR A IMAGEM AQUI
-        </p>
-        <img src="${pokemon.img}" alt="${pokemon.name}" style="width: 100px; height: 100px;">
-    `;
-
-    // VERIFICA SE JÁ ESTÁ NA POKEDEX
-    let pokedexAtual = {};
-    try {
-        const saved = localStorage.getItem("pokedex");
-        pokedexAtual = saved ? JSON.parse(saved) : {};
-    } catch (error) {
-        pokedexAtual = {};
-        console.error("Erro ao carregar pokedex:", error);
-    }
-
-    // Verifica se o Pokémon já está registrado na POKEDEX
-    let iconeCapturado = pokedexAtual[pokemon.name] ? '<img src="/NickJogos/Img/ImagemPokemon/Pego.png" style="width: 16px; height: 16px; margin-left: 10px;">' : '';
-
-    encounterDiv.innerHTML = `
-        <p>
-            Você encontrou ${pokemon.name} 
             (<span class="rarity-${pokemon.rarity}">${pokemon.rarity}</span>)! <br>
-            ${iconeCapturado}
+            ${iconeJaPego}
         </p>
         <img src="${pokemon.img}" alt="${pokemon.name}" style="width: 100px; height: 100px;">
     `;
 
-    // Esconde o botão se já tiver capturado
-    if (pokedexAtual[pokemon.name]) {
-        btn.style.display = "none";
+    // Controle do botão: só mostra se NÃO estiver nos capturados atuais
+    if (estaNosCapturados) {
+        btn.style.display = "none"; // Já tem atualmente, não pode capturar de novo
     } else {
-        btn.style.display = "block";
+        btn.style.display = "block"; // Não tem atualmente, pode capturar
         btn.onclick = () => mostrarModalInventarioCaptura(pokemon);
     }
 }

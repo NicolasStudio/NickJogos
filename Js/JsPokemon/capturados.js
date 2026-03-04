@@ -54,7 +54,7 @@ function updateCaptured() {
                 font-size: 1.25rem;
                 font-weight: 600;
             ">
-                Pokédex Vazia
+                Pokébox Vazia
             </h4>
             
             <p style="

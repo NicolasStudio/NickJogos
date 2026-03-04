@@ -15,8 +15,6 @@
     <link rel="stylesheet" href="Css/StylesPokemon/OptionsSalvamento.css">
 </head>
 <body>
-    <!-- Cabeçalho -->
-    <!-- Header -->
     <header>
         <div class="container">
             <nav class="navbar">
@@ -33,6 +31,7 @@
         <ul id="sidebarTabs">
             <li><a href="#" id="pokedexTab" onclick="openTab('pokedex')"><div class="rotate">POKÉDEX</div></a></li>
             <li><a href="#" id="capturedTab" onclick="openTab('captured')"><div class="rotate">CAPTURADOS</div></a></li>
+            <li><a href="#" id="achievementsTab" onclick="abrirModalAchievements()"><div class="rotate">CONQUISTAS</div></a></li>
             <li><a href="#" id="storeTab" onclick="openTab('store')"><div class="rotate">LOJA</div></a></li>
             <li><a href="#" id="optionsTab" onclick="openTab('options')"><div class="rotate">OPTIONS</div></a></li>
         </ul>
@@ -45,7 +44,7 @@
 
             <div id="capturedTabContent" class="tabContent" style="display:none;">
                 <h2>Pokémons Capturados</h2>
-                <p>Conteúdo futuro...</p>
+                <p></p>
             </div>
 
             <div id="storeTabContent" class="tabContent" style="display:none;">
@@ -65,6 +64,7 @@
                         <input type="range" id="masterVolume" min="0" max="100" value="70">
                         <span class="volume-value" id="masterValue">70%</span>
                     </div>
+                    
                     <div class="option-item">
                         <label>Música</label>
                         <input type="range" id="musicVolume" min="0" max="100" value="80" src="Music/MusicPokemon/Pallet Town.mp3">
@@ -216,6 +216,7 @@
     <script src="Js/JsPokemon/game.js"></script>
     <script src="Js/JsPokemon/pokedex.js"></script>
     <script src="Js/JsPokemon/capturados.js"></script>
+    <script src="Js/JsPokemon/achievements.js"></script>
     <script src="Js/JsPokemon/menu.js"></script>
     <script src="Js/JsPokemon/store.js"></script>
     <script src="Js/JsPokemon/options.js"></script>

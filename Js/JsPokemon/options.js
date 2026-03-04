@@ -1,13 +1,22 @@
 // ============================================
 //                    Áudio
 // ============================================
+function salvarVolume(valor) {
+    localStorage.setItem('masterVolume', valor);
+    document.getElementById('masterValue').textContent = valor + '%';
+}
+
+// No input range
+document.getElementById('masterVolume').addEventListener('input', (e) => {
+    salvarVolume(e.target.value);
+});
+
 // ===== CONTROLE SIMPLES DE MÚSICA =====
-// 1. Criar elemento de áudio
 const musica = new Audio('/NickJogos/Music/MusicPokemon/Pallet Town.mp3');
 musica.loop = true; // Tocar em loop
 musica.volume = 0.07; // Volume inicial 7%
 
-// 2. Configurar controles
+// Configurar controles
 document.addEventListener('DOMContentLoaded', function() {
     const volumeSlider = document.getElementById('musicVolume');
     const volumeDisplay = document.getElementById('musicValue');
@@ -33,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 500);
 });
 
-// 3. Iniciar música ao clicar em qualquer lugar
+// Iniciar música ao clicar
 document.addEventListener('click', function iniciarMusica() {
     if (musica.paused) {
         musica.play();
@@ -45,7 +54,6 @@ document.addEventListener('click', function iniciarMusica() {
 // ============================================
 //                    Gráficos
 // ============================================
-// ===== ZOOM SIMPLES COM 3 ESTÁGIOS =====
 const zoomNiveis = [
     { scale: 0.8, status: 'Reduzido --' },
     { scale: 0.9, status: 'Reduzido -' },
@@ -95,6 +103,7 @@ function aplicarZoomAtual() {
 document.addEventListener('DOMContentLoaded', function() {
     aplicarZoomAtual();
 });
+
 // Função para tela cheia (mantida simples)
 function alternarTelaCheia() {
     const btn = document.getElementById('btnTelaCheia');
@@ -123,7 +132,6 @@ function alternarTelaCheia() {
     }
 }
 
-// Se quiser uma versão ainda mais simples e direta:
 function autoSelecionarPlataformaSimples() {
     const select = document.getElementById('tipoPlataforma');
     if (!select) return;
@@ -140,7 +148,6 @@ function autoSelecionarPlataformaSimples() {
     select.dispatchEvent(event);
 }
 
-// Versão alternativa usando matchMedia (recomendada)
 function autoSelecionarPlataformaMediaQuery() {
     const select = document.getElementById('tipoPlataforma');
     if (!select) return;
@@ -193,21 +200,17 @@ document.getElementById('tipoPlataforma').addEventListener('change', function() 
 // ============================================
 //                    SAVE
 // ============================================
-// ===== LISTA DE KEYS IMPORTANTES =====
 const IMPORTANT_KEYS = [
     'capturados',       // Pokémons capturados
     'pokedex',          // Pokédex
     'gameZoomLevel',    // Nível de zoom do jogo
     'pokemonInventory', // Inventário de pokébolas
     'pokemonMoney',     // Dinheiro atual
-    'lastExport'        // Data do último backup
+    'lastExport',       // Data do último backup
+    'achievements'      // Conquistas
 ];
 
-const OBSOLETE_KEYS = [
-    'dinheiro',         // Sistema antigo de dinheiro
-    'playerMoney',      // Possível duplicado
-    'pokemonStoreCart'  // Carrinho da loja (temporário)
-];
+const OBSOLETE_KEYS = []; // Chaves obsoletas para remover durante migração
 
 // ===== SISTEMA DE EXPORTAÇÃO/IMPORTAÇÃO =====
 document.addEventListener('DOMContentLoaded', function() {
@@ -228,7 +231,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // ===== FUNÇÃO DE EXPORTAÇÃO ATUALIZADA =====
 function exportarProgresso() {
     try {
-        // 1. Coletar todos os dados importantes (INCLUINDO OS NOVOS)
+        // 1. Coletar todos os dados importantes
         const saveData = {
             // Dados principais
             capturados: JSON.parse(localStorage.getItem('capturados') || '{}'),
@@ -236,15 +239,17 @@ function exportarProgresso() {
             gameZoomLevel: parseInt(localStorage.getItem('gameZoomLevel') || '1'),
             pokemonInventory: JSON.parse(localStorage.getItem('pokemonInventory') || '{}'),
             pokemonMoney: parseInt(localStorage.getItem('pokemonMoney') || '0'),
+            achievements: JSON.parse(localStorage.getItem('achievements') || '[]'),
             
             // Metadados ATUALIZADOS
             metadata: {
-                version: "2.0",
+                version: "2.1",
                 exportDate: new Date().toISOString(),
                 totalPokemons: Object.keys(JSON.parse(localStorage.getItem('capturados') || '{}')).length,
                 pokedexCount: Object.keys(JSON.parse(localStorage.getItem('pokedex') || '{}')).length,
                 money: parseInt(localStorage.getItem('pokemonMoney') || '0'),
                 zoomLevel: parseInt(localStorage.getItem('gameZoomLevel') || '1'),
+                achievementsUnlocked: JSON.parse(localStorage.getItem('achievements') || '[]').length,
                 inventoryCount: (() => {
                     try {
                         const inv = JSON.parse(localStorage.getItem('pokemonInventory') || '{}');
@@ -334,42 +339,41 @@ function criarConteudoTXT(data) {
     
     let txt = '';
     
-    // Cabeçalho ATUALIZADO
+    // Cabeçalho
     txt += '='.repeat(50) + '\n';
-    txt += 'BACKUP DO JOGO POKÉMON - VERSÃO 2.0\n';
+    txt += 'BACKUP DO JOGO POKÉMON - VERSÃO 2.1\n';
     txt += '='.repeat(50) + '\n\n';
     
-    // Informações gerais ATUALIZADAS
+    // Informações gerais 
     txt += `Data do Backup: ${exportDate.toLocaleString('pt-BR')}\n`;
     txt += `Versão do Backup: ${metadata.version}\n`;
     txt += `Pokémons Capturados: ${metadata.totalPokemons}\n`;
     txt += `Pokédex Registrados: ${metadata.pokedexCount}\n`;
     txt += `Dinheiro: $${metadata.money}\n`;
     txt += `Nível de Zoom: ${metadata.zoomLevel}x\n`;
-    txt += `Pokébolas no Inventário: ${metadata.inventoryCount}\n\n`;
+    txt += `Pokébolas no Inventário: ${metadata.inventoryCount}\n`;
+    txt += `Achievements Desbloqueados: ${metadata.achievementsUnlocked || 0}\n\n`;
     
-    // NOVA SEÇÃO: Detalhes do Inventário
-    txt += '-' .repeat(25) + '\n';
-    txt += 'INVENTÁRIO DE POKÉBOLAS:\n';
-    txt += '-' .repeat(25) + '\n';
+    // NOVA SEÇÃO: Achievements
+    txt += '-'.repeat(25) + '\n';
+    txt += 'ACHIEVEMENTS DESBLOQUEADOS:\n';
+    txt += '-'.repeat(25) + '\n';
     
-    const inventory = data.pokemonInventory || {};
-    if (Object.keys(inventory).length > 0) {
-        Object.entries(inventory).forEach(([type, item]) => {
-            if (item && typeof item === 'object') {
-                txt += `• ${type}: ${item.count || 0} (Taxa: ${item.catchRate || 1.0}x)\n`;
-            }
+    const achievements = data.achievements || [];
+    if (achievements.length > 0) {
+        achievements.forEach((achievementId, index) => {
+            txt += `${index + 1}. ${achievementId}\n`;
         });
     } else {
-        txt += 'Inventário vazio\n';
+        txt += 'Nenhum achievement desbloqueado\n';
     }
     
     txt += '\n';
     
     // Lista de Pokémons Capturados
-    txt += '-' .repeat(25) + '\n';
+    txt += '-'.repeat(25) + '\n';
     txt += 'POKÉMONS AINDA CAPTURADOS:\n';
-    txt += '-' .repeat(25) + '\n';
+    txt += '-'.repeat(25) + '\n';
     
     if (metadata.totalPokemons > 0) {
         Object.values(data.capturados).forEach((pokemon, index) => {
@@ -382,9 +386,9 @@ function criarConteudoTXT(data) {
     txt += '\n';
     
     // Lista da Pokédex
-    txt += '-' .repeat(25) + '\n';
+    txt += '-'.repeat(25) + '\n';
     txt += 'POKÉDEX:\n';
-    txt += '-' .repeat(25) + '\n';
+    txt += '-'.repeat(25) + '\n';
     
     const pokedexList = Object.keys(data.pokedex).filter(name => data.pokedex[name]);
     if (pokedexList.length > 0) {
@@ -403,12 +407,13 @@ function criarConteudoTXT(data) {
     
     // Criar objeto simplificado para exportação
     const exportObj = {
-        version: "2.0",
+        version: "2.1",
         capturados: data.capturados,
         pokedex: data.pokedex,
         gameZoomLevel: data.gameZoomLevel,
         pokemonInventory: data.pokemonInventory,
         pokemonMoney: data.pokemonMoney,
+        achievements: data.achievements,
         lastExport: data.lastExport,
         otherData: data.otherData,
         metadata: metadata
@@ -476,6 +481,13 @@ function migrarDadosAntigos() {
             console.log('💰 Dinheiro antigo migrado:', dinheiroAntigo);
         }
         
+        // ✅ NOVO: Garantir que achievements existe
+        const achievementsExistente = localStorage.getItem('achievements');
+        if (!achievementsExistente || achievementsExistente === 'null' || achievementsExistente === 'undefined') {
+            localStorage.setItem('achievements', JSON.stringify([]));
+            console.log('🏆 Array de achievements inicializado');
+        }
+        
         // ✅ CORREÇÃO: Só cria inventário se NÃO EXISTIR e NÃO TIVER DADOS
         const inventoryExistente = localStorage.getItem('pokemonInventory');
         if (!inventoryExistente || inventoryExistente === 'null' || inventoryExistente === 'undefined') {
@@ -484,7 +496,7 @@ function migrarDadosAntigos() {
                 "greatball": {"count": 0, "catchRate": 1.5},
                 "ultraball": {"count": 0, "catchRate": 2.0}
             }));
-            console.log('📦 Inventário inicial criado com 5 Pokébolas');
+            
         } else {
             // ✅ Verifica se já tem pokeball e adiciona 5 se não tiver
             try {
@@ -495,13 +507,11 @@ function migrarDadosAntigos() {
                 if (!inventory.pokeball) {
                     inventory.pokeball = {"count": 5, "catchRate": 1.0};
                     modificado = true;
-                    console.log('➕ Adicionando 5 Pokébolas ao inventário existente');
                 } 
                 // Se tiver pokeball mas count = 0, adiciona 5
                 else if (inventory.pokeball.count === 0) {
                     inventory.pokeball.count = 5;
                     modificado = true;
-                    console.log('🔄 Atualizando Pokébolas de 0 para 5');
                 }
                 
                 // Garante greatball e ultraball existem
@@ -528,7 +538,6 @@ function migrarDadosAntigos() {
         }
         
         // Remover dados obsoletos
-        const OBSOLETE_KEYS = []; // Defina suas chaves obsoletas aqui
         OBSOLETE_KEYS.forEach(key => {
             localStorage.removeItem(key);
         });
@@ -562,7 +571,7 @@ function handleFileImport(event) {
     event.target.value = '';
 }
 
-// Função de importação
+// Função de importação ATUALIZADA
 function importarProgresso(fileContent, fileName) {
     // Pedir confirmação
     if (!confirm('⚠️ ATENÇÃO!\n\nImportar dados irá SOBRESCREVER seu progresso atual.\nDeseja continuar?')) {
@@ -601,7 +610,8 @@ function importarProgresso(fileContent, fileName) {
             'lastImport',           // Última importação
             'playerMoney',          // Possível duplicado
             'pokemonStoreCart',     // Carrinho da loja
-            'dinheiro'              // Dinheiro antigo (obsoleto)
+            'dinheiro',             // Dinheiro antigo (obsoleto)
+            'achievements'          // ✅ ADICIONADO
         ];
         
         // 1. Limpar todos os dados atuais
@@ -613,28 +623,32 @@ function importarProgresso(fileContent, fileName) {
         localStorage.setItem('capturados', JSON.stringify(jsonData.capturados));
         localStorage.setItem('pokedex', JSON.stringify(jsonData.pokedex));
         
-        // 3. Salvar NOVOS dados (APENAS se existirem no arquivo)
+        // 3. Salvar achievements (NOVO)
+        if (jsonData.achievements !== undefined) {
+            localStorage.setItem('achievements', JSON.stringify(jsonData.achievements));
+        } else {
+            localStorage.setItem('achievements', JSON.stringify([]));
+        }
         
-        // Dinheiro: verifica versão nova primeiro, depois antiga
+        // 4. Dinheiro: verifica versão nova primeiro, depois antiga
         if (jsonData.pokemonMoney !== undefined) {
             localStorage.setItem('pokemonMoney', jsonData.pokemonMoney.toString());
         } else if (jsonData.dinheiro !== undefined) {
             // Migrar de versão antiga para nova
             localStorage.setItem('pokemonMoney', jsonData.dinheiro.toString());
         }
-        // Se não tiver nenhum, deixa vazio (será criado quando necessário)
         
-        // Zoom level (só salva se existir)
+        // 5. Zoom level (só salva se existir)
         if (jsonData.gameZoomLevel !== undefined) {
             localStorage.setItem('gameZoomLevel', jsonData.gameZoomLevel.toString());
         }
         
-        // Inventário (só salva se existir)
+        // 6. Inventário (só salva se existir)
         if (jsonData.pokemonInventory !== undefined) {
             localStorage.setItem('pokemonInventory', JSON.stringify(jsonData.pokemonInventory));
         }
         
-        // 4. Salvar metadata (data do backup)
+        // 7. Salvar metadata (data do backup)
         if (jsonData.metadata && jsonData.metadata.exportDate) {
             localStorage.setItem('lastExport', jsonData.metadata.exportDate);
         } else {
@@ -642,7 +656,7 @@ function importarProgresso(fileContent, fileName) {
             localStorage.setItem('lastExport', new Date().toISOString());
         }
         
-        // 5. Salvar outros dados (se existirem)
+        // 8. Salvar outros dados (se existirem)
         if (jsonData.otherData) {
             Object.keys(jsonData.otherData).forEach(key => {
                 const value = jsonData.otherData[key];
@@ -654,7 +668,13 @@ function importarProgresso(fileContent, fileName) {
             });
         }
         
-        // 6. Atualizar variáveis globais (se existirem)
+        // 9. Reinicializar AchievementManager se existir
+        if (window.AchievementManager) {
+            AchievementManager.loadProgress();
+            AchievementManager.notifiedAchievements = [...AchievementManager.unlockedAchievements];
+        }
+        
+        // 10. Atualizar variáveis globais (se existirem)
         if (typeof capturados !== 'undefined') {
             capturados = jsonData.capturados;
         }
@@ -662,7 +682,7 @@ function importarProgresso(fileContent, fileName) {
             pokedex = jsonData.pokedex;
         }
         
-        // 7. Atualizar loja Pokémon se existir (APENAS com dados do arquivo)
+        // 11. Atualizar loja Pokémon se existir
         if (window.pokemonStore) {
             // Dinheiro
             if (jsonData.pokemonMoney !== undefined) {
@@ -677,7 +697,7 @@ function importarProgresso(fileContent, fileName) {
             }
         }
         
-        // 8. Atualizar interface
+        // 12. Atualizar interface
         if (typeof updateLastSaveDisplay === 'function') {
             updateLastSaveDisplay();
         }
@@ -695,9 +715,10 @@ function importarProgresso(fileContent, fileName) {
             window.pokemonStore.updateStore();
         }
         
-        // 9. Mostrar mensagem de sucesso
+        // 13. Mostrar mensagem de sucesso
         let importDate = 'data desconhecida';
         let version = '1.0';
+        let achievementsCount = jsonData.achievements ? jsonData.achievements.length : 0;
         
         if (jsonData.metadata) {
             if (jsonData.metadata.exportDate) {
@@ -708,9 +729,9 @@ function importarProgresso(fileContent, fileName) {
             }
         }
         
-        showSaveMessage(`✅ Progresso v${version} importado! (Backup: ${importDate})`, 'success');
+        showSaveMessage(`✅ Progresso v${version} importado! (${achievementsCount} achievements, Backup: ${importDate})`, 'success');
         
-        // 10. Atualizar tooltip
+        // 14. Atualizar tooltip
         const tooltip = document.getElementById('importInfo');
         if (tooltip) {
             tooltip.textContent = `Importado: ${new Date().toLocaleTimeString('pt-BR')}`;
@@ -820,7 +841,7 @@ document.getElementById('limparProgresso').addEventListener('click', function() 
     limparProgresso();
 });
 
-// Função para limpar progresso
+// Função para limpar progresso ATUALIZADA
 function limparProgresso() {
     // Confirmar ação (com mensagem mais alarmante)
     if (!confirm('⚠️⚠️⚠️ ALERTA CRÍTICO! ⚠️⚠️⚠️\n\n' +
@@ -828,6 +849,7 @@ function limparProgresso() {
                  '• Todos os Pokémons vistos\n' +
                  '• Todos os Pokémons capturados\n' +
                  '• Todo o inventário e dinheiro acumulado\n' +
+                 '• Todas as conquistas (achievements)\n' +
                  '• Todas as datas de salvamento\n\n' +
                  'Esta ação NÃO pode ser desfeita!')) {
         return;
@@ -857,23 +879,32 @@ function limparProgresso() {
         // Salvar backup temporário
         sessionStorage.setItem('backupAntesDeLimpar', JSON.stringify(backupData));
         
-        // LISTA COMPLETA DE KEYS PARA LIMPAR (incluindo as novas)
+        // LISTA COMPLETA DE KEYS PARA LIMPAR (incluindo achievements)
         const keysParaLimpar = [
             'capturados',           // Pokémons capturados
             'pokedex',              // Pokédex
-            'pokemonInventory',     // Inventário de pokébolas (NOVO)
-            'pokemonMoney',         // Dinheiro do sistema novo (NOVO)
-            'gameZoomLevel',        // Nível de zoom (NOVO)
+            'pokemonInventory',     // Inventário de pokébolas
+            'pokemonMoney',         // Dinheiro do sistema novo
+            'gameZoomLevel',        // Nível de zoom
             'lastExport',           // Último backup
             'lastImport',           // Última importação
             'playerMoney',          // Possível duplicado
-            'pokemonStoreCart'      // Carrinho da loja
+            'pokemonStoreCart',     // Carrinho da loja
+            'dinheiro',             // Dinheiro antigo
+            'achievements'          // ✅ ADICIONADO
         ];
         
         // Limpar todas as keys da lista
         keysParaLimpar.forEach(key => {
             localStorage.removeItem(key);
         });
+        
+        // Resetar AchievementManager se existir
+        if (window.AchievementManager) {
+            AchievementManager.unlockedAchievements = [];
+            AchievementManager.notifiedAchievements = [];
+            AchievementManager.saveProgress();
+        }
         
         // Resetar variáveis globais (se existirem)
         if (typeof capturados !== 'undefined') {
@@ -884,7 +915,7 @@ function limparProgresso() {
         }
         if (window.pokemonStore) {
             // Resetar loja Pokémon
-            window.pokemonStore.money = 0; // Valor inicial
+            window.pokemonStore.money = 0;
             window.pokemonStore.inventory = {
                 "pokeball": {"count": 5, "catchRate": 1.0},
                 "greatball": {"count": 0, "catchRate": 1.5},
@@ -925,6 +956,7 @@ function limparProgresso() {
         showSaveMessage('Erro ao limpar progresso', 'error');
     }
 }
+
 // Adicionar ao evento DOMContentLoaded (se já tiver um)
 document.addEventListener('DOMContentLoaded', function() {
     // Adicionar confirmação extra no hover
