@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta author="Nicolas de Almeida Sousa">
+    <title>NickJogos - Pokémon</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="Css/StylesPokemon/Style.css">
+    <link rel="stylesheet" href="Css/footer.css">
+    <link rel="stylesheet" href="Css/header.css">
+    <link rel="stylesheet" href="Css/StylesRunNoel/Style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-gamepad"></i>
+                    NickJogos
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="game-container">
+        <div class="game-wrapper">
+            <canvas id="gameCanvas" width="800" height="400"></canvas>
+            
+            <div class="game-info">
+                <div class="score-box">
+                    <span>🏆 SCORE</span>
+                    <span id="score">0</span>
+                </div>
+                <div class="highscore-box">
+                    <span>⭐ RECORDE</span>
+                    <span id="highscore">0</span>
+                </div>
+                <button class="restart-btn" id="restartBtn">
+                    <i class="fas fa-redo-alt"></i> Reiniciar
+                </button>
+            </div>
+            
+            <div class="controls">
+                <i class="fas fa-space-shuttle"></i> Pressione ESPAÇO, CLIQUE ou ↑ para pular
+            </div>
+            
+            <div class="game-over-message" id="gameOverMsg">
+            </div>
+        </div>
+    </div>
+
+    <footer class="game-footer">
+        <div class="footer-content">
+            <p>© 2025 - Projeto desenvolvido por Nicolas de Almeida Sousa</p>
+            <p>Projeto acadêmico sem fins lucrativos</p>
+        </div>
+    </footer>
+
+    <script src="Js/JsRunNoel/script.js"></script>
+</body>
+</html>

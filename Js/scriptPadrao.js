@@ -31,6 +31,10 @@ function abrirJogoTamagotchi(){
     window.location.href = "jogoTamagotchi.html";
 }
 
+function abrirJogoRunNoel(){
+    window.location.href = "jogoRunNoel.html";
+}
+
 // Funcionalidade das categorias
 document.addEventListener('DOMContentLoaded', function() {
     const categoryButtons = document.querySelectorAll('.category-btn');
