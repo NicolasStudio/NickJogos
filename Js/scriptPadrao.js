@@ -35,6 +35,10 @@ function abrirJogoRunNoel(){
     window.location.href = "jogoRunNoel.html";
 }
 
+function abrirJogoOrigemVida(){
+    window.location.href = "Index/jogoOrigemVida.html";
+}
+
 // Funcionalidade das categorias
 document.addEventListener('DOMContentLoaded', function() {
     const categoryButtons = document.querySelectorAll('.category-btn');

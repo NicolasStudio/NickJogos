@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Evolução Celular - Origem da Vida</title>
+    <link rel="stylesheet" href="/Css/StylesOrigemVida/style.css">
+    <link rel="stylesheet" href="/Css/StylesOrigemVida/achievements.css">
+</head>
+<body>
+
+    <!-- Menu Lateral -->
+    <div class="side-menu" id="sideMenu">
+        <div class="menu-toggle" id="menuToggle">
+            <span class="menu-icon">☰</span>
+        </div>
+        <div class="menu-content" id="menuContent">
+            <div class="menu-header">
+                <h3>📋 MENU</h3>
+                <button class="menu-close" id="menuClose">✕</button>
+            </div>
+            <div class="menu-options">
+                <button class="menu-option" id="menuAchievements">
+                    🏆 Conquistas
+                </button>
+                <button class="menu-option" id="menuSave">
+                    💾 Salvar Jogo
+                </button>
+                <button class="menu-option" id="menuLoad">
+                    📂 Carregar Jogo
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pop-up de Conquistas -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-container">
+            <div class="popup-header">
+                <h2>🏆 CONQUISTAS</h2>
+                <button class="popup-close" id="popupClose">✕</button>
+            </div>
+            <div class="popup-content" id="achievementsGrid">
+                <!-- As conquistas serão inseridas via JS -->
+            </div>
+        </div>
+    </div>
+
+    <div class="game-container">
+        <h1>🧬 ORIGEM DA VIDA</h1>
+        <h2>⚡ Síntese Molecular</h2>
+        
+        <!-- Tabela de recursos -->
+        <div class="evolution-table">
+            <div class="table-header">
+                <span>🔬 Componente</span>
+                <span>📊 Quantidade</span>
+                <span>🔝 Máximo</span>
+            </div>
+            <div class="table-row">
+                <span>🧪 Aminoácidos</span>
+                <span class="qtd" id="aminoacidosValue">0</span>
+                <span class="max">/ <span id="aminoacidosMax">15</span></span>
+            </div>
+            <div class="table-row">
+                <span>🧬 Nucleotídeos</span>
+                <span class="qtd" id="nucleotideosValue">0</span>
+                <span class="max">/ <span id="nucleotideosMax">15</span></span>
+            </div>
+            <div class="table-row">
+                <span>🫧 Lipídios</span>
+                <span class="qtd" id="lipidiosValue">0</span>
+                <span class="max">/ <span id="lipidiosMax">15</span></span>
+            </div>
+            <div class="table-row" id="rowMoleculas" style="display: none;">
+                <span>🧪 Moléculas orgânicas</span>
+                <span class="qtd" id="moleculasValue">0</span>
+                <span class="max">/ 20</span>
+            </div>
+            <div class="table-row" id="rowRNA" style="display: none;">
+                <span>🧬 RNA</span>
+                <span class="qtd" id="rnaValue">0</span>
+                <span class="max">/ 12</span>
+            </div>
+            <div class="table-row" id="rowMembrana" style="display: none;">
+                <span>🫧 Membrana (protocélula)</span>
+                <span class="qtd" id="membranaValue">0</span>
+                <span class="max">/ 4</span>
+            </div>
+            <div class="table-row" id="rowDNA" style="display: none;">
+                <span>🧬 DNA</span>
+                <span class="qtd" id="dnaValue">0</span>
+                <span class="max">/ 40</span>
+            </div>
+            <div class="table-row" id="rowMetabolismo" style="display: none;">
+                <span>⚡ Metabolismo</span>
+                <span class="qtd" id="metabolismoValue">0</span>
+                <span class="max">/ 1</span>
+            </div>
+        </div>
+
+        <!-- Área de criação -->
+        <div class="creation-area">
+            <h3>🔧 SÍNTESE MOLECULAR</h3>
+            <div class="buttons-row">
+                <button class="creation-btn" id="btnAminoacidos">🧪 Aminoácidos +1</button>
+                <button class="creation-btn" id="btnNucleotideos">🧬 Nucleotídeos +1</button>
+                <button class="creation-btn" id="btnLipidios">🫧 Lipídios +1</button>
+            </div>
+            <div class="buttons-row" id="moleculaButtonRow" style="display: none;">
+                <button class="creation-btn" id="btnGerarMoleculas" disabled>🔬 Gerar Molécula orgânica (10 de cada)</button>
+            </div>
+            <div class="buttons-row" id="rnaButtonRow" style="display: none;">
+                <button class="creation-btn" id="btnComprarRNA" disabled>🧬 Sintetizar RNA (20 moléculas)</button>
+            </div>
+            <div class="buttons-row" id="membranaButtonRow" style="display: none;">
+                <button class="creation-btn" id="btnComprarMembrana" disabled>🫧 Formar Membrana (10 RNA)</button>
+            </div>
+            <div class="buttons-row" id="dnaButtonRow" style="display: none;">
+                <button class="creation-btn" id="btnComprarDNA" disabled>🧬 Sintetizar DNA (4 Membranas)</button>
+            </div>
+            <div class="buttons-row" id="metabolismoButtonRow" style="display: none;">
+                <button class="creation-btn" id="btnComprarMetabolismo" disabled>⚡ Desenvolver Metabolismo (100 DNA)</button>
+            </div>
+        </div>
+
+        <!-- Área de melhorias (upgrades) -->
+        <div class="upgrades-area">
+            <h3>📈 MELHORIAS</h3>
+            <div class="upgrades-grid">
+                <!-- Upgrade 1: Expansão do Protoplasma -->
+                <div class="upgrade-card" id="upgradeCapacidadeCard">
+                    <span class="upgrade-name">📦 Expansão do Protoplasma</span>
+                    <span class="upgrade-desc" id="upgradeDesc">Aumenta capacidade máxima de Aminoácidos, Nucleotídeos e Lipídios</span>
+                    <span class="upgrade-cost" id="upgradeCost">Custo: 10 🧪 Moléculas</span>
+                    <button class="upgrade-btn" id="btnUpgradeCapacidade">COMPRAR</button>
+                    <div class="upgrade-tooltip" id="upgradeTooltip">🔴 Custo: 10 moléculas orgânicas</div>
+                </div>
+
+                <!-- Upgrade 2: Automação Metabólica -->
+                <div class="upgrade-card" id="upgradeAutoCard">
+                    <span class="upgrade-name">⚡ Automação Metabólica</span>
+                    <span class="upgrade-desc" id="autoDesc">Gera automaticamente Aminoácidos, Nucleotídeos e Lipídios</span>
+                    <span class="upgrade-cost" id="autoCost">Custo: 2 🧬 RNA</span>
+                    <button class="upgrade-btn" id="btnUpgradeAuto">COMPRAR</button>
+                    <div class="upgrade-tooltip" id="autoTooltip">🔴 Custo: 2 RNA</div>
+                </div>
+
+                <!-- Upgrade 3: Automação Molecular (NOVO) -->
+                <div class="upgrade-card" id="upgradeAutoMoleculaCard">
+                    <span class="upgrade-name">🔬 Automação Molecular</span>
+                    <span class="upgrade-desc" id="autoMoleculaDesc">Gera automaticamente Moléculas orgânicas</span>
+                    <span class="upgrade-cost" id="autoMoleculaCost">Custo: 50 🧪 + 50 🧬 + 50 🫧</span>
+                    <button class="upgrade-btn" id="btnUpgradeAutoMolecula">COMPRAR</button>
+                    <div class="upgrade-tooltip" id="autoMoleculaTooltip">🔴 Custo: 50 Aminoácidos, 50 Nucleotídeos, 50 Lipídios</div>
+                </div>
+
+                                <!-- Upgrade 4: Expansão do DNA -->
+                <div class="upgrade-card" id="upgradeExpansaoDNACard">
+                    <span class="upgrade-name">🧬 Expansão do DNA</span>
+                    <span class="upgrade-desc" id="expansaoDNADesc">Aumenta limite máximo de DNA</span>
+                    <span class="upgrade-cost" id="expansaoDNACost">Custo: 1 🫧 Membrana</span>
+                    <button class="upgrade-btn" id="btnUpgradeExpansaoDNA">COMPRAR</button>
+                    <div class="upgrade-tooltip" id="expansaoDNATooltip">🔴 Custo: 1 Membrana (protocélula)</div>
+                </div>
+
+                <!-- Upgrade 5: Automação de Membrana -->
+                <div class="upgrade-card" id="upgradeAutoMembranaCard">
+                    <span class="upgrade-name">🫧 Automação de Membrana</span>
+                    <span class="upgrade-desc" id="autoMembranaDesc">Gera automaticamente Membranas</span>
+                    <span class="upgrade-cost" id="autoMembranaCost">Custo: 10 🧪 + 5 🧬 RNA</span>
+                    <button class="upgrade-btn" id="btnUpgradeAutoMembrana">COMPRAR</button>
+                    <div class="upgrade-tooltip" id="autoMembranaTooltip">🔴 Custo: 10 Moléculas, 5 RNA</div>
+                </div>
+
+                <!-- Upgrade 6: DNA Gêmeo (Clonagem) -->
+                <div class="upgrade-card" id="upgradeClonagemCard">
+                    <span class="upgrade-name">🧬 DNA Gêmeo</span>
+                    <span class="upgrade-desc" id="clonagemDesc">Chance de clonagem ao sintetizar DNA</span>
+                    <span class="upgrade-cost" id="clonagemCost">Custo: 10 🧬 DNA</span>
+                    <button class="upgrade-btn" id="btnUpgradeClonagem">COMPRAR</button>
+                    <div class="upgrade-tooltip" id="clonagemTooltip">🔴 Custo: 10 DNA</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/Js/JsOrigemVida/saveSystem.js"></script>
+    <script src="/Js/JsOrigemVida/achievements.js"></script>
+    <script src="/Js/JsOrigemVida/gameData.js"></script>
+    <script src="/Js/JsOrigemVida/gameLogic.js"></script>
+    <script src="/Js/JsOrigemVida/main.js"></script>
+</body>
+</html>
