@@ -36,7 +36,7 @@ function abrirJogoRunNoel(){
 }
 
 function abrirJogoOrigemVida(){
-    window.location.href = "Index/jogoOrigemVida.html";
+    window.location.href = "jogoOrigemVida.html";
 }
 
 // Funcionalidade das categorias
