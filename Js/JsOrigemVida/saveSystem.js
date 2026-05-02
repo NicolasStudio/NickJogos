@@ -1,4 +1,4 @@
-// ==================== SISTEMA DE SALVAMENTO ====================
+// ==================== SISTEMA DE SALVAMENTO ATUALIZADO ====================
 
 const SaveSystem = {
     // Salvar jogo como arquivo .txt
@@ -6,10 +6,10 @@ const SaveSystem = {
         // Coletar todos os dados do jogo
         const saveData = {
             // Metadados
-            version: "1.0",
+            version: "2.0",
             savedAt: new Date().toLocaleString('pt-BR'),
             
-            // Recursos e quantidades
+            // Recursos e quantidades (COMPLETO)
             resources: {
                 aminoacidos: GameData.aminoacidos,
                 nucleotideos: GameData.nucleotideos,
@@ -18,7 +18,8 @@ const SaveSystem = {
                 rna: GameData.rna,
                 membrana: GameData.membrana,
                 dna: GameData.dna,
-                metabolismo: GameData.metabolismo
+                metabolismo: GameData.metabolismo,
+                primeiraCelula: GameData.primeiraCelula
             },
             
             // Limites máximos
@@ -28,6 +29,7 @@ const SaveSystem = {
                 maxMembrana: GameData.maxMembrana,
                 maxDNA: GameData.maxDNA,
                 maxMetabolismo: GameData.maxMetabolismo,
+                maxBase: GameData.maxBase,
                 limiteBaseAtual: GameLogic.getLimiteAtual()
             },
             
@@ -109,18 +111,21 @@ const SaveSystem = {
                 }
             },
             
-            // Botões desbloqueados
+            // Botões desbloqueados (COMPLETO)
             unlockedButtons: {
                 moleculasVisivel: GameData.botaoMoleculasVisivel,
                 rnaVisivel: GameData.botaoRNAVisivel,
                 membranaVisivel: GameData.botaoMembranaVisivel,
                 dnaVisivel: GameData.botaoDNAVisivel,
-                metabolismoVisivel: GameData.botaoMetabolismoVisivel
+                metabolismoVisivel: GameData.botaoMetabolismoVisivel,
+                primeiraCelulaVisivel: GameData.botaoPrimeiraCelulaVisivel
             },
             
-            // Estado do jogo
+            // Estado do jogo (COMPLETO)
             gameState: {
                 gameFinished: GameData.gameFinished,
+                primeiraFaseConcluida: GameData.primeiraFaseConcluida,
+                evolucaoEscolhida: GameData.evolucaoEscolhida,
                 vitoria: GameData.metabolismo >= 1
             },
             
@@ -140,14 +145,16 @@ const SaveSystem = {
             resumo: {
                 totalRecursos: GameData.aminoacidos + GameData.nucleotideos + GameData.lipidios + 
                                GameData.moleculas + GameData.rna + GameData.membrana + 
-                               GameData.dna + GameData.metabolismo,
+                               GameData.dna + GameData.metabolismo + GameData.primeiraCelula,
                 upgradesComprados: (GameData.upgradeNivel > 0 ? 1 : 0) +
                                   (GameData.autoNivel > 0 ? 1 : 0) +
                                   (GameData.autoMoleculaNivel > 0 ? 1 : 0) +
                                   (GameData.expansaoDNANivel > 0 ? 1 : 0) +
                                   (GameData.autoMembranaNivel > 0 ? 1 : 0) +
                                   (GameData.clonagemNivel > 0 ? 1 : 0),
-                conquistasDesbloqueadas: Achievements ? Achievements.desbloqueadas.length : 0
+                conquistasDesbloqueadas: Achievements ? Achievements.desbloqueadas.length : 0,
+                faseAtual: GameData.primeiraFaseConcluida ? "Pós-Primeira Célula" : "Origem da Vida",
+                evolucao: GameData.evolucaoEscolhida || "Não escolhida"
             }
         };
         
@@ -169,7 +176,7 @@ const SaveSystem = {
         return true;
     },
     
-    // Formatar dados de forma legível
+    // Formatar dados de forma legível (ATUALIZADO)
     formatSaveData(data) {
         let text = '='.repeat(60) + '\n';
         text += '         EVOLUÇÃO CELULAR - SAVE GAME\n';
@@ -188,7 +195,17 @@ const SaveSystem = {
         text += `🧬 RNA: ${data.resources.rna} / ${data.limits.maxRNA}\n`;
         text += `🫧 Membrana: ${data.resources.membrana} / ${data.limits.maxMembrana}\n`;
         text += `🧬 DNA: ${data.resources.dna} / ${data.limits.maxDNA}\n`;
-        text += `⚡ Metabolismo: ${data.resources.metabolismo} / ${data.limits.maxMetabolismo}\n\n`;
+        text += `⚡ Metabolismo: ${data.resources.metabolismo} / ${data.limits.maxMetabolismo}\n`;
+        text += `🔬 Primeira Célula: ${data.resources.primeiraCelula} / 1\n\n`;
+        
+        text += '-'.repeat(60) + '\n';
+        text += '🎮 ESTADO DO JOGO\n';
+        text += '-'.repeat(60) + '\n';
+        text += `Fase atual: ${data.resumo.faseAtual}\n`;
+        text += `Evolução escolhida: ${data.resumo.evolucao}\n`;
+        text += `Jogo finalizado: ${data.gameState.gameFinished ? 'SIM' : 'NÃO'}\n`;
+        text += `Primeira fase concluída: ${data.gameState.primeiraFaseConcluida ? 'SIM' : 'NÃO'}\n`;
+        text += `Vitória alcançada: ${data.gameState.vitoria ? 'SIM 🎉' : 'NÃO'}\n\n`;
         
         text += '-'.repeat(60) + '\n';
         text += '📈 MELHORIAS (UPGRADES)\n';
@@ -291,17 +308,13 @@ const SaveSystem = {
         text += `\n`;
         
         text += '-'.repeat(60) + '\n';
-        text += '🎮 ESTADO DO JOGO\n';
-        text += '-'.repeat(60) + '\n';
-        text += `Jogo finalizado: ${data.gameState.gameFinished ? 'SIM' : 'NÃO'}\n`;
-        text += `Vitória alcançada: ${data.gameState.vitoria ? 'SIM 🎉' : 'NÃO'}\n\n`;
-        
-        text += '-'.repeat(60) + '\n';
         text += '📊 RESUMO DO PROGRESSO\n';
         text += '-'.repeat(60) + '\n';
         text += `Total de recursos acumulados: ${data.resumo.totalRecursos}\n`;
         text += `Upgrades comprados: ${data.resumo.upgradesComprados}/6\n`;
-        text += `Conquistas desbloqueadas: ${data.resumo.conquistasDesbloqueadas}/${data.achievements.total}\n\n`;
+        text += `Conquistas desbloqueadas: ${data.resumo.conquistasDesbloqueadas}/${data.achievements.total}\n`;
+        text += `Fase atual: ${data.resumo.faseAtual}\n`;
+        text += `Evolução: ${data.resumo.evolucao}\n\n`;
         
         text += '='.repeat(60) + '\n';
         text += '         FIM DO SAVE - Evolução Celular\n';
@@ -310,7 +323,7 @@ const SaveSystem = {
         return text;
     },
     
-    // Carregar jogo a partir de arquivo .txt
+    // Carregar jogo a partir de arquivo .txt (ATUALIZADO)
     carregarArquivo(file) {
         const reader = new FileReader();
         
@@ -357,9 +370,8 @@ const SaveSystem = {
         input.click();
     },
     
-    // Parse do arquivo de save para extrair dados
+    // Parse do arquivo de save para extrair dados (ATUALIZADO)
     parseSaveFile(content) {
-        // Procurar por padrões no texto para extrair os dados
         const saveData = {};
         
         // Extrair recursos
@@ -371,6 +383,7 @@ const SaveSystem = {
         const membMatch = content.match(/Membrana:\s*(\d+)/);
         const dnaMatch = content.match(/DNA:\s*(\d+)/);
         const metaMatch = content.match(/Metabolismo:\s*(\d+)/);
+        const primeiraCelulaMatch = content.match(/Primeira Célula:\s*(\d+)/);
         
         saveData.resources = {
             aminoacidos: aminoMatch ? parseInt(aminoMatch[1]) : 0,
@@ -380,12 +393,26 @@ const SaveSystem = {
             rna: rnaMatch ? parseInt(rnaMatch[1]) : 0,
             membrana: membMatch ? parseInt(membMatch[1]) : 0,
             dna: dnaMatch ? parseInt(dnaMatch[1]) : 0,
-            metabolismo: metaMatch ? parseInt(metaMatch[1]) : 0
+            metabolismo: metaMatch ? parseInt(metaMatch[1]) : 0,
+            primeiraCelula: primeiraCelulaMatch ? parseInt(primeiraCelulaMatch[1]) : 0
         };
         
         // Extrair limites
         const dnaLimitMatch = content.match(/DNA:\s*\d+\s*\/\s*(\d+)/);
         saveData.maxDNA = dnaLimitMatch ? parseInt(dnaLimitMatch[1]) : 40;
+        
+        // Extrair estado do jogo
+        const faseAtualMatch = content.match(/Fase atual:\s*(.+)/);
+        const evolucaoMatch = content.match(/Evolução escolhida:\s*(.+)/);
+        const primeiraFaseConcluidaMatch = content.match(/Primeira fase concluída:\s*(SIM|NÃO)/);
+        const gameFinishedMatch = content.match(/Jogo finalizado:\s*(SIM|NÃO)/);
+        
+        saveData.gameState = {
+            faseAtual: faseAtualMatch ? faseAtualMatch[1] : "Origem da Vida",
+            evolucaoEscolhida: evolucaoMatch ? (evolucaoMatch[1] === "Não escolhida" ? null : evolucaoMatch[1].toLowerCase()) : null,
+            primeiraFaseConcluida: primeiraFaseConcluidaMatch ? primeiraFaseConcluidaMatch[1] === 'SIM' : false,
+            gameFinished: gameFinishedMatch ? gameFinishedMatch[1] === 'SIM' : false
+        };
         
         // Extrair níveis dos upgrades
         const expansaoNivelMatch = content.match(/EXPANSÃO DO PROTOPLASMA[\s\S]*?Nível:\s*(\d+)\/(\d+)/);
@@ -411,7 +438,6 @@ const SaveSystem = {
             conquistaLines.forEach(line => {
                 const match = line.match(/[✅🔒] (.+)/);
                 if (match && line.startsWith('✅')) {
-                    // Encontrar o ID da conquista pelo título
                     if (Achievements) {
                         const conquista = Achievements.lista.find(a => a.titulo === match[1]);
                         if (conquista) conquistas.push(conquista.id);
@@ -421,14 +447,10 @@ const SaveSystem = {
         }
         saveData.conquistas = conquistas;
         
-        // Extrair estado do jogo
-        const gameFinishedMatch = content.match(/Jogo finalizado:\s*(SIM|NÃO)/);
-        saveData.gameFinished = gameFinishedMatch ? gameFinishedMatch[1] === 'SIM' : false;
-        
         return saveData;
     },
     
-    // Restaurar o jogo a partir dos dados parseados
+    // Restaurar o jogo a partir dos dados parseados (ATUALIZADO)
     restaurarSave(saveData) {
         // Restaurar recursos
         GameData.aminoacidos = saveData.resources.aminoacidos;
@@ -439,6 +461,7 @@ const SaveSystem = {
         GameData.membrana = saveData.resources.membrana;
         GameData.dna = saveData.resources.dna;
         GameData.metabolismo = saveData.resources.metabolismo;
+        GameData.primeiraCelula = saveData.resources.primeiraCelula;
         
         // Restaurar limites
         GameData.maxDNA = saveData.maxDNA;
@@ -457,14 +480,18 @@ const SaveSystem = {
             GameData.maxDNA = GameData.expansaoDNATabela[nivelIndex].novoLimite;
         }
         
+        // Restaurar estado do jogo
+        if (saveData.gameState) {
+            GameData.gameFinished = saveData.gameState.gameFinished;
+            GameData.primeiraFaseConcluida = saveData.gameState.primeiraFaseConcluida;
+            GameData.evolucaoEscolhida = saveData.gameState.evolucaoEscolhida;
+        }
+        
         // Restaurar conquistas
         if (Achievements && saveData.conquistas) {
             Achievements.desbloqueadas = saveData.conquistas;
             Achievements.salvar();
         }
-        
-        // Restaurar estado do jogo
-        GameData.gameFinished = saveData.gameFinished;
         
         // Recalcular desbloqueios de botões baseado nos recursos atuais
         GameData.botaoMoleculasVisivel = GameData.aminoacidos >= 10 && 
@@ -474,6 +501,12 @@ const SaveSystem = {
         GameData.botaoMembranaVisivel = GameData.rna >= 10;
         GameData.botaoDNAVisivel = GameData.membrana >= 4;
         GameData.botaoMetabolismoVisivel = GameData.dna >= 100;
+        GameData.botaoPrimeiraCelulaVisivel = GameData.metabolismo >= 1000;
+        
+        // Se a primeira fase já foi concluída, restaurar interface especial
+        if (GameData.primeiraFaseConcluida && window.limparInterfaceAposPrimeiraCelula) {
+            window.limparInterfaceAposPrimeiraCelula();
+        }
         
         // Reiniciar automações
         if (GameLogic) {
@@ -483,6 +516,11 @@ const SaveSystem = {
             GameLogic.startAutoGeneration();
             GameLogic.startAutoMoleculaGeneration();
             GameLogic.startAutoMembranaGeneration();
+        }
+        
+        // Verificar conquistas novamente
+        if (Achievements && Achievements.verificarTodas) {
+            Achievements.verificarTodas();
         }
     },
     
@@ -532,19 +570,24 @@ const SaveSystem = {
                         rna: data.rna,
                         membrana: data.membrana,
                         dna: data.dna,
-                        metabolismo: data.metabolismo
+                        metabolismo: data.metabolismo,
+                        primeiraCelula: data.primeiraCelula || 0
                     },
-                    maxDNA: data.maxDNA,
+                    maxDNA: data.maxDNA || 40,
                     upgrades: {
-                        expansaoProtoplasma: data.upgradeNivel,
-                        automacaoMetabolica: data.autoNivel,
-                        automacaoMolecular: data.autoMoleculaNivel,
-                        expansaoDNA: data.expansaoDNANivel,
-                        automacaoMembrana: data.autoMembranaNivel,
-                        clonagemDNA: data.clonagemNivel
+                        expansaoProtoplasma: data.upgradeNivel || 0,
+                        automacaoMetabolica: data.autoNivel || 0,
+                        automacaoMolecular: data.autoMoleculaNivel || 0,
+                        expansaoDNA: data.expansaoDNANivel || 0,
+                        automacaoMembrana: data.autoMembranaNivel || 0,
+                        clonagemDNA: data.clonagemNivel || 0
                     },
                     conquistas: Achievements ? Achievements.desbloqueadas : [],
-                    gameFinished: data.gameFinished
+                    gameState: {
+                        gameFinished: data.gameFinished || false,
+                        primeiraFaseConcluida: data.primeiraFaseConcluida || false,
+                        evolucaoEscolhida: data.evolucaoEscolhida || null
+                    }
                 });
                 this.mostrarMensagem('✅ Jogo carregado do localStorage!', '#00ff00');
                 if (window.UIRefresh) window.UIRefresh();

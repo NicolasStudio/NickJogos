@@ -24,12 +24,16 @@ Comece clicando em **Aminoácidos**, **Nucleotídeos** e **Lipídios** - os bloc
 
 ## 🎯 Como Jogar
 
-1. **Clique nos 3 botões básicos** para acumular recursos
-2. **Gere moléculas orgânicas** (10 de cada recurso)
-3. **Sintetize RNA** (20 moléculas)
-4. **Forme Membranas** (10 RNA)
-5. **Crie DNA** (4 membranas)
-6. **Desenvolva o Metabolismo** (100 DNA) - **VITÓRIA!**
+1. **Clique nos 3 botões básicos** para acumular recursos.
+2. **Gere uma molécula orgânica** (10 de cada: Aminoácidos, Nucleotídeos e Lipídios)
+3. **Sintetize um RNA** (20 moléculas orgânicas gera 1 RNA)
+4. **Forme uma Membrana** (10 RNA forma uma Membrana)
+5. **Crie DNA** (4 membranas forma 1 DNA)
+6. **Desenvolva o Metabolismo** (Juntando 100 DNA)
+7. **Formação da Primeira célula** (Juntando 1000 metabolismo).
+
+
+**VITÓRIA!**
 
 ### Dicas
 - Invista em **upgrades de capacidade** cedo

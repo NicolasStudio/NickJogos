@@ -1,4 +1,4 @@
-// ==================== SISTEMA DE CONQUISTAS ====================
+// ==================== SISTEMA DE CONQUISTAS (ATUALIZADO) ====================
 
 const Achievements = {
     // Lista de conquistas
@@ -60,7 +60,23 @@ const Achievements = {
             descricao: "Expandir o limite de DNA para 100",
             icone: "🚀",
             verificar: () => GameData.maxDNA >= 100
+        },
+        // ==================== NOVAS CONQUISTAS ====================
+        {
+            id: 9,
+            titulo: "🔬 Primeira Célula",
+            descricao: "Formar a primeira célula e dar início à vida",
+            icone: "🔬",
+            verificar: () => GameData.primeiraCelula >= 1
+        },
+        {
+            id: 10,
+            titulo: "🐑 Dolly",
+            descricao: "Alcançar 20% de chance de clonagem (Nível máximo de DNA Gêmeo)",
+            icone: "🐑",
+            verificar: () => GameData.clonagemNivel >= 6
         }
+        // ==================== FIM DAS NOVAS CONQUISTAS ====================
     ],
     
     // Conquistas desbloqueadas
@@ -99,6 +115,7 @@ const Achievements = {
             <div class="achievement-notif-info">
                 <div class="achievement-notif-title">🏆 CONQUISTA DESBLOQUEADA!</div>
                 <div class="achievement-notif-name">${conquista.titulo}</div>
+                <div class="achievement-notif-desc">${conquista.descricao}</div>
             </div>
         `;
         notif.style.cssText = `
@@ -115,6 +132,7 @@ const Achievements = {
             z-index: 3000;
             animation: slideIn 0.3s ease, fadeOut 0.5s ease 3s forwards;
             box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            min-width: 250px;
         `;
         document.body.appendChild(notif);
         
@@ -174,6 +192,13 @@ style.textContent = `
         }
     }
     
+    @keyframes fadeOut {
+        to {
+            opacity: 0;
+            visibility: hidden;
+        }
+    }
+    
     .achievement-notification {
         animation: slideIn 0.3s ease, fadeOut 0.5s ease 3s forwards;
     }
@@ -192,6 +217,12 @@ style.textContent = `
         font-size: 14px;
         color: #fff;
         font-weight: bold;
+    }
+    
+    .achievement-notif-desc {
+        font-size: 11px;
+        color: #aaa;
+        margin-top: 4px;
     }
 `;
 document.head.appendChild(style);

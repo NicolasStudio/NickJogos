@@ -1,17 +1,16 @@
-* {
-    user-select: none;
-    box-sizing: border-box;
-}
-
 body {
     margin: 0;
     min-height: 100vh;
     background: radial-gradient(circle at center, #0a0f2a, #03050b);
-    display: flex;
-    justify-content: center;
-    align-items: center;
     font-family: 'Courier New', 'Fira Code', monospace;
-    padding: 20px;
+    
+}
+
+.game{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
 }
 
 .game-container {
@@ -125,6 +124,8 @@ h3 {
     text-transform: uppercase;
     letter-spacing: 1px;
     box-shadow: 0 0 5px #00ffff66;
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 .creation-btn:hover:not(:disabled) {
@@ -360,3 +361,5 @@ h3 {
 ::-webkit-scrollbar-thumb:hover {
     background: #00ffff;
 }
+
+

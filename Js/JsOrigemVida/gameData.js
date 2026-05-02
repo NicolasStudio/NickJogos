@@ -12,13 +12,15 @@ const GameData = {
     membrana: 0,
     dna: 0,
     metabolismo: 0,
+    primeiraCelula: 0,
     
     // Limites
     maxMoleculas: 20,
     maxRNA: 12,
     maxMembrana: 4,
     maxDNA: 40,
-    maxMetabolismo: 1,
+    maxMetabolismo: 1000,
+    maxPrimeiraCelula: 1,
     maxBase: 15,
     
     // Upgrade 1: Expansão do Protoplasma
@@ -82,12 +84,12 @@ const GameData = {
     // Upgrade 6: Clonagem de DNA
     clonagemNivel: 0,
     clonagemTabela: [
-        { custo: 10, chance: 3 },
-        { custo: 20, chance: 6 },
-        { custo: 30, chance: 9 },
-        { custo: 40, chance: 12 },
-        { custo: 50, chance: 15 },
-        { custo: 60, chance: 20 }
+        { custo: 3, chance: 3 },
+        { custo: 6, chance: 6 },
+        { custo: 9, chance: 9 },
+        { custo: 12, chance: 12 },
+        { custo: 15, chance: 15 },
+        { custo: 20, chance: 20 }
     ],
     
     // Controle de desbloqueio
@@ -96,7 +98,10 @@ const GameData = {
     botaoMembranaVisivel: false,
     botaoDNAVisivel: false,
     botaoMetabolismoVisivel: false,
+    botaoPrimeiraCelulaVisivel: false,
     
-    // Flag de vitória
-    gameFinished: false
+    // Flag de controle
+    primeiraFaseConcluida: false,
+    gameFinished: false,
+    evolucaoEscolhida: null
 };
