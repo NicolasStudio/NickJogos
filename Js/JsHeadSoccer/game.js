@@ -45,10 +45,11 @@ class PuppetSoccer {
         this.gravity = 0.4;
         this.jumpPower = 12;
         
-        // Controlador de FPS
-        this.fps = 60;
-        this.deltaTime = 0;
-        this.lastTime = 0;
+        // Loop com passo fixo: a física sempre roda a 60 atualizações por segundo,
+        // independente da taxa de quadros do monitor
+        this.step = 1000 / 60;
+        this.accumulator = 0;
+        this.lastTime = null;
         
         // Jogadores (valores base, serão ajustados)
         this.players = [
@@ -59,6 +60,7 @@ class PuppetSoccer {
                 height: 60,
                 color: '#e74c3c', 
                 speed: 3.5,
+                velX: 0,
                 velY: 0,
                 isJumping: false,
                 footAngle: 0,
@@ -81,6 +83,7 @@ class PuppetSoccer {
                 height: 60,
                 color: '#3498db', 
                 speed: 3.5,
+                velX: 0,
                 velY: 0,
                 isJumping: false,
                 footAngle: 0,
@@ -127,7 +130,7 @@ class PuppetSoccer {
         window.addEventListener('resize', () => this.setCanvasSize());
         
         this.setupEventListeners();
-        this.gameLoop();
+        requestAnimationFrame((time) => this.gameLoop(time));
     }
     
     setCanvasSize() {
@@ -210,15 +213,19 @@ class PuppetSoccer {
     
     updatePlayers() {
         this.players.forEach(player => {
+            const previousX = player.x;
+
             if (this.keys[player.keys.left] && player.x - player.width / 2 > 0) {
-                player.x -= player.speed * (this.deltaTime / 16);
+                player.x -= player.speed;
                 player.direction = -1;
             }
             if (this.keys[player.keys.right] && player.x + player.width / 2 < this.canvas.width) {
-                player.x += player.speed * (this.deltaTime / 16);
+                player.x += player.speed;
                 player.direction = 1;
             }
-            
+
+            player.velX = player.x - previousX;
+
             if (player.isKicking) {
                 player.kickProgress++;
                 
@@ -243,8 +250,8 @@ class PuppetSoccer {
                 }
             }
             
-            player.y += player.velY * (this.deltaTime / 16);
-            player.velY += this.gravity * (this.deltaTime / 16);
+            player.y += player.velY;
+            player.velY += this.gravity;
             
             if (player.y > this.groundY - player.height / 2) {
                 player.y = this.groundY - player.height / 2;
@@ -312,23 +319,30 @@ class PuppetSoccer {
             const distance = Math.sqrt(dx * dx + dy * dy);
             
             const collisionRadius = this.ball.radius + (player.width / 2);
-            
-            const timeSinceLastCollision = Date.now() - this.ball.lastCollision;
-            
-            if (distance < collisionRadius && timeSinceLastCollision > 100) {
+
+            if (distance < collisionRadius) {
                 const angle = Math.atan2(dy, dx);
+                const normalX = Math.cos(angle);
+                const normalY = Math.sin(angle);
                 const overlap = collisionRadius - distance;
-                
-                this.ball.x += Math.cos(angle) * overlap * 1.1;
-                this.ball.y += Math.sin(angle) * overlap * 1.1;
-                
-                const playerSpeed = Math.sqrt(player.velY * player.velY);
-                const impactForce = (1.2 + playerSpeed * 0.5) * this.scale;
-                
-                this.ball.speedX += Math.cos(angle) * impactForce;
-                this.ball.speedY += Math.sin(angle) * impactForce;
-                
-                this.ball.lastCollision = Date.now();
+
+                // Tira a bola de dentro do jogador
+                this.ball.x += normalX * overlap * 1.1;
+                this.ball.y += normalY * overlap * 1.1;
+
+                // Se a bola vinha em direção ao jogador, ela quica na cabeça
+                const approachSpeed = this.ball.speedX * normalX + this.ball.speedY * normalY;
+                if (approachSpeed < 0) {
+                    this.ball.speedX -= 1.6 * approachSpeed * normalX;
+                    this.ball.speedY -= 1.6 * approachSpeed * normalY;
+                }
+
+                // Empurrão extra proporcional ao movimento do jogador (andar e pular)
+                const playerSpeed = Math.sqrt(player.velX * player.velX + player.velY * player.velY);
+                const impactForce = 1.2 * this.scale + playerSpeed * 0.5;
+
+                this.ball.speedX += normalX * impactForce;
+                this.ball.speedY += normalY * impactForce;
             }
         });
         
@@ -339,19 +353,23 @@ class PuppetSoccer {
                 this.ball.y - this.ball.radius < goal.y + goal.height &&
                 this.ball.y + this.ball.radius > goal.y) {
                 
-                this.score[index]++;
+                // Gol na trave esquerda é ponto do Jogador 2, e na direita do Jogador 1
+                this.score[index === 0 ? 1 : 0]++;
                 this.updateScore();
                 this.resetBall();
             }
         });
         
         // Colisão com paredes laterais E PAREDES ACIMA DOS GOLS
-        if ((this.ball.x - this.ball.radius < 0 && 
-            (this.ball.y < this.goals[0].y || this.ball.y > this.goals[0].y + this.goals[0].height)) ||
-            (this.ball.x + this.ball.radius > this.canvas.width &&
-            (this.ball.y < this.goals[1].y || this.ball.y > this.goals[1].y + this.goals[1].height))) {
-            this.ball.speedX *= -0.7;
-            this.ball.lastCollision = Date.now();
+        if (this.ball.x - this.ball.radius < 0 &&
+            (this.ball.y < this.goals[0].y || this.ball.y > this.goals[0].y + this.goals[0].height)) {
+            this.ball.x = this.ball.radius;
+            this.ball.speedX = Math.abs(this.ball.speedX) * 0.7;
+        }
+        if (this.ball.x + this.ball.radius > this.canvas.width &&
+            (this.ball.y < this.goals[1].y || this.ball.y > this.goals[1].y + this.goals[1].height)) {
+            this.ball.x = this.canvas.width - this.ball.radius;
+            this.ball.speedX = -Math.abs(this.ball.speedX) * 0.7;
         }
         
         // NOVO: Colisão com parede invisível acima do gol ESQUERDO
@@ -359,9 +377,8 @@ class PuppetSoccer {
             this.ball.x + this.ball.radius > this.goals[0].x &&
             this.ball.y < this.goals[0].y) {
             // Se a bola está na área horizontal do gol esquerdo mas ACIMA do gol
-            this.ball.speedX *= -0.7;
+            this.ball.speedX = Math.abs(this.ball.speedX) * 0.7;
             this.ball.x = this.goals[0].x + this.goals[0].width + this.ball.radius;
-            this.ball.lastCollision = Date.now();
         }
         
         // NOVO: Colisão com parede invisível acima do gol DIREITO
@@ -369,24 +386,21 @@ class PuppetSoccer {
             this.ball.x + this.ball.radius > this.goals[1].x &&
             this.ball.y < this.goals[1].y) {
             // Se a bola está na área horizontal do gol direito mas ACIMA do gol
-            this.ball.speedX *= -0.7;
+            this.ball.speedX = -Math.abs(this.ball.speedX) * 0.7;
             this.ball.x = this.goals[1].x - this.ball.radius;
-            this.ball.lastCollision = Date.now();
         }
         
         // Colisão com teto
         if (this.ball.y - this.ball.radius < 0) {
-            this.ball.speedY *= -0.7;
+            this.ball.speedY = Math.abs(this.ball.speedY) * 0.7;
             this.ball.y = this.ball.radius;
-            this.ball.lastCollision = Date.now();
         }
         
         // Colisão com chão
         if (this.ball.y + this.ball.radius > this.groundY) {
-            this.ball.speedY *= -0.7;
+            this.ball.speedY = -Math.abs(this.ball.speedY) * 0.7;
             this.ball.y = this.groundY - this.ball.radius;
             this.ball.speedX *= 0.9;
-            this.ball.lastCollision = Date.now();
         }
         
         const maxSpeed = 25 * this.scale;
@@ -599,25 +613,29 @@ class PuppetSoccer {
     }
     
     updateBall() {
-        this.ball.x += this.ball.speedX * (this.deltaTime / 16);
-        this.ball.y += this.ball.speedY * (this.deltaTime / 16);
+        this.ball.x += this.ball.speedX;
+        this.ball.y += this.ball.speedY;
         this.ball.speedX *= this.ball.friction;
         this.ball.speedY *= this.ball.friction;
         this.ball.speedY += 0.15 * this.scale;
     }
     
-    gameLoop(currentTime = 0) {
-        this.deltaTime = currentTime - this.lastTime;
+    gameLoop(currentTime) {
+        if (this.lastTime === null) this.lastTime = currentTime;
+
+        // Limita o tempo acumulado (ex.: ao voltar de outra aba) para nada "teleportar"
+        this.accumulator += Math.min(currentTime - this.lastTime, 250);
         this.lastTime = currentTime;
-        
-        this.updatePlayers();
-        this.updateBall();
-        this.checkBallCollisions();
+
+        while (this.accumulator >= this.step) {
+            this.updatePlayers();
+            this.updateBall();
+            this.checkBallCollisions();
+            this.accumulator -= this.step;
+        }
+
         this.draw();
-        
-        setTimeout(() => {
-            requestAnimationFrame((time) => this.gameLoop(time));
-        }, 1000 / this.fps);
+        requestAnimationFrame((time) => this.gameLoop(time));
     }
 }
 

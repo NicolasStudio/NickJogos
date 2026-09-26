@@ -43,6 +43,15 @@ function abrirJogoEternalAdventure(){
     window.location.href = "https://nicolasstudio.github.io/Eternal-Adventure/";
 }
 
+// Estado atual dos filtros (categoria + busca)
+let categoriaAtual = 'Todos';
+let termoBusca = '';
+
+// Deixa o texto em minúsculas e sem acentos, para a busca ignorar maiúsculas e acentuação
+function normalizarTexto(texto) {
+    return texto.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim();
+}
+
 // Funcionalidade das categorias
 document.addEventListener('DOMContentLoaded', function() {
     const categoryButtons = document.querySelectorAll('.category-btn');
@@ -66,8 +75,31 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Versão simplificada da função de filtro
+// Funcionalidade da busca
+document.addEventListener('DOMContentLoaded', function() {
+    const campoBusca = document.querySelector('.search-bar input');
+    
+    if (campoBusca) {
+        // Filtra enquanto o usuário digita
+        campoBusca.addEventListener('input', function() {
+            termoBusca = normalizarTexto(this.value);
+            filtrarJogosPorCategoria(categoriaAtual);
+        });
+        
+        // Esc limpa a busca
+        campoBusca.addEventListener('keydown', function(evento) {
+            if (evento.key === 'Escape') {
+                this.value = '';
+                termoBusca = '';
+                filtrarJogosPorCategoria(categoriaAtual);
+            }
+        });
+    }
+});
+
+// Filtra os jogos pela categoria selecionada e pelo texto da busca
 function filtrarJogosPorCategoria(categoria) {
+    categoriaAtual = categoria;
     const todosJogos = document.querySelectorAll('.game-card');
     let jogosEncontrados = 0;
     
@@ -93,7 +125,11 @@ function filtrarJogosPorCategoria(categoria) {
             }
         }
         
-        if (pertenceACategoria) {
+        // Busca pelo nome ou pela categoria do jogo
+        const correspondeBusca = termoBusca === '' ||
+            normalizarTexto(titulo + ' ' + categoriaSpan).includes(termoBusca);
+        
+        if (pertenceACategoria && correspondeBusca) {
             jogo.style.display = 'block';
             jogosEncontrados++;
         } else {
@@ -127,7 +163,7 @@ function filtrarJogosPorCategoria(categoria) {
             });
             
             // Mostra ou esconde o título e a grid
-            if (temJogoVisivel || categoria === 'Todos') {
+            if (temJogoVisivel) {
                 secao.style.display = 'block';
                 gamesGrid.style.display = 'grid';
             } else {
@@ -138,9 +174,10 @@ function filtrarJogosPorCategoria(categoria) {
     });
     
     // Se não encontrou nenhum jogo, mostra uma mensagem (opcional)
-    if (jogosEncontrados === 0 && categoria !== 'Todos') {
+    if (jogosEncontrados === 0) {
         // Verifica se já existe uma mensagem de "nenhum jogo encontrado"
         let mensagemNaoEncontrado = document.querySelector('.no-games-message');
+        const textoBusca = document.querySelector('.search-bar input')?.value.trim() || '';
         
         if (!mensagemNaoEncontrado) {
             mensagemNaoEncontrado = document.createElement('div');
@@ -149,11 +186,19 @@ function filtrarJogosPorCategoria(categoria) {
             mensagemNaoEncontrado.style.padding = '40px';
             mensagemNaoEncontrado.style.fontSize = '18px';
             mensagemNaoEncontrado.style.color = '#666';
-            mensagemNaoEncontrado.innerHTML = `Nenhum jogo encontrado na categoria "${categoria}"`;
             
             // Adiciona após a última seção
             const gamesSection = document.querySelector('.games-section .container');
             gamesSection.appendChild(mensagemNaoEncontrado);
+        }
+        
+        // textContent (e não innerHTML) para o texto digitado não ser interpretado como HTML
+        if (textoBusca && categoria !== 'Todos') {
+            mensagemNaoEncontrado.textContent = `Nenhum jogo encontrado para "${textoBusca}" na categoria "${categoria}"`;
+        } else if (textoBusca) {
+            mensagemNaoEncontrado.textContent = `Nenhum jogo encontrado para "${textoBusca}"`;
+        } else {
+            mensagemNaoEncontrado.textContent = `Nenhum jogo encontrado na categoria "${categoria}"`;
         }
     } else {
         // Remove a mensagem se existir
