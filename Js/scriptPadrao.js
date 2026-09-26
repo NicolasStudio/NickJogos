@@ -39,6 +39,10 @@ function abrirJogoOrigemVida(){
     window.location.href = "jogoOrigemVida.html";
 }
 
+function abrirJogoEternalAdventure(){
+    window.location.href = "https://nicolasstudio.github.io/Eternal-Adventure/";
+}
+
 // Funcionalidade das categorias
 document.addEventListener('DOMContentLoaded', function() {
     const categoryButtons = document.querySelectorAll('.category-btn');
@@ -80,6 +84,9 @@ function filtrarJogosPorCategoria(categoria) {
             if (titulo === 'Head Soccer') {
                 // Head Soccer pertence a Esportes E Multiplayer
                 pertenceACategoria = (categoria === 'Esportes' || categoria === 'Multiplayer');
+            } else if (titulo === 'Eternal Adventure') {
+                // Eternal Adventure pertence a Aventura E Multiplayer
+                pertenceACategoria = (categoria === 'Aventura' || categoria === 'Multiplayer');
             } else {
                 // Para os outros jogos, compara normalmente
                 pertenceACategoria = (categoriaSpan === categoria);
