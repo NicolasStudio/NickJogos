@@ -43,6 +43,10 @@ function abrirJogoEternalAdventure(){
     window.location.href = "https://nicolasstudio.github.io/Eternal-Adventure/";
 }
 
+function abrirJogoInfect(){
+    window.location.href = "jogoInfect.html";
+}
+
 // Estado atual dos filtros (categoria + busca)
 let categoriaAtual = 'Todos';
 let termoBusca = '';
