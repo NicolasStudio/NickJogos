@@ -3,33 +3,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NickJogos - Jogo de Infectar</title>
+    <title>Global Outbreak - NickJogos</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="Css/header.css">
-    <link rel="stylesheet" href="Css/footer.css">
     <link rel="stylesheet" href="Css/StylesInfect/style.css">
 
+    <!-- D3 LOCAL (offline, sem CDN em runtime) -->
+    <script src="Js/JsInfect/d3.v7.min.js"></script>
     <script src="Js/JsInfect/script.js" defer></script>
 </head>
 <body>
-    <header>
-        <div class="container">
-            <nav class="navbar">
-                <a href="index.html" class="logo">
-                    <i class="fas fa-gamepad"></i>
-                    NickJogos
-                </a>
-            </nav>
+    <!-- ================= TELA INICIAL / CRIACAO DA DOENCA ================= -->
+    <div id="setup" class="setup">
+        <div class="setup-card">
+            <a href="index.html" class="back-link"><i class="fas fa-arrow-left"></i> NickJogos</a>
+            <span class="badge">CENTRO DE MONITORAMENTO GLOBAL</span>
+            <h1 class="setup-title">GLOBAL OUTBREAK</h1>
+            <p class="setup-sub">Crie um patogeno e observe o mundo reagir. Simulacao ficticia de estrategia.</p>
+
+            <label class="field">
+                <span>Nome do patogeno</span>
+                <input id="diseaseName" type="text" maxlength="40" placeholder="Ex.: Patogeno-X" value="Patogeno-X">
+            </label>
+
+            <div class="field">
+                <span>Classe da doenca</span>
+                <div id="classGrid" class="class-grid"><!-- preenchido pelo JS --></div>
+            </div>
+
+            <div class="field">
+                <span>Pais de origem</span>
+                <select id="originSelect"><!-- preenchido pelo JS --></select>
+            </div>
+
+            <button id="continueBtn" class="btn btn-ghost hidden">Continuar partida salva</button>
+            <button id="startBtn" class="btn btn-primary">Iniciar partida</button>
+
+            <div class="setup-io">
+                <button id="exportBtn" class="io-link hidden"><i class="fas fa-download"></i> Exportar .txt</button>
+                <button id="importBtn" class="io-link"><i class="fas fa-upload"></i> Importar .txt</button>
+                <input id="importFile" type="file" accept=".txt,.json,application/json,text/plain" hidden>
+            </div>
+
+            <p class="disclaimer">Simulacao 100% ficticia, sem relacao com dados medicos ou epidemiologicos reais.</p>
         </div>
-    </header>
+    </div>
 
+    <!-- ================= JOGO ================= -->
+    <div id="game" class="game hidden">
+        <!-- HEADER / HUD -->
+        <header class="hud">
+            <div class="brand">
+                <a href="index.html" class="hud-home" title="Voltar ao NickJogos"><i class="fas fa-gamepad"></i></a>
+                <div>
+                    <div class="hud-logo">GLOBAL OUTBREAK</div>
+                    <div class="hud-disease" id="hudDisease">-</div>
+                </div>
+            </div>
+            <div class="hud-metrics">
+                <div class="metric"><span>Dia</span><b id="mDay">0</b></div>
+                <div class="metric"><span>Infectados</span><b id="mInfected">0</b></div>
+                <div class="metric"><span>Mortos</span><b id="mDead">0</b></div>
+                <div class="metric"><span>Cura</span><b id="mCure">0%</b></div>
+                <div class="metric"><span>Pontos</span><b id="mPoints">0</b></div>
+            </div>
+            <div class="hud-controls">
+                <button class="speed-btn" data-speed="0" title="Pausar"><i class="fas fa-pause"></i></button>
+                <button class="speed-btn active" data-speed="1">1x</button>
+                <button class="speed-btn" data-speed="2">2x</button>
+                <button class="speed-btn" data-speed="3">3x</button>
+                <button class="speed-btn" data-speed="5">5x</button>
+            </div>
+        </header>
 
+        <!-- CENTRO: MAPA + PAINEL -->
+        <div class="main">
+            <div class="map-area">
+                <svg id="map" role="img" aria-label="Mapa-mundi interativo"></svg>
+                <div class="legend" id="legend"><!-- preenchido pelo JS --></div>
+            </div>
 
-    <footer class="game-footer">
-        <div class="footer-content">
-            <p>© 2025 - Projeto desenvolvido por Nicolas de Almeida Sousa</p>
-            <p>Projeto acadêmico sem fins lucrativos</p>
+            <aside class="side" id="side">
+                <div class="side-empty" id="sideEmpty">Selecione um pais no mapa para ver os detalhes.</div>
+                <div class="side-content hidden" id="sideContent">
+                    <div class="side-head">
+                        <div>
+                            <h3 id="cName">-</h3>
+                            <span class="side-sub" id="cSub">-</span>
+                        </div>
+                        <button class="close-btn" id="closeSide" aria-label="Fechar">&times;</button>
+                    </div>
+                    <div class="situation" id="cSituation">-</div>
+                    <h4>Populacao</h4>
+                    <div class="row"><span>Total</span><b id="cTotal">-</b></div>
+                    <div class="row"><span class="dot dot-healthy"></span><span>Saudaveis</span><b id="cHealthy">-</b></div>
+                    <div class="row"><span class="dot dot-infected"></span><span>Infectados</span><b id="cInfected">-</b></div>
+                    <div class="row"><span class="dot dot-recovered"></span><span>Recuperados</span><b id="cRecovered">-</b></div>
+                    <div class="row"><span class="dot dot-dead"></span><span>Mortos</span><b id="cDead">-</b></div>
+                    <h4>Indicadores</h4>
+                    <div class="row"><span>Afetados</span><b id="cAffected">-</b></div>
+                    <div class="row"><span>Detectado</span><b id="cDetected">-</b></div>
+                    <div class="row"><span>Acesso</span><b id="cAccess">-</b></div>
+                </div>
+            </aside>
         </div>
-    </footer>
+
+        <!-- BARRA INFERIOR -->
+        <nav class="bottom">
+            <button class="tab" data-panel="disease"><i class="fas fa-virus"></i> Doenca</button>
+            <button class="tab" data-panel="transmission"><i class="fas fa-route"></i> Transmissao</button>
+            <button class="tab" data-panel="symptoms"><i class="fas fa-notes-medical"></i> Sintomas</button>
+            <button class="tab" data-panel="cure"><i class="fas fa-flask"></i> Cura</button>
+            <button class="tab" data-panel="events"><i class="fas fa-bell"></i> Eventos <span id="evBadge" class="ev-badge hidden">0</span></button>
+        </nav>
+
+        <!-- MODAL DE PAINEIS -->
+        <div class="modal hidden" id="modal">
+            <div class="modal-box">
+                <div class="modal-head">
+                    <h3 id="modalTitle">Painel</h3>
+                    <button class="close-btn" id="closeModal">&times;</button>
+                </div>
+                <div class="modal-body" id="modalBody"></div>
+            </div>
+        </div>
+
+        <!-- FIM DE JOGO -->
+        <div class="modal hidden" id="overModal">
+            <div class="modal-box over">
+                <h2 id="overTitle">-</h2>
+                <p id="overText">-</p>
+                <div class="over-actions">
+                    <button class="btn btn-primary" id="overRestart">Nova partida</button>
+                    <a class="btn btn-ghost" href="index.html">Sair</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- TOAST DE EVENTOS -->
+        <div class="toast-wrap" id="toasts"></div>
+    </div>
 </body>
 </html>
