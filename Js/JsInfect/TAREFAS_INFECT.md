@@ -1,4 +1,4 @@
-# Global Outbreak (jogoInfect) - Tarefas
+# Infecção: Paciente Zero (jogoInfect) - Tarefas
 
 Jogo de estrategia/simulacao epidemiologica FICTICIA, HTML/CSS/JS puro, offline,
 no padrao NickJogos. Abre pelo card -> `jogoInfect.html`. Sem build, sem servidor
@@ -10,7 +10,7 @@ Arquivos:
 - `Js/JsInfect/script.js` - engine deterministico + mapa D3 + UI + save
 - `Js/JsInfect/d3.v7.min.js` - D3 v7 LOCAL (offline)
 - `Js/JsInfect/world.geojson` - 169 paises (Natural Earth, dominio publico)
-- `Img/ImagemCapa/globalOutbreak.svg` - capa do card (local)
+- `Img/ImagemCapa/pacienteZero.svg` - capa do card (local)
 
 Legenda: [x] feito - [ ] pendente
 
@@ -30,7 +30,7 @@ Legenda: [x] feito - [ ] pendente
 - [x] Persistencia: localStorage (auto-save) + Continuar partida salva
 - [x] Exportar / Importar partida em .txt (JSON), com validacao minima
 - [x] Balanceamento ajustado (espalhamento mais lento e progressivo)
-- [x] Card do portfolio: "Global Outbreak" com capa SVG local
+- [x] Card do portfolio: "Infecção: Paciente Zero" com capa SVG local
 - [x] Verificado ao vivo (Playwright): mapa 169 paises, rotas, invariante OK,
       continuar e export/import .txt - 0 erros de console
 
