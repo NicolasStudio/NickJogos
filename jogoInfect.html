@@ -97,14 +97,13 @@
             </div>
 
             <aside class="side" id="side">
-                <div class="side-empty" id="sideEmpty">Selecione um pais no mapa para ver os detalhes.</div>
-                <div class="side-content hidden" id="sideContent">
+                <div class="side-content" id="sideContent">
                     <div class="side-head">
                         <div>
                             <h3 id="cName">-</h3>
                             <span class="side-sub" id="cSub">-</span>
                         </div>
-                        <button class="close-btn" id="closeSide" aria-label="Fechar">&times;</button>
+                        <button class="close-btn" id="closeSide" aria-label="Voltar para a visão global" title="Voltar para a visão global">&times;</button>
                     </div>
                     <div class="situation" id="cSituation">-</div>
                     <h4>Populacao</h4>
@@ -115,11 +114,11 @@
                     <div class="row"><span class="dot dot-dead"></span><span>Mortos</span><b id="cDead">-</b></div>
                     <h4>Indicadores</h4>
                     <div class="row"><span>Afetados</span><b id="cAffected">-</b></div>
-                    <div class="row"><span>Detectado</span><b id="cDetected">-</b></div>
+                    <div class="row"><span id="cDetectedLbl">Detectado</span><b id="cDetected">-</b></div>
                     <h4>Acessos</h4>
-                    <div class="row"><span><i class="fas fa-plane"></i> Aeroporto</span><b id="cAir">-</b></div>
-                    <div class="row"><span><i class="fas fa-anchor"></i> Porto</span><b id="cSea">-</b></div>
-                    <div class="row"><span><i class="fas fa-road"></i> Fronteiras</span><b id="cLand">-</b></div>
+                    <div class="row"><span><i class="fas fa-plane"></i> <span id="cAirLbl">Aeroporto</span></span><b id="cAir">-</b></div>
+                    <div class="row"><span><i class="fas fa-anchor"></i> <span id="cSeaLbl">Porto</span></span><b id="cSea">-</b></div>
+                    <div class="row"><span><i class="fas fa-road"></i> <span id="cLandLbl">Fronteiras</span></span><b id="cLand">-</b></div>
                 </div>
             </aside>
         </div>
@@ -169,7 +168,7 @@
 
     <footer class="game-footer">
         <div class="footer-content">
-            <p>© 2025 - Projeto desenvolvido por Nicolas de Almeida Sousa</p>
+            <p>© 2026 - Projeto desenvolvido por Nicolas de Almeida Sousa</p>
             <p>Simulacao 100% ficticia, sem relacao com dados medicos ou epidemiologicos reais.</p>
         </div>
     </footer>

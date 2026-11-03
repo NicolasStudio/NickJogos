@@ -45,13 +45,16 @@ const BALANCE = {
 // lines: linhas de transmissao que a classe pode evoluir (null = todas).
 // pointsMul: multiplica os pontos ganhos. coldPenalty/heatPenalty: quanto o clima
 // frio/quente atrapalha o contagio sem resistencia (0,5 = normal).
+// heatResistCap/coldResistCap: teto da adaptacao ao clima (1 = adapta por completo).
+// Sem teto a fraqueza da classe some: o fungo, por exemplo, ganha heatResist de
+// graca na linha de mosquitos (a unica que ele pode evoluir) e zerava a penalidade.
 const CLASSES = {
   virus:    { label:'Vírus',    desc:'O mais fácil. Evoluções 20% mais baratas, mas a cura avança 20% mais rápido.',
               baseSpread:.30, costMul:.8, cureMul:1.2, landMul:1, airMul:1, pointsMul:1, lines:null, coldPenalty:.5, heatPenalty:.5 },
   bacteria: { label:'Bactéria', desc:'Só evolui contato físico. 10% menos pontos, evoluções 20% mais caras, fraca no frio. A cura avança 20% mais devagar.',
               baseSpread:.36, costMul:1.2, cureMul:.8, landMul:1, airMul:1, pointsMul:.9, lines:['cont'], lineBoost:2.5, coldPenalty:.8, heatPenalty:.5 },
-  fungus:   { label:'Fungo',    desc:'Só evolui ratos e insetos. 15% menos pontos, evoluções 15% mais caras, fraco no calor. Forte por terra, fraco em voos.',
-              baseSpread:.33, costMul:1.15, cureMul:1, landMul:1.3, airMul:.6, pointsMul:.85, lines:['rato','mosq'], lineBoost:1.6, coldPenalty:.5, heatPenalty:.8 },
+  fungus:   { label:'Fungo',    desc:'Só evolui ratos e insetos. 15% menos pontos, evoluções 15% mais caras. Nunca se adapta de todo ao calor: países quentes sempre travam o contágio. Forte por terra, fraco em voos.',
+              baseSpread:.33, costMul:1.15, cureMul:1, landMul:1.3, airMul:.6, pointsMul:.85, lines:['rato','mosq'], lineBoost:1.6, coldPenalty:.5, heatPenalty:.9, heatResistCap:.5 },
   parasite: { label:'Parasita', desc:'Bloqueado nesta versão.',
               baseSpread:.30, costMul:1, cureMul:1, landMul:1, airMul:1, pointsMul:1, lines:null, coldPenalty:.5, heatPenalty:.5, locked:true },
 };
@@ -135,17 +138,19 @@ const EVOLUTIONS = {
       desc:'Contamina a água e o esgoto. Desidrata os infectados.' },
     { id:'cegueira',name:'Cegueira',        icon:'fa-eye-slash',       col:2,row:3, cost:9,  req:['lesao'], eff:{severity:.10},
       desc:'Perda da visão. Muito visível.' },
-    { id:'falen',  name:'Falência orgânica',icon:'fa-heart-crack',     col:3,row:0, cost:18, req:['pneu'], eff:{severity:.15, lethality:.15},
+    // 4o grau: so vale a pena depois de um surto grande (os pontos vem do mundo infectado)
+    { id:'falen',  name:'Falência orgânica',icon:'fa-heart-crack',     col:3,row:0, cost:30, req:['pneu'], eff:{severity:.15, lethality:.15},
       desc:'Órgãos param de funcionar.' },
-    { id:'convul', name:'Convulsões',       icon:'fa-bolt',            col:3,row:1, cost:12, req:['confu'], eff:{severity:.12, lethality:.05},
+    { id:'convul', name:'Convulsões',       icon:'fa-bolt',            col:3,row:1, cost:22, req:['confu'], eff:{severity:.12, lethality:.05},
       desc:'Crises violentas e imprevisíveis.' },
-    { id:'hemo',   name:'Hemorragia',       icon:'fa-droplet-slash',   col:3,row:2, cost:14, req:['diarreia','cegueira'], eff:{infectivity:.05, severity:.10, lethality:.08},
+    { id:'hemo',   name:'Hemorragia',       icon:'fa-droplet-slash',   col:3,row:2, cost:26, req:['diarreia','cegueira'], eff:{infectivity:.05, severity:.10, lethality:.08},
       desc:'Sangramentos internos. Muito letal.' },
-    { id:'coma',   name:'Coma',             icon:'fa-bed',             col:4,row:0, cost:22, req:['falen','convul'], eff:{severity:.20, lethality:.20},
+    // 5o grau: os sintomas mais letais do jogo, um degrau acima do 4o grau
+    { id:'coma',   name:'Coma',             icon:'fa-bed',             col:4,row:0, cost:38, req:['falen','convul'], eff:{severity:.20, lethality:.20},
       desc:'Pacientes não acordam mais.' },
-    { id:'paral',  name:'Paralisia',        icon:'fa-wheelchair',      col:4,row:1, cost:16, req:['convul'], eff:{severity:.15, lethality:.08},
+    { id:'paral',  name:'Paralisia',        icon:'fa-wheelchair',      col:4,row:1, cost:28, req:['convul'], eff:{severity:.15, lethality:.08},
       desc:'O sistema nervoso para de responder.' },
-    { id:'necro',  name:'Necrose',          icon:'fa-skull',           col:4,row:2, cost:24, req:['hemo'], eff:{infectivity:.06, severity:.15, lethality:.20},
+    { id:'necro',  name:'Necrose',          icon:'fa-skull',           col:4,row:2, cost:40, req:['hemo'], eff:{infectivity:.06, severity:.15, lethality:.20},
       desc:'Destruição de tecidos. Letalidade máxima.' },
   ],
   abilities: [
@@ -251,8 +256,10 @@ function tick(prev){
     if(co.infected>0){
       // clima vs habilidades
       let climMul = 1;
-      climMul *= 1 - co.clim.cold*(1-Math.min(1,d.coldResist))*cls.coldPenalty;
-      climMul *= 1 - co.clim.heat*(1-Math.min(1,d.heatResist))*cls.heatPenalty;
+      const coldR = Math.min(cls.coldResistCap ?? 1, d.coldResist);
+      const heatR = Math.min(cls.heatResistCap ?? 1, d.heatResist);
+      climMul *= 1 - co.clim.cold*(1-coldR)*cls.coldPenalty;
+      climMul *= 1 - co.clim.heat*(1-heatR)*cls.heatPenalty;
       // com a cura em distribuicao, os tratados quase nao transmitem mais
       const pressure = (cls.baseSpread + d.infectivity) * climMul * (curing ? BALANCE.curingSpreadMul : 1);
       // crescimento LOGISTICO: taxa diaria * suscetiveis restantes. O piso evita
@@ -627,6 +634,7 @@ function enterGame(startSpeed){
   drawMap(selectCountry);
   paintMap(GAME);
   refreshHud();
+  renderSide();   // sem pais selecionado, o painel abre na visao global
   updateEvBadge();
   if(GAME.status!=='running'){ setSpeed(0); showGameOver(); }
   else setSpeed(startSpeed ?? 0);
@@ -661,11 +669,50 @@ function selectCountry(iso){
 
 function accessText(has, open){ return !has ? 'Não possui' : open ? 'Aberto' : 'Fechado'; }
 
+// Resumo do mundo mostrado quando nenhum pais esta selecionado.
+function renderWorldSide(){
+  const list=Object.values(GAME.countries);
+  const acc={ total:0, healthy:0, infected:0, recovered:0, dead:0 };
+  let infectedCountries=0, airClosed=0, airTotal=0, seaClosed=0, seaTotal=0, landClosed=0, landTotal=0;
+  for(const co of list){
+    acc.total+=co.total; acc.healthy+=co.healthy; acc.infected+=co.infected;
+    acc.recovered+=co.recovered; acc.dead+=co.dead;
+    if(co.infected>0) infectedCountries++;
+    if(co.hasAir){ airTotal++; if(!co.airOpen) airClosed++; }
+    if(co.hasSea){ seaTotal++; if(!co.seaOpen) seaClosed++; }
+    if(co.borders.length){ landTotal++; if(!co.landOpen) landClosed++; }
+  }
+  const stage=deriveStage({ ...acc, infected:acc.infected });
+  el('cName').textContent='Visão global';
+  el('cSub').textContent=`${list.length} países`;
+  const sit=el('cSituation');
+  sit.innerHTML=`<span class="dot" style="background:${STAGE_COLORS[stage]}"></span>${STAGE_LABELS[stage]}`;
+  sit.style.borderColor=STAGE_COLORS[stage];
+  el('cTotal').textContent=fmt(acc.total);
+  el('cHealthy').textContent=fmt(acc.healthy);
+  el('cInfected').textContent=fmt(acc.infected);
+  el('cRecovered').textContent=fmt(acc.recovered);
+  el('cDead').textContent=fmt(acc.dead);
+  el('cAffected').textContent=(((acc.infected+acc.dead)/Math.max(1,acc.total))*100).toFixed(2)+'%';
+  el('cDetectedLbl').textContent='Países com casos';
+  el('cDetected').textContent=`${infectedCountries} de ${list.length}`;
+  el('cAirLbl').textContent='Aeroportos fechados';
+  el('cAir').textContent=`${airClosed} de ${airTotal}`;
+  el('cSeaLbl').textContent='Portos fechados';
+  el('cSea').textContent=`${seaClosed} de ${seaTotal}`;
+  el('cLandLbl').textContent='Fronteiras restritas';
+  el('cLand').textContent=`${landClosed} de ${landTotal}`;
+}
+
 function renderSide(){
   const co=selectedIso?GAME.countries[selectedIso]:null;
-  el('sideEmpty').classList.toggle('hidden',!!co);
-  el('sideContent').classList.toggle('hidden',!co);
-  if(!co) return;
+  // o X so aparece quando ha um pais selecionado (ele volta para a visao global)
+  el('closeSide').classList.toggle('hidden',!co);
+  if(!co){ renderWorldSide(); return; }
+  el('cDetectedLbl').textContent='Detectado';
+  el('cAirLbl').textContent='Aeroporto';
+  el('cSeaLbl').textContent='Porto';
+  el('cLandLbl').textContent='Fronteiras';
   el('cName').textContent=co.name;
   el('cSub').textContent=co.iso3;
   const sit=el('cSituation');
@@ -712,7 +759,7 @@ function stepDay(){
   paintMap(GAME);
   animateFlashes(GAME._flashes);
   refreshHud();
-  if(selectedIso) renderSide();
+  renderSide();   // atualiza o pais selecionado ou o resumo global
   updateEvBadge();
   if(openPanel) renderPanel(openPanel); // mantem o painel aberto vivo
   if(GAME.status!=='running'){ setSpeed(0); showGameOver(); }
@@ -796,7 +843,8 @@ function renderPanel(panel){
       `<div class="row"><span>Países atingidos</span><b>${cos.filter(c=>c.everInfected).length} / ${cos.length}</b></div>`+
       `<div class="row"><span>Aeroportos fechados</span><b>${cos.filter(c=>c.hasAir&&!c.airOpen).length} / ${cos.filter(c=>c.hasAir).length}</b></div>`+
       `<div class="row"><span>Portos fechados</span><b>${cos.filter(c=>c.hasSea&&!c.seaOpen).length} / ${cos.filter(c=>c.hasSea).length}</b></div>`+
-      statBar('Rotas aéreas (bônus)',d.air/2)+statBar('Rotas marítimas (bônus)',d.sea/2)+statBar('Fronteiras terrestres (bônus)',d.land/2));
+      statBar('Rotas aéreas (bônus)',d.air/2)+statBar('Rotas marítimas (bônus)',d.sea/2)+statBar('Fronteiras terrestres (bônus)',d.land/2)+
+      climBar('Adaptação ao frio',d.coldResist,cls.coldResistCap)+climBar('Adaptação ao calor',d.heatResist,cls.heatResistCap));
   } else if(panel==='cure'){ title.textContent='Cura';
     const cos=Object.values(GAME.countries);
     const cured=cos.reduce((a,c)=>a+c.recovered,0);
@@ -822,6 +870,14 @@ function renderPanel(panel){
 function statBar(label,val){
   const pct=Math.min(100,Math.max(0,val*100));
   return `<div class="stat-line"><div class="lab"><span>${label}</span><span>${pct.toFixed(0)}%</span></div><div class="bar"><i style="width:${pct}%"></i></div></div>`;
+}
+
+// Barra de adaptacao ao clima: mostra o valor EFETIVO (limitado pelo teto da
+// classe) e avisa quando a classe nunca chega aos 100%.
+function climBar(label,val,cap){
+  const max = cap ?? 1;
+  const eff = Math.min(max, val);
+  return statBar(max<1 ? `${label} (máx. ${(max*100).toFixed(0)}%)` : label, eff);
 }
 
 function statsFooter(){
