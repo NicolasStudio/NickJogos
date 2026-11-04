@@ -59,6 +59,10 @@ h1,h2,h3,h4{line-height:1.2}
 .class-card h5{font-size:1rem;display:flex;justify-content:space-between;align-items:center}
 .class-card p{font-size:.72rem;color:var(--text2);margin-top:4px}
 .lock-badge{font-size:.6rem;color:var(--yellow);border:1px solid var(--yellow);border-radius:4px;padding:1px 5px}
+.win-badge{font-size:.6rem;color:var(--green);border:1px solid var(--green);border-radius:4px;padding:1px 5px}
+.origin-hint{font-size:.72rem;color:var(--yellow)}
+.over-unlock{display:block;margin-top:10px;padding:8px 12px;border-radius:8px;color:var(--green);
+  background:rgba(69,168,121,.12);border:1px solid var(--green);font-weight:600}
 
 /* ============ GAME ============ */
 .game{display:flex;flex-direction:column;position:relative;min-height:420px;
@@ -79,6 +83,9 @@ h1,h2,h3,h4{line-height:1.2}
 .speed-btn,.save-btn{font:inherit;font-weight:600;min-width:38px;height:34px;color:var(--text2);
   background:var(--surface);border:1px solid var(--border);border-radius:6px;cursor:pointer}
 .save-btn{margin-right:8px}
+#fullBtn{margin-right:4px}
+/* modo maximizado: esconde o header e o footer do site, o jogo ocupa a tela toda */
+body.maximized>header,body.maximized>.game-footer{display:none}
 .save-btn:hover{color:var(--text);border-color:var(--green)}
 .save-btn.saved{color:var(--green);border-color:var(--green)}
 .speed-btn.active{color:var(--bg);background:var(--blue);border-color:var(--blue)}

@@ -55,14 +55,24 @@ const CLASSES = {
               baseSpread:.36, costMul:1.2, cureMul:.8, landMul:1, airMul:1, pointsMul:.9, lines:['cont'], lineBoost:2.5, coldPenalty:.8, heatPenalty:.5 },
   fungus:   { label:'Fungo',    desc:'Só evolui ratos e insetos. 15% menos pontos, evoluções 15% mais caras. Nunca se adapta de todo ao calor: países quentes sempre travam o contágio. Forte por terra, fraco em voos.',
               baseSpread:.33, costMul:1.15, cureMul:1, landMul:1.3, airMul:.6, pointsMul:.85, lines:['rato','mosq'], lineBoost:1.6, coldPenalty:.5, heatPenalty:.9, heatResistCap:.5 },
-  parasite: { label:'Parasita', desc:'Bloqueado nesta versão.',
-              baseSpread:.30, costMul:1, cureMul:1, landMul:1, airMul:1, pointsMul:1, lines:null, coldPenalty:.5, heatPenalty:.5, locked:true },
+  // Parasita (dificil): liberado ao vencer com as 3 outras classes (unlock).
+  // climateLock: nao se reproduz em pais quente sem Calor 2 nem em pais frio sem Frio 2.
+  // startWith: nos ja comprados no inicio. lateHalfPointsMul: pontos apos metade do mundo contaminado.
+  parasite: { label:'Parasita', desc:'Difícil. Só evolui Ratos e já começa com Confusão mental. 15% menos pontos, evoluções 35% mais caras. Não se reproduz em países quentes sem Calor 2 nem em frios sem Frio 2. Com metade do mundo contaminado, ganha 30% menos pontos.',
+              baseSpread:.30, costMul:1.35, cureMul:1, landMul:1, airMul:1, pointsMul:.85, lines:['rato'], lineBoost:1.3, coldPenalty:.5, heatPenalty:.5,
+              climateLock:true, startWith:['confu'], lateHalfPointsMul:.7, unlock:['virus','bacteria','fungus'] },
 };
 const LINE_NAMES = { aer:'Ar', cont:'Contato', agua:'Água', rato:'Ratos', mosq:'Mosquitos' };
 
 // Linha de transmissao de um no ("aer", "cont"...) ou null para nos fora das 5 linhas.
 // (pelo id: os nos da lista EVOLUTIONS nao tem o campo "tree", so as copias em EVO_BY_ID)
 function transLine(e){ const m = /^(aer|cont|agua|rato|mosq)\d$/.exec(e.id); return m ? m[1] : null; }
+// Clima do pais para o Parasita: quente (|lat| <= 24) ou frio (|lat| >= 45).
+function climateKind(co){ return co.clim.heat>=0.6 ? 'hot' : co.clim.cold>=0.75 ? 'cold' : 'mild'; }
+function climateBlocked(co, state){
+  const k = climateKind(co);
+  return (k==='hot' && !state.purchased.includes('calor2')) || (k==='cold' && !state.purchased.includes('frio2'));
+}
 // A classe da doenca pode evoluir este no?
 function allowedFor(e, diseaseClass){
   const lines = CLASSES[diseaseClass].lines, line = transLine(e);
@@ -168,6 +178,9 @@ const EVOLUTIONS = {
       desc:'Resiste a antivirais e antibióticos.' },
     { id:'droga3', name:'Remédios 3',       icon:'fa-prescription-bottle-medical', col:2,row:2, cost:36, req:['droga2'], eff:{cureSlow:.30},
       desc:'Resiste até aos tratamentos experimentais: atrasa muito a cura.' },
+    // cureCut: efeito unico na compra (tira pontos percentuais da cura); so com a pesquisa em andamento
+    { id:'droga4', name:'Remédios 4',       icon:'fa-syringe',         col:3,row:2, cost:50, req:['droga3'], eff:{}, cureCut:10,
+      desc:'Mutação de emergência: as amostras dos laboratórios ficam inúteis e a cura perde 10% do progresso.' },
     { id:'gen1',   name:'Blindagem genética 1', icon:'fa-dna',         col:2,row:1, cost:32, req:['frio2','calor2','droga2'], eff:{cureSlow:.15},
       desc:'Código genético instável dificulta a pesquisa.' },
     { id:'gen2',   name:'Blindagem genética 2', icon:'fa-shield-virus',col:3,row:1, cost:45, req:['gen1'], eff:{cureSlow:.15},
@@ -216,6 +229,8 @@ function diseaseStats(state){
 
 function costOf(e, state){ return Math.max(1, Math.round(e.cost * CLASSES[state.diseaseClass].costMul)); }
 function reqOk(e, state){ return !e.req || e.req.some(r => state.purchased.includes(r)); }
+// nos de efeito unico na cura so valem com a pesquisa em andamento (nem parada, nem concluida)
+function cutReady(e, state){ return !e.cureCut || (state.cure>0 && state.cure<100); }
 
 function deriveStage(co){
   if(co.infected<=0 && co.dead<=0 && co.recovered<=0) return 'none';
@@ -260,6 +275,8 @@ function tick(prev){
       const heatR = Math.min(cls.heatResistCap ?? 1, d.heatResist);
       climMul *= 1 - co.clim.cold*(1-coldR)*cls.coldPenalty;
       climMul *= 1 - co.clim.heat*(1-heatR)*cls.heatPenalty;
+      // Parasita: sem Calor 2 / Frio 2 nao se reproduz em pais quente / frio
+      if(cls.climateLock && climateBlocked(co, state)) climMul = 0;
       // com a cura em distribuicao, os tratados quase nao transmitem mais
       const pressure = (cls.baseSpread + d.infectivity) * climMul * (curing ? BALANCE.curingSpreadMul : 1);
       // crescimento LOGISTICO: taxa diaria * suscetiveis restantes. O piso evita
@@ -359,7 +376,14 @@ function tick(prev){
       : 'Não há mais ninguém saudável, mas sem letalidade ninguém morre. Evolua sintomas letais para vencer.','milestone','high')); }
 
   // pontos de evolucao: renda diaria que cresce com a escala da epidemia
-  state._ptAcc = (state._ptAcc||0) + BALANCE.pointsLogMul*Math.log10(1+worldInfected)*cls.pointsMul;
+  // Parasita: com metade do mundo contaminado (infectados + mortos), ganha menos pontos
+  let ptMul = cls.pointsMul;
+  if(cls.lateHalfPointsMul && (worldInfected+worldDead)/Math.max(1,worldPop) >= 0.5){
+    ptMul *= cls.lateHalfPointsMul;
+    if(!state._halfWorld){ state._halfWorld=true;
+      events.push(mkEvent(state.day,'Parasita enfraquecido','Metade do mundo foi contaminada. A partir de agora você ganha 30% menos pontos.','milestone','high')); }
+  }
+  state._ptAcc = (state._ptAcc||0) + BALANCE.pointsLogMul*Math.log10(1+worldInfected)*ptMul;
   const earned = Math.floor(state._ptAcc);
   if(earned>0){ state.points += earned; state._ptAcc -= earned; }
 
@@ -373,7 +397,8 @@ function tick(prev){
     events.push(mkEvent(state.day,'Surto isolado','O patógeno parou de se espalhar. A pesquisa da cura acelerou.','research','high'));
 
   // cura: comeca quando algum pais detecta o surto
-  if(!curing && (detectedCount>0 || state.cure>0)){
+  // (Parasita: surto isolado tambem dispara a pesquisa, senao um paciente zero travado pelo clima nunca terminaria a partida)
+  if(!curing && (detectedCount>0 || state.cure>0 || (isolated && cls.climateLock))){
     const deadPct = worldDead/Math.max(1,worldPop);
     const gain = BALANCE.cureBaseDaily * cls.cureMul
       * (1 - Math.min(BALANCE.cureSlowCap, d.cureSlow))
@@ -440,7 +465,7 @@ function createGame({ name, diseaseClass, origin, seed, geo }){
   return {
     schema:2, seed, rngState:seedToState(seed), day:0, speed:0, status:'running',
     diseaseName:name||'Patogeno-X', diseaseClass,
-    countries, purchased:[], points:BALANCE.startPoints, totalInfected:seed0,
+    countries, purchased:[...(CLASSES[diseaseClass].startWith||[])], points:BALANCE.startPoints, totalInfected:seed0,
     cure:0, history:[], worldInfected:seed0, worldDead:0,
   };
 }
@@ -593,15 +618,35 @@ let GAME=null, selectedIso=null, chosenClass='virus', loopTimer=null;
 
 function el(id){ return document.getElementById(id); }
 
+// ---------- vitorias por classe (liberam o Parasita) ----------
+const WINS_KEY='pacienteZeroVitorias';
+function loadWins(){ try{ return JSON.parse(localStorage.getItem(WINS_KEY))||{}; }catch(e){ return {}; } }
+function isUnlocked(key){ const need=CLASSES[key].unlock; if(!need) return true; const w=loadWins(); return need.every(k=>w[k]); }
+// Registra a vitoria; devolve as classes que ficaram liberadas por causa dela.
+function recordWin(key){
+  const lockedBefore=Object.keys(CLASSES).filter(k=>!isUnlocked(k));
+  const w=loadWins(); w[key]=true;
+  try{ localStorage.setItem(WINS_KEY, JSON.stringify(w)); }catch(e){}
+  return lockedBefore.filter(k=>isUnlocked(k));
+}
+
 function buildSetup(){
   // cards de classe
+  const wins=loadWins();
+  if(!isUnlocked(chosenClass)) chosenClass='virus';
   const grid=el('classGrid'); grid.innerHTML='';
   for(const [key,c] of Object.entries(CLASSES)){
+    const locked=!isUnlocked(key);
     const card=document.createElement('button');
     card.type='button';
-    card.className='class-card'+(c.locked?' locked':'')+(key===chosenClass?' sel':'');
-    card.innerHTML=`<h5>${c.label}${c.locked?'<span class="lock-badge">Bloqueado</span>':''}</h5><p>${c.desc}</p>`;
-    if(!c.locked) card.onclick=()=>{ chosenClass=key; buildSetup(); };
+    card.className='class-card'+(locked?' locked':'')+(key===chosenClass?' sel':'');
+    const badge = locked ? '<span class="lock-badge"><i class="fas fa-lock"></i> Bloqueado</span>'
+      : wins[key] ? '<span class="win-badge"><i class="fas fa-trophy"></i> Vencido</span>' : '';
+    const desc = locked
+      ? `Vença com ${c.unlock.map(k=>CLASSES[k].label).join(', ')} para liberar (${c.unlock.filter(k=>wins[k]).length}/${c.unlock.length}).`
+      : c.desc;
+    card.innerHTML=`<h5>${c.label}${badge}</h5><p>${desc}</p>`;
+    if(!locked) card.onclick=()=>{ chosenClass=key; buildSetup(); };
     grid.appendChild(card);
   }
   // paises de origem
@@ -610,8 +655,18 @@ function buildSetup(){
     if(sel.options.length===0){
       const sorted=[...GEO].sort((a,b)=>a.name.localeCompare(b.name,'pt-BR'));
       for(const f of sorted){ const op=document.createElement('option'); op.value=f.iso3; op.textContent=f.name;
+        op.dataset.name=f.name; op.dataset.climate=climateKind({ clim:climateFor(f.centroid[1]) });
         if(f.iso3==='BRA') op.selected=true; sel.appendChild(op); }
     }
+    // Parasita so pode comecar em pais temperado (em quente/frio o paciente zero nao se reproduz)
+    const onlyMild=!!CLASSES[chosenClass].climateLock;
+    for(const op of sel.options){
+      const bad = onlyMild && op.dataset.climate!=='mild';
+      op.disabled=bad;
+      op.textContent = op.dataset.name + (bad ? ` (${CLIMATE_LABEL[op.dataset.climate].toLowerCase()})` : '');
+    }
+    if(sel.selectedOptions[0]?.disabled) sel.value = [...sel.options].find(o=>o.value==='USA'&&!o.disabled)?.value || [...sel.options].find(o=>!o.disabled).value;
+    el('originHint').classList.toggle('hidden',!onlyMild);
   }
 }
 
@@ -702,7 +757,10 @@ function renderWorldSide(){
   el('cSea').textContent=`${seaClosed} de ${seaTotal}`;
   el('cLandLbl').textContent='Fronteiras restritas';
   el('cLand').textContent=`${landClosed} de ${landTotal}`;
+  el('cClimateRow').classList.add('hidden');
 }
+
+const CLIMATE_LABEL={ hot:'Quente', cold:'Frio', mild:'Temperado' };
 
 function renderSide(){
   const co=selectedIso?GAME.countries[selectedIso]:null;
@@ -725,6 +783,11 @@ function renderSide(){
   el('cDead').textContent=fmt(co.dead);
   el('cAffected').textContent=(((co.infected+co.dead)/co.total)*100).toFixed(2)+'%';
   el('cDetected').textContent=co.detected?'Sim':'Não';
+  el('cClimateRow').classList.remove('hidden');
+  const blockedHere = CLASSES[GAME.diseaseClass].climateLock && climateBlocked(co, GAME);
+  el('cClimate').textContent = CLIMATE_LABEL[climateKind(co)] + (blockedHere
+    ? ` · requer ${climateKind(co)==='hot'?'Calor 2':'Frio 2'}` : '');
+  el('cClimate').style.color = blockedHere ? 'var(--yellow)' : '';
   el('cAir').textContent=accessText(co.hasAir, co.airOpen);
   el('cSea').textContent=accessText(co.hasSea, co.seaOpen);
   el('cLand').textContent=co.borders.length
@@ -762,7 +825,11 @@ function stepDay(){
   renderSide();   // atualiza o pais selecionado ou o resumo global
   updateEvBadge();
   if(openPanel) renderPanel(openPanel); // mantem o painel aberto vivo
-  if(GAME.status!=='running'){ setSpeed(0); showGameOver(); }
+  if(GAME.status!=='running'){
+    // a vitoria so conta quando acontece jogando (importar um save vencido nao libera nada)
+    const unlocked = GAME.status==='won' ? recordWin(GAME.diseaseClass) : [];
+    setSpeed(0); showGameOver(unlocked);
+  }
   save();
 }
 
@@ -891,7 +958,7 @@ function statsFooter(){
 function evoState(e){
   if(!allowedFor(e, GAME.diseaseClass)) return 'blocked';
   if(GAME.purchased.includes(e.id)) return 'bought';
-  if(!reqOk(e,GAME)) return 'locked';
+  if(!reqOk(e,GAME) || !cutReady(e,GAME)) return 'locked';
   return GAME.points>=costOf(e,GAME) ? 'avail' : 'poor';
 }
 
@@ -918,8 +985,10 @@ function renderEvoDetail(tree){
   if(!e){ const info=TREE_INFO[tree];
     return `<div class="evo-detail"><h4>${info.title}</h4><p>${info.text}</p><p class="hint">Toque em um hexágono para ver os detalhes.</p></div>`; }
   const st=evoState(e), cost=costOf(e,GAME);
-  const effs=Object.entries(e.eff).map(([k,v])=>`<li>${EFF_LABELS[k]} <b>+${Math.round(v*100)}%</b></li>`).join('');
-  const req=e.req ? `<p class="req ${st==='locked'?'bad':''}">Requer um destes: ${e.req.map(r=>EVO_BY_ID[r].name).join(', ')}</p>` : '';
+  const effs=Object.entries(e.eff).map(([k,v])=>`<li>${EFF_LABELS[k]} <b>+${Math.round(v*100)}%</b></li>`).join('')
+    + (e.cureCut ? `<li>Progresso da cura <b>−${e.cureCut}%</b> (uma vez)</li>` : '');
+  const req=(e.req ? `<p class="req ${st==='locked'&&!reqOk(e,GAME)?'bad':''}">Requer um destes: ${e.req.map(r=>EVO_BY_ID[r].name).join(', ')}</p>` : '')
+    + (e.cureCut && !cutReady(e,GAME) ? `<p class="req bad">${GAME.cure>=100?'A cura já foi concluída.':'Só pode ser usado com a pesquisa da cura em andamento.'}</p>` : '');
   const cls=CLASSES[GAME.diseaseClass];
   const action = st==='blocked'
     ? `<p class="req bad"><i class="fas fa-lock"></i> Indisponível para ${cls.label}: só evolui ${cls.lines.map(l=>LINE_NAMES[l]).join(' e ')}.</p>`
@@ -933,6 +1002,7 @@ function buyEvo(id){
   if(evoState(e)!=='avail') return;
   GAME.points-=costOf(e,GAME);
   GAME.purchased.push(id);
+  if(e.cureCut) GAME.cure=Math.max(0, GAME.cure-e.cureCut);
   refreshHud();
   if(openPanel) renderPanel(openPanel);
   save();
@@ -945,7 +1015,7 @@ const WIN_RANKS=[ [500,'Lendária','Poucos patógenos acabam com a humanidade t�
   [650,'Implacável','A humanidade resistiu, mas não o bastante.'],
   [Infinity,'Persistente','Lenta, mas inevitável.'] ];
 
-function showGameOver(){
+function showGameOver(unlocked=[]){
   closeModal();   // fecha Evolucao/Cura/Eventos: a tela de fim nao fica empilhada sobre outro painel
   const won=GAME.status==='won';
   const cos=Object.values(GAME.countries);
@@ -964,25 +1034,27 @@ function showGameOver(){
     el('overText').innerHTML =
       `${name} (${cls}) varreu a humanidade em <b>${GAME.day} dias</b>. Não restou nenhum sobrevivente.`;
     el('overRank').innerHTML=`<span>Classificação</span><b>${rank[1]}</b><small>${rank[2]}</small>`;
+    if(unlocked.length) el('overText').innerHTML += `<span class="over-unlock"><i class="fas fa-unlock"></i> ${unlocked.map(k=>CLASSES[k].label).join(', ')} desbloqueado! Escolha na tela inicial.</span>`;
   } else {
     const byCure=GAME.cure>=100;
     el('overIcon').innerHTML=`<i class="fas ${byCure?'fa-syringe':'fa-skull-crossbones'}"></i>`;
     el('overKicker').textContent=byCure?'PATÓGENO ERRADICADO':'PATÓGENO EXTINTO';
     el('overTitle').textContent='Derrota';
     el('overText').innerHTML = byCure
-      ? `A cura salvou o último infectado. A humanidade venceu ${name} após <b>${GAME.day} dias</b>.`
-      : `${name} ficou sem hospedeiros e desapareceu após <b>${GAME.day} dias</b>.`;
+      ? `A cura salvou o último infectado. A humanidade venceu ${name} (${cls}) após <b>${GAME.day} dias</b>.`
+      : `${name} (${cls}) ficou sem hospedeiros e desapareceu após <b>${GAME.day} dias</b>.`;
   }
   el('overRank').classList.toggle('hidden',!won);
 
   const stat=(label,val)=>`<div><span>${label}</span><b>${val}</b></div>`;
+  const alive=cos.reduce((s,c)=>s+c.healthy+c.infected+c.recovered,0), worldPop=Math.max(1,alive+GAME.worldDead);
   el('overStats').innerHTML=
     stat('Dias',GAME.day)+
+    stat('Sobreviventes',`${fmt(alive)} <small>(${(alive/worldPop*100).toFixed(1)}%)</small>`)+
     stat('Mortos',`${fmt(GAME.worldDead)} <small>(${(deadPct*100).toFixed(1)}%)</small>`)+
     stat('Países atingidos',`${cos.filter(c=>c.everInfected).length} / ${cos.length}`)+
     stat(won?'Cura ao final':'Curados', won?`${GAME.cure.toFixed(1)}%`:fmt(cured))+
-    stat('Evoluções',GAME.purchased.length)+
-    stat('Classe',cls);
+    stat('Evoluções',GAME.purchased.length);
   el('overModal').classList.remove('hidden');
 }
 
@@ -1006,7 +1078,7 @@ function saveNow(){
 // Valida o formato de uma partida salva/importada (saves da versao antiga sao recusados).
 function isValidSave(data){
   const g=data && data.g;
-  if(!g || g.schema!==2 || !CLASSES[g.diseaseClass] || CLASSES[g.diseaseClass].locked) return false;
+  if(!g || g.schema!==2 || !CLASSES[g.diseaseClass]) return false;
   if(!Array.isArray(g.purchased) || !Array.isArray(g.history) || typeof g.points!=='number') return false;
   const cos=g.countries && Object.values(g.countries);
   return !!cos && cos.length>0 && cos.every(c=>typeof c.total==='number' && Array.isArray(c.borders));
@@ -1052,6 +1124,14 @@ function syncHeaderHeight(){
   if(h) document.documentElement.style.setProperty('--header-h', h.offsetHeight+'px');
 }
 
+// Maximizar: esconde header/footer do site; --header-h vira 0 e o jogo ocupa a tela toda.
+function toggleMaximize(){
+  const on=document.body.classList.toggle('maximized'), b=el('fullBtn');
+  b.innerHTML=`<i class="fas ${on?'fa-compress':'fa-expand'}"></i>`;
+  b.title=on?'Minimizar':'Maximizar'; b.setAttribute('aria-label',b.title); b.setAttribute('aria-pressed',on);
+  syncHeaderHeight(); window.scrollTo(0,0);
+}
+
 async function boot(){
   syncHeaderHeight();
   window.addEventListener('resize', syncHeaderHeight);
@@ -1074,6 +1154,7 @@ async function boot(){
 
   document.querySelectorAll('.speed-btn').forEach(b=> b.onclick=()=>setSpeed(+b.dataset.speed));
   el('saveBtn').onclick=saveNow;
+  el('fullBtn').onclick=toggleMaximize;
   document.querySelectorAll('.tab').forEach(t=> t.onclick=()=>openModal(t.dataset.panel));
 
   // delegacao: abas, selecao de no e compra de evolucao
@@ -1086,5 +1167,5 @@ async function boot(){
 }
 
 if(typeof document!=='undefined') document.addEventListener('DOMContentLoaded', boot);
-if(typeof module!=='undefined') module.exports={ tick, createGame, computeBorders, EVOLUTIONS, EVO_BY_ID, BALANCE, costOf, reqOk, allowedFor };
+if(typeof module!=='undefined') module.exports={ tick, createGame, computeBorders, EVOLUTIONS, EVO_BY_ID, BALANCE, costOf, reqOk, cutReady, allowedFor };
 })();

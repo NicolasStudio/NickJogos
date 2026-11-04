@@ -48,10 +48,12 @@
             <div class="field">
                 <span>Pais de origem</span>
                 <select id="originSelect"><!-- preenchido pelo JS --></select>
+                <small class="origin-hint hidden" id="originHint">O Parasita só pode começar em países de clima temperado.</small>
             </div>
 
             <button id="continueBtn" class="btn btn-ghost hidden">Continuar partida salva</button>
             <button id="startBtn" class="btn btn-primary">Iniciar partida</button>
+            <a href="index.html" class="btn btn-ghost"><i class="fas fa-right-from-bracket"></i>&nbsp; Sair</a>
 
             <div class="setup-io">
                 <button id="exportBtn" class="io-link hidden"><i class="fas fa-download"></i> Exportar .txt</button>
@@ -80,6 +82,7 @@
                 <div class="metric"><span>Pontos</span><b id="mPoints">0</b></div>
             </div>
             <div class="hud-controls">
+                <button class="save-btn" id="fullBtn" title="Maximizar" aria-label="Maximizar" aria-pressed="false"><i class="fas fa-expand"></i></button>
                 <button class="save-btn" id="saveBtn" title="Salvar jogo" aria-label="Salvar jogo"><i class="fas fa-floppy-disk"></i></button>
                 <button class="speed-btn" data-speed="0" title="Pausar"><i class="fas fa-pause"></i></button>
                 <button class="speed-btn active" data-speed="1">1x</button>
@@ -115,6 +118,7 @@
                     <h4>Indicadores</h4>
                     <div class="row"><span>Afetados</span><b id="cAffected">-</b></div>
                     <div class="row"><span id="cDetectedLbl">Detectado</span><b id="cDetected">-</b></div>
+                    <div class="row" id="cClimateRow"><span>Clima</span><b id="cClimate">-</b></div>
                     <h4>Acessos</h4>
                     <div class="row"><span><i class="fas fa-plane"></i> <span id="cAirLbl">Aeroporto</span></span><b id="cAir">-</b></div>
                     <div class="row"><span><i class="fas fa-anchor"></i> <span id="cSeaLbl">Porto</span></span><b id="cSea">-</b></div>
