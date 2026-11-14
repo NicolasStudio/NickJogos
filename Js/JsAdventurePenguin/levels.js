@@ -14,6 +14,11 @@
 //   p pinha explosiva (pise para desarmar; chegar perto ou encostar faz explodir)
 //   n bola de neve gigante (3 pisoes ou escorregoes; escorregao que nao derruba empurra de volta)
 //   y urso polar (2 pisoes; patada de perto; escorregar nele empurra de volta)
+//   f foca (mesma mecanica do urso)
+//   w plataforma de madeira (atravessa por baixo; na altura do chao, sobre a agua, vira ponte)
+//   D piso da ponte (tabua com neve; embaixo nao ha nada)    X caixote (bloco solido)
+//   c nuvem (pisa em cima e atravessa por baixo)            a coruja (voa e mergulha; pular nela derruba)
+//   b boi-almiscarado (como a rena)                         m rato das neves (como o urso)
 //   s boneco de neve (chefe da 2-5, ainda sem fase: so morre por tras; garras e bola de neve)
 //   K ponto de controle (recomeca aqui depois de tocar)
 //   P inicio do pinguim  > placa            | bandeira (fim da fase)
@@ -1522,6 +1527,672 @@ const LEVELS = [
             'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
             'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
             'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
+        ],
+    },
+    {
+        // Mundo 3: rio com ponte (cerca de 30% agua, 60% terra e 10% madeira; foca, bola de neve e urso)
+        name: '3-1',
+        time: 400,
+        cenario: 'rio',
+        map: joinSegments(
+            // 1. comeco
+            [
+                '                    ',
+                '  o     o           ',
+                '   B$B   $          ',
+                '                    ',
+                ' P  >     oo        ',
+                ...ground(20),
+            ],
+            // 2. rio com uma ilhota no meio
+            [
+                '                    ',
+                '  oo     oo         ',
+                '                    ',
+                '                    ',
+                '      oo        e   ',
+                'G    GGG    GGGGGGGG',
+                'G~~~~GGG~~~~GGGGGGGG',
+                'G~~~~GGG~~~~GGGGGGGG',
+            ],
+            // 3. peixe dourado e buraco de 4
+            [
+                '    B$BF            ',
+                '                    ',
+                '                    ',
+                '                    ',
+                ' o o              e ',
+                'GGGGGGGGG    GGGGGGG',
+                'GGGGGGGGG~~~~GGGGGGG',
+                'GGGGGGGGG~~~~GGGGGGG',
+            ],
+            // 4. rio largo com duas plataformas de madeira
+            [
+                '   ooo  ooo         ',
+                '   www  www         ',
+                '                    ',
+                '                    ',
+                '                    ',
+                'G            GGGGGGG',
+                'G~~~~~~~~~~~~GGGGGGG',
+                'G~~~~~~~~~~~~GGGGGGG',
+            ],
+            // 5. foca embaixo de uma plataforma de gelo
+            [
+                '                    ',
+                '       oo           ',
+                '      =====         ',
+                '                    ',
+                '   oo          f    ',
+                ...ground(20),
+            ],
+            // 6. ponte de madeira com urso em cima
+            [
+                '                    ',
+                '    o o o o         ',
+                '                    ',
+                '                    ',
+                '        y           ',
+                'GGGwwwwwwwwwwGGGGGGG',
+                'GGG~~~~~~~~~~GGGGGGG',
+                'GGG~~~~~~~~~~GGGGGGG',
+            ],
+            // 7. presentes, bolas de neve e buraco de 4
+            [
+                '  $   $             ',
+                '                    ',
+                '                    ',
+                '  oo                ',
+                '            e  e    ',
+                'GGGGGG    GGGGGGGGGG',
+                'GGGGGG~~~~GGGGGGGGGG',
+                'GGGGGG~~~~GGGGGGGGGG',
+            ],
+            // 8. rio com pedrinhas de madeira e ilhota
+            [
+                '                    ',
+                '  oo    oo          ',
+                '                    ',
+                '                    ',
+                '              f     ',
+                'G  ww GG  ww GGGGGGG',
+                'G~~~~~GG~~~~~GGGGGGG',
+                'G~~~~~GG~~~~~GGGGGGG',
+            ],
+            // 9. ponto de controle e buraco de 4
+            [
+                '                    ',
+                '  o o o o           ',
+                '                    ',
+                '                    ',
+                '    K               ',
+                'GGGGGGGGGGGG    GGGG',
+                'GGGGGGGGGGGG~~~~GGGG',
+                'GGGGGGGGGGGG~~~~GGGG',
+            ],
+            // 10. ponte quebrada (pule o vao)
+            [
+                '                    ',
+                '   oooo  oooo       ',
+                '                    ',
+                '                    ',
+                '                    ',
+                'GGwwww  wwwwGGGGGGGG',
+                'GG~~~~~~~~~~GGGGGGGG',
+                'GG~~~~~~~~~~GGGGGGGG',
+            ],
+            // 11. peixe verde (+1 vida), urso e buraco de 4
+            [
+                '     $V$            ',
+                '                    ',
+                '  oo     oo         ',
+                '                    ',
+                '               y    ',
+                'GGGGGGGGGG    GGGGGG',
+                'GGGGGGGGGG~~~~GGGGGG',
+                'GGGGGGGGGG~~~~GGGGGG',
+            ],
+            // 12. tabuas soltas sobre o rio
+            [
+                '                    ',
+                '    o    o          ',
+                '                    ',
+                '                    ',
+                '                    ',
+                'GG  ww   ww  GGGGGGG',
+                'GG~~~~~~~~~~~GGGGGGG',
+                'GG~~~~~~~~~~~GGGGGGG',
+            ],
+            // 13. duas focas separadas por um bloco de gelo
+            [
+                '  o        o        ',
+                '       o            ',
+                '      III           ',
+                '      III           ',
+                '  f   III     f     ',
+                ...ground(20),
+            ],
+            // 14. rio com duas plataformas de madeira altas
+            [
+                '                    ',
+                '     oo  oo         ',
+                '     ww  ww         ',
+                '                    ',
+                '                    ',
+                'GGG          GGGGGGG',
+                'GGG~~~~~~~~~~GGGGGGG',
+                'GGG~~~~~~~~~~GGGGGGG',
+            ],
+            // 15. tres bolas de neve, presentes e buraco de 4
+            [
+                '  $  B  $           ',
+                '                    ',
+                '                    ',
+                '  o o o             ',
+                '    e   e   e       ',
+                'GGGGGGGGGGGGGGG    G',
+                'GGGGGGGGGGGGGGG~~~~G',
+                'GGGGGGGGGGGGGGG~~~~G',
+            ],
+            // 16. rio com uma ilhota no meio
+            [
+                '                    ',
+                '   oo    oo         ',
+                '                    ',
+                '                    ',
+                '       oo           ',
+                'GG    GGG    GGGGGGG',
+                'GG~~~~GGG~~~~GGGGGGG',
+                'GG~~~~GGG~~~~GGGGGGG',
+            ],
+            // 17. ultimo trecho: buraco de 4 e urso
+            [
+                '    B $ B           ',
+                '                    ',
+                '                    ',
+                '  o o o o           ',
+                '               y    ',
+                'GGGGGG    GGGGGGGGGG',
+                'GGGGGG~~~~GGGGGGGGGG',
+                'GGGGGG~~~~GGGGGGGGGG',
+            ],
+            // escadaria final e bandeira
+            [
+                '           I            ',
+                '          II            ',
+                '         III            ',
+                '        IIII            ',
+                '       IIIII            ',
+                '      IIIIII            ',
+                '     IIIIIII            ',
+                '    IIIIIIII      |     ',
+                ...ground(24),
+            ],
+            [
+                '                ',
+                ...ground(16),
+            ],
+        ),
+    },
+    {
+        // Mundo 3: em cima da ponte (piso de tabuas; buraco = queda no vao; foca, bola de neve e urso)
+        name: '3-2',
+        time: 400,
+        cenario: 'ponte',
+        map: joinSegments(
+            // 1. comeco
+            [
+                '                    ',
+                '  o  o  o           ',
+                '   B$B   $          ',
+                '                    ',
+                ' P  >     oo        ',
+                'DDDDDDDDDDDDDDDDDDDD',
+                '',
+            ],
+            // 2. primeiro buraco na ponte (3)
+            [
+                '                    ',
+                '      ooo           ',
+                '                    ',
+                '                    ',
+                '  oo          e     ',
+                'DDDDDD   DDDDDDDDDDD',
+                '',
+            ],
+            // 3. peixe dourado e caixotes
+            [
+                '    B$BF            ',
+                '                    ',
+                '                    ',
+                '         X          ',
+                ' o o     X    e     ',
+                'DDDDDDDDDDDDDDDDDDDD',
+                '',
+            ],
+            // 4. buraco de 4 com plataforma de madeira
+            [
+                '                    ',
+                '    ooo             ',
+                '   www              ',
+                '                    ',
+                '                    ',
+                'DD    DDDDDDDDDDDDDD',
+                '',
+            ],
+            // 5. focas dos dois lados de uma pilha de caixotes
+            [
+                '                    ',
+                '  oo                ',
+                '         XX         ',
+                '         XX         ',
+                '   f     XX    f    ',
+                'DDDDDDDDDDDDDDDDDDDD',
+                '',
+            ],
+            // 6. ponte quebrada: sobrou uma tabua solta no meio
+            [
+                '                    ',
+                '  oo  oo  oo        ',
+                '                    ',
+                '                    ',
+                '                    ',
+                'DDD  ww  DDDDDDDDDDD',
+                '',
+            ],
+            // 7. urso embaixo de uma fileira de caixotes
+            [
+                '                    ',
+                '   ooo              ',
+                '  XXXXX             ',
+                '                    ',
+                '               y    ',
+                'DDDDDDDDDDDDDDDDDDDD',
+                '',
+            ],
+            // 8. peixe verde (+1 vida) e buraco de 3
+            [
+                '     $V$            ',
+                '                    ',
+                '  oo     oo         ',
+                '                    ',
+                '              e     ',
+                'DDDDDDDDDD   DDDDDDD',
+                '',
+            ],
+            // 9. ponto de controle
+            [
+                '                    ',
+                '  o o o o o         ',
+                '                    ',
+                '                    ',
+                '    K               ',
+                'DDDDDDDDDDDDDDDDDDDD',
+                '',
+            ],
+            // 10. tabuas faltando em sequencia
+            [
+                '                    ',
+                '  oo   oo   oo      ',
+                '                    ',
+                '                    ',
+                '              f     ',
+                'DD  DDD  DDD  DDDDDD',
+                '',
+            ],
+            // 11. duas focas separadas por caixotes
+            [
+                '  oo       oo       ',
+                '       o            ',
+                '      XX            ',
+                '      XX            ',
+                '  f   XX      f     ',
+                'DDDDDDDDDDDDDDDDDDDD',
+                '',
+            ],
+            // 12. buraco grande com plataforma de madeira
+            [
+                '                    ',
+                '    ooo             ',
+                '   www              ',
+                '                    ',
+                '            ooo     ',
+                'DD        DDDDDDDDDD',
+                '',
+            ],
+            // 13. tres bolas de neve e presentes
+            [
+                '  $  B  $           ',
+                '                    ',
+                '                    ',
+                '  o o o             ',
+                '    e   e   e       ',
+                'DDDDDDDDDDDDDDDDDDDD',
+                '',
+            ],
+            // 14. urso depois de um buraco de 4
+            [
+                '                    ',
+                '   oo               ',
+                '                    ',
+                '                    ',
+                '            y       ',
+                'DDDDDD    DDDDDDDDDD',
+                '',
+            ],
+            // 15. escadinhas de caixotes com buraco no meio
+            [
+                '       oo           ',
+                '      o  o          ',
+                '                    ',
+                '     X    X         ',
+                '    XX    XX        ',
+                '   XXX    XXX       ',
+                'DDDDDD    DDDDDDDDDD',
+                '',
+            ],
+            // 16. foca e urso
+            [
+                '   ooo     ooo      ',
+                '                    ',
+                '                    ',
+                '                    ',
+                '   f       y        ',
+                'DDDDDDDDDDDDDDDDDDDD',
+                '',
+            ],
+            // 17. ultimo trecho antes da escadaria
+            [
+                '    B $ B           ',
+                '                    ',
+                '                    ',
+                '  o o o o o         ',
+                '            e       ',
+                'DDDDDDDDDDDDDDDDDDDD',
+                '',
+            ],
+            // escadaria de caixotes e bandeira
+            [
+                '           X            ',
+                '          XX            ',
+                '         XXX            ',
+                '        XXXX            ',
+                '       XXXXX            ',
+                '      XXXXXX            ',
+                '     XXXXXXX            ',
+                '    XXXXXXXX      |     ',
+                'DDDDDDDDDDDDDDDDDDDDDDDD',
+                '',
+            ],
+            [
+                '                ',
+                'DDDDDDDDDDDDDDDD',
+                '',
+            ],
+        ),
+    },
+    {
+        // Mundo 3: a ponte a noite (piso: ~60% madeira, ~30% nuvem, ~10% outros blocos; foca, pinha e coruja)
+        name: '3-3',
+        time: 400,
+        cenario: 'pontenoite',
+        map: joinSegments(
+            // 1. comeco: presentes soltos em alturas diferentes
+            [
+                '                    ',
+                '                    ',
+                '     $     B        ',
+                '                    ',
+                '  oo     oo         ',
+                ' P  >               ',
+                'DDDDDDDDDDDDDDDDDDDD',
+                '',
+            ],
+            // 2. ponte de nuvem e primeira foca
+            [
+                '                    ',
+                '   o  o  o  o       ',
+                '                    ',
+                '                    ',
+                '                    ',
+                '               f    ',
+                'DDDDDDDDDDDDDDDDDDDD',
+                '',
+            ],
+            // 3. torre de caixotes e pinha
+            [
+                '                    ',
+                '      oo            ',
+                '                    ',
+                '      XX      o     ',
+                '      XX            ',
+                '  p   XX            ',
+                'DDDDDDDDDDDDDDDDDDDD',
+                '',
+            ],
+            // 4. primeira coruja, voando alto sobre a nuvem
+            [
+                '            a       ',
+                '                    ',
+                '  ooo  ooo          ',
+                '                    ',
+                '                    ',
+                '                    ',
+                'DDDDDDDDDDDDDDDDDDDD',
+                '',
+            ],
+            // 5. peixe dourado entre presentes e buraco pequeno
+            [
+                '                    ',
+                '    $F$             ',
+                '                    ',
+                '                    ',
+                '  o      o  o       ',
+                '              f     ',
+                'DDDDDDDDDD  DDDDDDDD',
+                '',
+            ],
+            // 6. nuvens em degraus subindo (altura!)
+            [
+                '  ooo        a      ',
+                '  ccc               ',
+                '        ooo         ',
+                '        ccc         ',
+                '                    ',
+                '                    ',
+                'DDDDDDDDDDDDDDDDDDDD',
+                '',
+            ],
+            // 7. escada de caixotes, pinha e foca
+            [
+                '                    ',
+                '        oo          ',
+                '        XX          ',
+                '       XXX          ',
+                '      XXXX          ',
+                '  p  XXXXX    f     ',
+                'DDDDDDDDDDDDDDDDDDDD',
+                '',
+            ],
+            // 8. nuvens com um vao e coruja
+            [
+                '                    ',
+                '   oo  oo  oo       ',
+                '                    ',
+                '          a         ',
+                '                    ',
+                '                    ',
+                'DDDDDDDD  DDDDDDDDDD',
+                '',
+            ],
+            // 9. ponto de controle
+            [
+                '                    ',
+                '                    ',
+                '  o o o o           ',
+                '                    ',
+                '                    ',
+                '    K        p      ',
+                'DDDDDDDDDDDDDDDDDDDD',
+                '',
+            ],
+            // 10. peixe verde (+1 vida) embaixo de uma nuvem
+            [
+                '           ccc      ',
+                '     $V$    oo      ',
+                '                    ',
+                '  oo   oo           ',
+                '                    ',
+                '              f     ',
+                'DDDDDDDDDDDDDDDDDDDD',
+                '',
+            ],
+            // 11. torres de caixotes de alturas diferentes
+            [
+                '                    ',
+                '   oo     o         ',
+                '   XX     X         ',
+                '   XX  X  X         ',
+                '   XX  X  X         ',
+                '  fXX  X  X         ',
+                'DDDDDDDDDDDDDDDDDDDD',
+                '',
+            ],
+            // 12. buraco com nuvem no meio e coruja
+            [
+                '                    ',
+                '      ooo           ',
+                '                    ',
+                '        a           ',
+                '                    ',
+                '                    ',
+                'DDDDD   DDD   DDDDDD',
+                '',
+            ],
+            // 13. caminho alto de nuvens
+            [
+                '                    ',
+                '   ooo    ooo       ',
+                '   ccc    ccc       ',
+                '                    ',
+                '                    ',
+                '               p    ',
+                'DDDDDDDDDDDDDDDDDDDD',
+                '',
+            ],
+            // 14. presentes e foca sobre caixotes
+            [
+                '                    ',
+                '                    ',
+                '  $  B  $           ',
+                '                    ',
+                '  o   o   o         ',
+                '        f           ',
+                'DDDDDDDDDDDDDDDDDDDD',
+                '',
+            ],
+            // 15. coruja, pinha e foca
+            [
+                '            a       ',
+                '                    ',
+                '   oo  oo           ',
+                '                    ',
+                '                    ',
+                '   p       f        ',
+                'DDDDDDDDDDDDDDDDDDDD',
+                '',
+            ],
+            // 16. nuvenzinhas altas com moedas
+            [
+                '                    ',
+                '  oo    oo          ',
+                '  cc    cc          ',
+                '                    ',
+                '                    ',
+                '                    ',
+                'DDDDDDDDDDDDDDDDDDDD',
+                '',
+            ],
+            // 17. ultimo trecho antes da escadaria
+            [
+                '                    ',
+                '   $ B $            ',
+                '                    ',
+                '  o o o o           ',
+                '                    ',
+                '              f     ',
+                'DDDDDDDDDDDDDDDDDDDD',
+                '',
+            ],
+            // escadaria de caixotes e bandeira
+            [
+                '           X            ',
+                '          XX            ',
+                '         XXX            ',
+                '        XXXX            ',
+                '       XXXXX            ',
+                '      XXXXXX            ',
+                '     XXXXXXX            ',
+                '    XXXXXXXX      |     ',
+                'DDDDDDDDDDDDDDDDDDDDDDDD',
+                '',
+            ],
+            [
+                '                ',
+                'DDDDDDDDDDDDDDDD',
+                '',
+            ],
+        ),
+    },
+    {
+        // Mundo 3: canion com a cascata. Madeira (ratos) > nuvens (corujas) > madeira (bois) > nuvens (corujas) > madeira (bois)
+        name: '3-4',
+        time: 400,
+        cenario: 'cascata',
+        map: [
+            '                                                                                                                                                                                                                                                                                                                                                                                            ',
+            '                                                                                                                                                                                                                                                                                                                                                                                            ',
+            '                                                                                                                                                                                                                                                                                                                                                                                            ',
+            '                                                                                                                                                                                                                                                                                                                                                                                            ',
+            '                                                                                                                                                                                                                                                                                                                                                                                            ',
+            '                                                                                                                                                      a                                                                                                                                             a                                                                                       ',
+            '                                                                                                                                a                                               a                                                                                           a                                                                                                               ',
+            '                                                                                                                                       o o                                                                                                                                                oo                                                                         X                      ',
+            '                                                                                     ooo                                      o o                                                                                                                                                oo                                                                                 XX                      ',
+            '                                                                                                                                      ccccccccc    o o              o o                                                                                                  oo             cccccc     oo                                                              XXX                      ',
+            '                                                                           ooo      wwwwwww                          o o     ccccccc                                         o o                                       ooooo                                                   cccccc                                                                             XXXX                      ',
+            '         $              F                    ooooo          $                                             B                                       ccccc    o o     cccccc              o o              V                           $                           oo     cccccc                    cccccc     oo                $              B$                  XXXXX                      ',
+            '                                         ooo                              wwwwwww                                   cccccc                                                  ccccccc                                   wwwwwww                                                                                                                                   XXXXXX                      ',
+            '             oooo            ooo            wwwwwww                                                                                                       cccccc                      cccccccc                                                                cccccc                                      cccccc                                  ooo          XXXXXXX                      ',
+            '  P  >            m               m                      oo      m                               oooo       m                                                                                     K   ooo      b                        ooo      b   ooo                                                              ooo            b                  b     XXXXXXXX      |               ',
+            'DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD             DDDDDDDDDDDDDDDDD                       DDDDDDDDDDDDDDDDDDDD                                                                             DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD                                                        DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD',
+            '                                                                                                                                                                                                                                                                                                                                                                                            ',
+        ],
+    },
+    {
+        // chefe do Mundo 3: Floco de Neve, na cascata (o chao e o tronco da imagem)
+        name: '3-5',
+        boss: 'snowflake',
+        time: 999,
+        cenario: 'cascatachefe',
+        map: [
+            '                              ',
+            '                              ',
+            '                              ',
+            '                              ',
+            '                              ',
+            '                              ',
+            '                              ',
+            '                              ',
+            '                              ',
+            '                              ',
+            '                              ',
+            '    P                         ',
+            'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
+            '                              ',
+            '                              ',
+            '                              ',
+            '                              ',
         ],
     },
 ];

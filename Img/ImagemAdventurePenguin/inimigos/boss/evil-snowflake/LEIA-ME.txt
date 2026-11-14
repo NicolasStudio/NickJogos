@@ -1,0 +1,5 @@
+EVIL SNOWFLAKE - CHEFE FLOCO DE NEVE (3-5)
+
+idle 4, float 6, attack_ice_lances 6, special_ice_explosion 6, hurt 3, defeat 6
+Quadros recortados da folha original (originais/folha.png): pedacos proximos agrupados por coluna
+(as lancas e a explosao ficam junto da pose); faiscas minusculas soltas ficaram de fora.

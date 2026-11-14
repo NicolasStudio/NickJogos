@@ -1,0 +1,5 @@
+MUSK OX - BOI-ALMISCARADO (olhando para a direita)
+
+idle 4, walk 6, attack_gore 6, charge_run 6, hurt 3, defeat 6
+Quadros recortados da folha original (originais/folha.png) pelo contorno de cada pose.
+No jogo: mesma mecanica da rena (investe pela frente; so morre por tras).

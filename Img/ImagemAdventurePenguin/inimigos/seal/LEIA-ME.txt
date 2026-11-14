@@ -1,0 +1,9 @@
+SEAL - SPRITES DO INIMIGO FOCA (olhando para a direita)
+
+idle: 4 quadros          walk: 6 quadros         attack_bite: 6 quadros
+charge_run: 6 quadros    hurt: 3 quadros         defeat: 6 quadros
+
+Quadros recortados automaticamente da folha original (originais/folha.png):
+cada corpo vira uma pose e os pedacos pequenos (riscos, neve) vao para o corpo
+mais proximo; telas de 260x260 px, apoiados na mesma base.
+No jogo: mesma mecanica do urso (2 pisoes, mordida de perto, escorregao empurra).

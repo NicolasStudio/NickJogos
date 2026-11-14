@@ -17,8 +17,9 @@
     const FIX_X = (VIEW_W * RES / 2) * (1 - 1 / RES);
     const FIX_Y = (VIEW_H * RES / 2) * (1 - 1 / RES);
     const T = ART.TILE_INDEX;
-    const SOLID = [T.SNOW, T.DIRT, T.BRICK, T.GIFT, T.USED, T.ICE, T.SNOW_L, T.SNOW_R, T.ICE_TOP, T.DIRT_L, T.DIRT_R];
-    const PLATS = [T.PLAT, T.PLAT_L, T.PLAT_M, T.PLAT_R];   // so colidem por cima
+    const SOLID = [T.SNOW, T.DIRT, T.BRICK, T.GIFT, T.USED, T.ICE, T.SNOW_L, T.SNOW_R, T.ICE_TOP, T.DIRT_L, T.DIRT_R,
+        T.DECK, T.DECK_L, T.DECK_M, T.DECK_R, T.CRATE];
+    const PLATS = [T.PLAT, T.PLAT_L, T.PLAT_M, T.PLAT_R, T.WOOD, T.WOOD_L, T.WOOD_M, T.WOOD_R, T.CLOUD, T.CLOUD_L, T.CLOUD_M, T.CLOUD_R];   // so colidem por cima
     const FONT = '"Press Start 2P", monospace';
     const RECORD_KEY = 'adventurePenguinRecorde';
 
@@ -40,7 +41,7 @@
         slideHoldSpeed: 90,  // segurando para baixo, o escorregao continua com pelo menos esta velocidade
     };
 
-    const SCORE = { coin: 10, stomp: 100, knock: 200, brick: 50, fish: 1000, timeBonus: 10, coinsForLife: 100, reindeer: 500, pinecone: 300, snowman: 500, bear: 600, bigsnow: 800, bigsnowHit: 100 };
+    const SCORE = { coin: 10, stomp: 100, knock: 200, brick: 50, fish: 1000, timeBonus: 10, coinsForLife: 100, reindeer: 500, pinecone: 300, snowman: 500, bear: 600, seal: 400, owl: 400, ox: 600, rat: 400, bigsnow: 800, bigsnowHit: 100 };
 
     // ---------------------------------------------------------------
     // Arvore de talentos. Toda moeda pega tambem vai para um cofre salvo no navegador
@@ -156,9 +157,25 @@
                 die:   { arquivo: 'defeat',      quadros: 6, fps: 10, repetir: false },
             },
         },
+        // chefe da 3-5: floco de neve (flutua; lancas de gelo e explosao de cristais)
+        flakeboss: {
+            pasta: 'Img/ImagemAdventurePenguin/inimigos/boss/evil-snowflake/',
+            tamanho: 72,
+            altura: 36,
+            olhaDireita: true,
+            semFranja: true,
+            anims: {
+                walk:    { arquivo: 'float',                 quadros: 6, fps: 8,  repetir: true },
+                idle:    { arquivo: 'idle',                  quadros: 4, fps: 6,  repetir: true },
+                lances:  { arquivo: 'attack_ice_lances',     quadros: 6, fps: 10, repetir: false },
+                explode: { arquivo: 'special_ice_explosion', quadros: 6, fps: 6,  repetir: false },
+                hurt:    { arquivo: 'hurt',                  quadros: 3, fps: 10, repetir: false },
+                die:     { arquivo: 'defeat',                quadros: 6, fps: 7,  repetir: false },
+            },
+        },
         // chefe da 2-5: o mesmo boneco de neve, bem maior
         snowboss: {
-            pasta: 'Img/ImagemAdventurePenguin/inimigos/evil-snowman/',
+            pasta: 'Img/ImagemAdventurePenguin/inimigos/boss/evil-snowman/',
             tamanho: 72,
             altura: 46,
             olhaDireita: true,
@@ -172,9 +189,71 @@
                 die:   { arquivo: 'defeat',         quadros: 6, fps: 8,  repetir: false },
             },
         },
+        // boi-almiscarado: mesma mecanica da rena (ve o pinguim na frente e investe; so morre por tras)
+        ox: {
+            pasta: 'Img/ImagemAdventurePenguin/inimigos/musk-ox/',
+            tamanho: 56,
+            altura: 26,
+            olhaDireita: true,
+            semFranja: true,
+            anims: {
+                walk:   { arquivo: 'walk',        quadros: 6, fps: 8,  repetir: true },
+                idle:   { arquivo: 'idle',        quadros: 4, fps: 5,  repetir: true },
+                attack: { arquivo: 'attack_gore', quadros: 6, fps: 14, repetir: false },
+                charge: { arquivo: 'charge_run',  quadros: 6, fps: 14, repetir: true },
+                hurt:   { arquivo: 'hurt',        quadros: 3, fps: 12, repetir: false },
+                die:    { arquivo: 'defeat',      quadros: 6, fps: 10, repetir: false },
+            },
+        },
+        // rato das neves: mesma mecanica do urso (2 pisoes, mordida de perto, escorregao empurra)
+        rat: {
+            pasta: 'Img/ImagemAdventurePenguin/inimigos/snow-rat/',
+            tamanho: 52,
+            altura: 18,
+            olhaDireita: true,
+            semFranja: true,
+            anims: {
+                walk: { arquivo: 'walk',        quadros: 6, fps: 10, repetir: true },
+                idle: { arquivo: 'idle',        quadros: 4, fps: 5,  repetir: true },
+                claw: { arquivo: 'attack_bite', quadros: 6, fps: 14, repetir: false },
+                hurt: { arquivo: 'hurt',        quadros: 3, fps: 12, repetir: false },
+                die:  { arquivo: 'defeat',      quadros: 6, fps: 10, repetir: false },
+            },
+        },
+        // coruja: voa patrulhando no alto e mergulha no pinguim; pular nela derruba
+        owl: {
+            pasta: 'Img/ImagemAdventurePenguin/inimigos/snowy-owl/',
+            tamanho: 52,
+            altura: 20,
+            olhaDireita: true,
+            semFranja: true,
+            anims: {
+                walk: { arquivo: 'fly',         quadros: 6, fps: 10, repetir: true },
+                idle: { arquivo: 'idle',        quadros: 4, fps: 5,  repetir: true },
+                claw: { arquivo: 'attack_claw', quadros: 6, fps: 14, repetir: false },
+                dive: { arquivo: 'dive_charge', quadros: 6, fps: 12, repetir: true },
+                hurt: { arquivo: 'hurt',        quadros: 3, fps: 12, repetir: false },
+                die:  { arquivo: 'defeat',      quadros: 6, fps: 10, repetir: false },
+            },
+        },
+        // foca: mesma mecanica do urso (2 pisoes, mordida de perto, escorregao empurra de volta)
+        seal: {
+            pasta: 'Img/ImagemAdventurePenguin/inimigos/seal/',
+            tamanho: 52,
+            altura: 20,
+            olhaDireita: true,
+            semFranja: true,
+            anims: {
+                walk:  { arquivo: 'walk',        quadros: 6, fps: 8,  repetir: true },
+                idle:  { arquivo: 'idle',        quadros: 4, fps: 5,  repetir: true },
+                claw:  { arquivo: 'attack_bite', quadros: 6, fps: 12, repetir: false },
+                hurt:  { arquivo: 'hurt',        quadros: 3, fps: 12, repetir: false },
+                die:   { arquivo: 'defeat',      quadros: 6, fps: 10, repetir: false },
+            },
+        },
         // boneco de neve comum (ainda fora das fases): so morre por tras; garras de perto e bola de neve de longe
         snowman: {
-            pasta: 'Img/ImagemAdventurePenguin/inimigos/evil-snowman/',
+            pasta: 'Img/ImagemAdventurePenguin/inimigos/boss/evil-snowman/',
             tamanho: 44,
             altura: 30,
             olhaDireita: true,
@@ -287,8 +366,33 @@
         shots: [1, 2, 3],
         rest: 2000,             // tempo extra parado depois de cada ataque (janela para pegar ele por tras)
     };
+    // Chefe Floco de Neve (3-5): flutua alto (fora de alcance). Lancas de gelo em leque e explosao
+    // de cristais; depois da explosao fica tonto embaixo - hora de pular nele. 5 pisoes vencem.
+    const FLAKE = {
+        hp: 5,
+        high: 86,              // altura em que flutua (px acima do chao)
+        low: 12,               // altura quando desce para explodir (perto do tronco: da para pular nele)
+        follow: 30,            // velocidade com que acompanha o pinguim la em cima
+        lanceSpeed: 150,
+        shardSpeed: 130,
+        dizzy: 2600,           // tempo tonto embaixo (janela para pular nele)
+        think: 1300,
+        pace: [1, 0.8, 0.6],
+        volleys: [1, 1, 2],    // rajadas de lancas por ataque (por fase)
+    };
     const TROPHY_KEY = 'adventurePenguinTrofeuRei';
     const BANISH_KEY = 'adventurePenguinBanido';
+
+    // coruja (px do mundo, ms)
+    const OWL = {
+        patrol: 56,          // distancia que voa para cada lado do ponto de partida
+        flySpeed: 40,
+        sight: 120,          // ve o pinguim abaixo ate essa distancia (horizontal)
+        diveSpeed: 170,
+        diveTime: 900,
+        climbSpeed: 70,
+        rest: 1200,          // espera depois de voltar ao alto
+    };
 
     // urso polar (px do mundo, ms)
     const BEAR = {
@@ -402,9 +506,29 @@
         ],
         // portao do castelo: imagem simetrica do tamanho da tela, fica parada (o castelo sempre a frente)
         // encaixe: estica a largura para fechar exatamente a tela (sem repetir a borda)
+        // chefe da 3-5: cascata com o tronco (parada, do tamanho da tela; o tronco e o chao)
+        cascatachefe: [
+            { key: 'cascatachefe', file: 'cenario/fundo-cascata-chefe', altura: VIEW_H + 28, base: VIEW_H, fator: 0, encaixe: true },   // um pouco maior: o tronco fica nos pes do pinguim
+        ],
         // chefe da 2-5: cabana na floresta (parada, do tamanho da tela)
         cabana: [
             { key: 'cabana', file: 'cenario/fundo-cabana', altura: VIEW_H, base: VIEW_H, fator: 0, encaixe: true },
+        ],
+        // Mundo 3: canion com a cascata
+        cascata: [
+            { key: 'cascata', file: 'cenario/fundo-cascata', altura: VIEW_H, base: VIEW_H, fator: 0.15 },
+        ],
+        // Mundo 3: a mesma ponte, a noite
+        pontenoite: [
+            { key: 'pontenoite', file: 'cenario/fundo-ponte-noite', altura: VIEW_H + 30, base: VIEW_H + 30, fator: 0.15 },
+        ],
+        // Mundo 3: em cima da ponte sobre o vao (o piso e desenhado pelo jogo)
+        ponte: [
+            { key: 'ponte', file: 'cenario/fundo-ponte', altura: VIEW_H + 30, base: VIEW_H + 30, fator: 0.15 },   // um pouco maior: o pe do corrimao encosta no piso
+        ],
+        // Mundo 3: rio com ponte entre pinheiros
+        rio: [
+            { key: 'rio', file: 'cenario/fundo-rio', altura: VIEW_H, base: VIEW_H, fator: 0.15 },
         ],
         // Mundo 2: clareira entre pinheiros
         clareira: [
@@ -469,6 +593,25 @@
         [T.PLAT_M]: { file: 'plataformas/gelo-larga', height: 64, crop: [22, 0] },
         [T.PLAT_R]: { file: 'plataformas/gelo-larga', height: 64, crop: [44, 0] },
         [T.PLAT]:   { file: 'plataformas/gelo', fit: true },
+        // plataforma de madeira ('w'): sobre a agua, na altura do chao, vira ponte
+        // (mesma tabua com neve da ponte, para combinar com o Mundo 3)
+        [T.WOOD_L]: { file: 'madeira-neve/ponte-tabua', height: 64, crop: [0, 0] },
+        [T.WOOD_M]: { file: 'madeira-neve/ponte-tabua', height: 64, crop: [126, 0] },
+        [T.WOOD_R]: { file: 'madeira-neve/ponte-tabua', height: 64, crop: [251, 0] },
+        [T.WOOD]:   { file: 'madeira-neve/ponte-tabua', height: 64, crop: [126, 0] },
+        // ponte ('D'): tabua com neve, solida; embaixo nao ha nada (buraco = queda no vao)
+        [T.DECK_L]: { file: 'madeira-neve/ponte-tabua', height: 64, crop: [0, 0] },
+        [T.DECK_M]: { file: 'madeira-neve/ponte-tabua', height: 64, crop: [126, 0] },
+        [T.DECK_R]: { file: 'madeira-neve/ponte-tabua', height: 64, crop: [251, 0] },
+        [T.DECK]:   { file: 'madeira-neve/ponte-tabua', height: 64, crop: [126, 0] },
+        // nuvem ('c'): pisa em cima e atravessa por baixo
+        // tamanho original (256 px = 4 tiles): pontas arredondadas inteiras e ondulacao que emenda a cada tile
+        [T.CLOUD_L]: { file: 'nuvem/nuvem', width: 256, crop: [0, 0] },
+        [T.CLOUD_M]: { file: 'nuvem/nuvem', width: 256, crop: [64, 0] },
+        [T.CLOUD_R]: { file: 'nuvem/nuvem', width: 256, crop: [192, 0] },
+        [T.CLOUD]:   { file: 'nuvem/nuvem', width: 256, crop: [64, 0] },
+        // caixote ('X'): bloco solido
+        [T.CRATE]:  { file: 'madeira-neve/caixote-x', fit: true },
         [T.SPIKE]:  { file: 'armadilhas/espinhos', width: 128, crop: [32, 0], bottom: true },   // 2 espinhos por tile
     };
 
@@ -1120,10 +1263,10 @@
             this.createInput();
 
             this.physics.add.collider(this.player, this.layer);
-            this.physics.add.collider(this.enemies, this.layer);
+            this.physics.add.collider(this.enemies, this.layer, null, (e) => e.kind !== 'owl' || e.dead, this);
             this.physics.add.collider(this.enemies, this.enemies, (a, b) => {
                 a.dir *= -1; b.dir *= -1;
-                for (const r of [a, b]) if (r.kind === 'reindeer' && r.mode === 'charge') r.modeUntil = 0;
+                for (const r of [a, b]) if ((r.kind === 'reindeer' || r.kind === 'ox') && r.mode === 'charge') r.modeUntil = 0;
             });
             this.physics.add.collider(this.items, this.layer);
             this.physics.add.overlap(this.player, this.enemies, this.onEnemy, null, this);
@@ -1198,10 +1341,23 @@
                         const l = at(x - 1, y) === '=', r = at(x + 1, y) === '=';
                         t = l && r ? T.PLAT_M : r ? T.PLAT_L : l ? T.PLAT_R : T.PLAT;
                     }
+                    else if (c === 'D') {
+                        const l = at(x - 1, y) === 'D', r = at(x + 1, y) === 'D';
+                        t = l && r ? T.DECK_M : r ? T.DECK_L : l ? T.DECK_R : T.DECK;
+                    }
+                    else if (c === 'X') t = T.CRATE;
+                    else if (c === 'c') {
+                        const l = at(x - 1, y) === 'c', r = at(x + 1, y) === 'c';
+                        t = l && r ? T.CLOUD_M : r ? T.CLOUD_L : l ? T.CLOUD_R : T.CLOUD;
+                    }
+                    else if (c === 'w') {
+                        const l = at(x - 1, y) === 'w', r = at(x + 1, y) === 'w';
+                        t = l && r ? T.WOOD_M : r ? T.WOOD_L : l ? T.WOOD_R : T.WOOD;
+                    }
                     else if (c === '^') t = T.SPIKE;
                     else if (c === '~') t = at(x, y - 1) === '~' ? T.WATER : T.WATER_TOP;
                     else if (c === 'o') this.spawns.coins.push({ x, y });
-                    else if ('eurpnsy'.includes(c)) this.spawns.enemies.push({ x, y, kind: { e: 'snow', u: 'urchin', r: 'reindeer', p: 'pinecone', n: 'bigsnow', s: 'snowman', y: 'bear' }[c] });
+                    else if ('eurpnsyfabm'.includes(c)) this.spawns.enemies.push({ x, y, kind: { e: 'snow', u: 'urchin', r: 'reindeer', p: 'pinecone', n: 'bigsnow', s: 'snowman', y: 'bear', f: 'seal', a: 'owl', b: 'ox', m: 'rat' }[c] });
                     else if (c === 'P') this.spawns.start = { x: x * TILE + 8, y: (y + 1) * TILE };
                     else if (c === '>') this.spawns.signs.push({ x, y });
                     else if (c === '|') this.spawns.flag = { x, y };
@@ -1293,10 +1449,10 @@
                 s.custom = !!box;
                 s.kind = e.kind;
                 s.dir = -1;
-                s.speed = snow ? 32 : e.kind === 'reindeer' ? REINDEER.walkSpeed : e.kind === 'pinecone' ? PINECONE.walkSpeed : 22;
+                s.speed = snow ? 32 : (e.kind === 'reindeer' || e.kind === 'ox') ? REINDEER.walkSpeed : e.kind === 'pinecone' ? PINECONE.walkSpeed : 22;
                 s.facesRight = !!(ENEMY_ART[e.kind] && ENEMY_ART[e.kind].olhaDireita && box);
                 s.mode = 'walk';          // rena/gigante: walk | windup | charge | rest (| hurt)
-                s.hp = e.kind === 'bigsnow' ? BIGSNOW.hp : e.kind === 'bear' ? BEAR.hp : 1;
+                s.hp = e.kind === 'bigsnow' ? BIGSNOW.hp : (e.kind === 'bear' || e.kind === 'seal' || e.kind === 'rat') ? BEAR.hp : 1;
                 s.nextThrow = 0;
                 s.invulnUntil = 0;
                 s.modeUntil = 0;
@@ -1307,6 +1463,11 @@
                 } else if (snow) s.body.setSize(12, 12).setOffset(2, 4);
                 else s.body.setSize(12, 9).setOffset(2, 4);
                 s.body.enable = false;  // acorda quando aparece na tela
+                if (e.kind === 'owl') {
+                    // voa: sem gravidade e sem colidir com o cenario
+                    s.body.setAllowGravity(false);
+                    s.homeX = px; s.homeY = bottom; s.mode = 'patrol'; s.dir = -1;
+                }
                 if (awake) { s.awake = true; s.body.enable = true; }
                 return s;
             }
@@ -1563,7 +1724,7 @@
 
         knockEnemiesOn(tile) {
             for (const e of this.enemies.getChildren()) {
-                if (e.dead || !e.body.enable || e.kind === 'reindeer' || e.kind === 'snowman' || e.kind === 'bear') continue;
+                if (e.dead || !e.body.enable || e.kind === 'reindeer' || e.kind === 'ox' || e.kind === 'snowman' || e.kind === 'bear' || e.kind === 'seal' || e.kind === 'rat') continue;
                 if (e.kind === 'bigsnow') {
                     if (Math.abs(e.x - tile.getCenterX()) < 18 && Math.abs(e.body.bottom - tile.getTop()) < 4) this.hitBigSnow(e);
                     continue;
@@ -1601,10 +1762,11 @@
                 }
                 if (e.y > this.mapH + 40) { e.destroy(); continue; }
                 const b = e.body;
-                if (e.kind === 'reindeer') { this.updateReindeer(e); continue; }
+                if (e.kind === 'reindeer' || e.kind === 'ox') { this.updateReindeer(e); continue; }
                 if (e.kind === 'bigsnow') { this.updateBigSnow(e); continue; }
                 if (e.kind === 'snowman') { this.updateSnowman(e); continue; }
-                if (e.kind === 'bear') { this.updateBear(e); continue; }
+                if (e.kind === 'bear' || e.kind === 'seal' || e.kind === 'rat') { this.updateBear(e); continue; }
+                if (e.kind === 'owl') { this.updateOwl(e); continue; }
                 if (e.kind === 'pinecone' && e.mode !== 'walk') { this.updatePinecone(e); continue; }
                 if (e.kind === 'pinecone') this.updatePinecone(e);
                 if (b.blocked.left) e.dir = 1;
@@ -1625,6 +1787,163 @@
                 f.setFlipX(f.art ? f.dir > 0 : f.dir < 0);   // a arte nova olha para a esquerda
                 if (f.y > this.mapH + 40) f.destroy();
             }
+        }
+
+        // ==================== CHEFE: FLOCO DE NEVE (3-5) ====================
+        createFlakeBoss() {
+            const box = enemyBoxes.flakeboss;
+            this.floorY = this.spawns.start.y;
+            const k = box
+                ? this.physics.add.sprite(this.mapW - 120, -40, 'enemy_flakeboss', 'walk1').setScale(1 / RES)
+                : this.physics.add.sprite(this.mapW - 120, -40, 'snowball', 's0').setScale(3);
+            k.setOrigin(0.5, 1).setDepth(13);
+            if (box) k.body.setSize(box.w, box.h).setOffset(box.x, box.y);
+            k.body.setAllowGravity(false);
+            k.custom = !!box;
+            Object.assign(k, { type: 'snowflake', art: 'flakeboss', hp: FLAKE.hp, dir: -1, mode: 'intro', until: this.time.now + 2200, dead: false, invulnUntil: 0, last: '' });
+            this.boss = k;
+            this.bossPlay('walk');
+            this.physics.add.overlap(this.player, k, this.onFlakeBoss, null, this);
+            this.hazards = this.physics.add.group({ allowGravity: false });
+            this.physics.add.overlap(this.player, this.hazards, (p, h) => { h.destroy(); this.hurt(); }, null, this);
+            this.time.delayedCall(700, () => this.bossSay('Você vai virar gelo, pinguim!'));
+            $('apBossName').textContent = 'FLOCO DE NEVE';
+            $('apStage').classList.add('boss-mode');
+            setBossBar(k.hp, FLAKE.hp);
+            this.events.once('shutdown', () => $('apStage').classList.remove('boss-mode'));
+        }
+
+        // dispara um caco/lanca de gelo na direcao (vx, vy)
+        flakeShot(x, y, vx, vy, scale = 1) {
+            const h = this.hazards.create(x, y, 'icicle').setScale(scale / RES).setDepth(15);
+            h.rotation = Math.atan2(vy, vx) - Math.PI / 2;      // a estalactite aponta para baixo
+            h.body.setSize(16, 16).setOffset(6, 48);
+            h.body.setVelocity(vx, vy);
+            h.kind = 'shot';
+            return h;
+        }
+
+        updateFlakeBoss(now) {
+            const k = this.boss, b = k.body, p = this.player;
+            // projeteis: somem fora da tela ou no chao
+            for (const h of this.hazards.getChildren()) {
+                if (h.x < -30 || h.x > this.mapW + 30 || h.y < -40 || h.y > this.floorY + 4) { if (h.y > this.floorY) this.puff(h.x, this.floorY - 2); h.destroy(); }
+            }
+            if (k.dead) return;
+            const ph = k.hp > FLAKE.hp * 2 / 3 ? 0 : k.hp > FLAKE.hp / 3 ? 1 : 2, pace = FLAKE.pace[ph];
+            const highY = this.floorY - FLAKE.high, lowY = this.floorY - FLAKE.low;
+            const go = (mode, ms) => { k.mode = mode; k.until = now + ms; };
+            const bob = Math.sin(now / 260) * 10;
+            const face = () => { k.dir = Math.sign(p.x - k.x) || k.dir; };
+            if (this.state.dead) { b.setVelocity(0, 0); return; }
+
+            switch (k.mode) {
+                case 'intro':            // desce do ceu ate a altura de voo
+                    b.setVelocity(0, Math.max(-40, Math.min(90, (highY - k.y) * 3)));
+                    if (now >= k.until) go('think', FLAKE.think * pace);
+                    break;
+                case 'think':            // la no alto, segue o pinguim devagar
+                    face();
+                    b.setVelocity(Math.sign(p.x - k.x) * Math.min(FLAKE.follow, Math.abs(p.x - k.x)), (highY - k.y) * 3 + bob);
+                    this.bossPlay('walk');
+                    if (now >= k.until) {
+                        const pick = k.last === 'explode' ? 'lances' : (ph === 0 && k.last !== 'lances' ? 'lances' : (Math.random() < 0.55 ? 'explode' : 'lances'));
+                        k.last = pick;
+                        if (pick === 'lances') { k.volleys = FLAKE.volleys[ph]; go('lances', 99999); k.nextVolley = now + 300; this.bossPlay('lances', true); }
+                        else { k.targetX = Phaser.Math.Clamp(p.x, 40, this.mapW - 40); go('descend', 1600); this.bossPlay('walk'); }
+                    }
+                    break;
+                case 'lances':           // mira e dispara 3 lancas em leque
+                    b.setVelocity(0, (highY - k.y) * 3);
+                    face();
+                    if (now >= k.nextVolley) {
+                        const sx = k.x + k.dir * 14, sy = k.y - 18;
+                        const base = Math.atan2(p.y - 8 - sy, p.x - sx);
+                        for (const off of [-0.22, 0, 0.22]) this.flakeShot(sx, sy, Math.cos(base + off) * FLAKE.lanceSpeed, Math.sin(base + off) * FLAKE.lanceSpeed, 0.8);
+                        if (--k.volleys > 0) { k.nextVolley = now + 650; this.time.delayedCall(250, () => { if (!k.dead && k.mode === 'lances') this.bossPlay('lances', true); }); }
+                        else go('think', FLAKE.think * pace);
+                    }
+                    break;
+                case 'descend':          // desce perto do tronco, em cima de onde o pinguim estava
+                    b.setVelocity((k.targetX - k.x) * 2, (lowY - k.y) * 3);
+                    if (Math.abs(lowY - k.y) < 3 || now >= k.until) { b.setVelocity(0, 0); go('charge', 900 * pace); this.bossPlay('explode', true); k.setTint(0xbfe8ff); }
+                    break;
+                case 'charge':           // carregando (brilha)
+                    b.setVelocity(0, 0);
+                    if (now >= k.until) {
+                        k.clearTint();
+                        const n = ph === 2 ? 12 : 8, sx = k.x, sy = k.y - 18;
+                        for (let i = 0; i < n; i++) { const a = i / n * Math.PI * 2; this.flakeShot(sx, sy, Math.cos(a) * FLAKE.shardSpeed, Math.sin(a) * FLAKE.shardSpeed, 0.6); }
+                        this.cameras.main.flash(120, 200, 235, 255);
+                        go('dizzy', FLAKE.dizzy * (ph === 2 ? 0.8 : 1));
+                    }
+                    break;
+                case 'dizzy':            // tonto embaixo: hora de pular nele
+                    b.setVelocity(0, (lowY - k.y) * 3 + bob * 0.5);
+                    this.bossPlay('idle');
+                    if (now >= k.until) go('rise', 1200);
+                    break;
+                case 'rise':
+                case 'hurt':
+                    b.setVelocity(0, (highY - k.y) * 3);
+                    if (now >= k.until || Math.abs(highY - k.y) < 3) go('think', FLAKE.think * pace * 0.7);
+                    break;
+            }
+            k.setFlipX(k.dir < 0);
+        }
+
+        onFlakeBoss(player, k) {
+            const st = this.state;
+            if (st.dead || st.won || k.dead || k.mode === 'intro') return;
+            const pb = player.body, kb = k.body;
+            if (pb.velocity.y > 20 && pb.bottom - kb.top < 14) {
+                pb.setVelocityY(-(this.readInput().jump ? PHYS.stompHeld : PHYS.stomp) * 1.15);
+                st.jumpCut = false;
+                if (this.time.now < k.invulnUntil) return;
+                k.hp--;
+                k.invulnUntil = this.time.now + 1000;
+                setBossBar(k.hp, FLAKE.hp);
+                this.addScore(300, k.x, k.y - 50);
+                this.puff(k.x, k.y - 20);
+                if (k.hp <= 0) return this.defeatFlakeBoss();
+                k.mode = 'hurt'; k.until = this.time.now + 900;
+                this.bossPlay('hurt', true);
+                k.setTintFill(0xffffff);
+                this.time.delayedCall(90, () => k.clearTint());
+                return;
+            }
+            if (this.time.now < k.invulnUntil) return;
+            this.hurt();
+        }
+
+        defeatFlakeBoss() {
+            const k = this.boss, st = this.state;
+            k.dead = true;
+            st.won = true;
+            k.body.setVelocity(0, 0);
+            k.clearTint();
+            this.bossPlay('die', true);
+            this.hazards.clear(true, true);
+            this.cameras.main.flash(300, 255, 255, 255);
+            this.player.body.setVelocityX(0);
+            S.score += 5000;
+            this.floatText('+5000', k.x, k.y - 70, '#ffd23f');
+            this.time.delayedCall(2600, () => {
+                S.playing = false;
+                const last = S.level >= LEVELS.length - 1;
+                $('apClearTitle').textContent = 'FLOCO DE NEVE DERROTADO!';
+                $('apClearHeightLabel').textContent = 'CHEFE DERROTADO';
+                $('apClearHeight').textContent = '+5000';
+                $('apClearTimeLabel').textContent = 'VIDAS';
+                $('apClearTime').textContent = pad(S.lives, 2);
+                $('apClearScore').textContent = pad(S.score, 6);
+                $('apNextBtn').textContent = last ? 'JOGAR DE NOVO' : 'PRÓXIMA FASE';
+                $('apNextBtn').dataset.last = last ? '1' : '';
+                $('apNextBtn').dataset.gate = '';
+                if (last) saveRecord();
+                refreshHud();
+                showScreen('apClear');
+            });
         }
 
         // ==================== CHEFE: BONECO DE NEVE (2-5) ====================
@@ -1771,6 +2090,7 @@
         // ==================== CHEFAO: REI DO GELO ====================
         createBoss() {
             if (LEVELS[S.level].boss === 'snowman') return this.createSnowBoss();
+            if (LEVELS[S.level].boss === 'snowflake') return this.createFlakeBoss();
             const box = enemyBoxes.king;
             this.floorY = this.spawns.start.y;          // altura do piso (pes do pinguim)
             const k = box
@@ -1801,7 +2121,7 @@
 
         bossSay(text) {
             const k = this.boss;
-            const t = this.add.text(k.x, k.y - 54, text, { fontFamily: FONT, fontSize: '7px', color: '#ffffff', stroke: '#1b2a4a', strokeThickness: 3, align: 'center', wordWrap: { width: 170 } })
+            const t = this.add.text(k.x, Math.max(k.y - 54, 78), text, { fontFamily: FONT, fontSize: '7px', color: '#ffffff', stroke: '#1b2a4a', strokeThickness: 3, align: 'center', wordWrap: { width: 170 } })
                 .setOrigin(0.5, 1).setDepth(40).setResolution(4);
             this.tweens.add({ targets: t, alpha: 0, delay: 1700, duration: 400, onComplete: () => t.destroy() });
         }
@@ -1820,6 +2140,7 @@
 
         updateBoss(now) {
             if (this.boss.type === 'snowman') return this.updateSnowBoss(now);
+            if (this.boss.type === 'snowflake') return this.updateFlakeBoss(now);
             const k = this.boss, b = k.body, p = this.player;
             // estalactites: caem ate o chao e se quebram
             for (const h of this.hazards.getChildren()) {
@@ -2011,7 +2332,7 @@
         updateReindeer(e) {
             const b = e.body, now = this.time.now, p = this.player;
             const custom = e.custom;
-            const play = (anim) => { if (custom) e.play(`en-reindeer-${anim}`, true); };
+            const play = (anim) => { if (custom) e.play(`en-${e.kind}-${anim}`, true); };
             const edgeAhead = () => {
                 if (b.blocked.left || b.blocked.right) return true;
                 if (!b.blocked.down) return false;
@@ -2049,10 +2370,55 @@
             e.setFlipX(e.facesRight ? e.dir < 0 : e.dir > 0);
         }
 
+        // coruja: patrulha no alto; pinguim embaixo e perto -> mergulha nele; depois sobe de volta
+        updateOwl(e) {
+            const b = e.body, now = this.time.now, p = this.player;
+            const play = (anim) => { if (e.custom) e.play(`en-owl-${anim}`, true); };
+            e.homeY = e.homeY || e.y;
+            if (e.mode === 'patrol') {
+                if (e.x < e.homeX - OWL.patrol) e.dir = 1;
+                else if (e.x > e.homeX + OWL.patrol) e.dir = -1;
+                b.setVelocity(e.dir * OWL.flySpeed, Math.sin(now / 300) * 12);
+                play('walk');
+                const dx = p.x - e.x, dy = p.y - e.y;
+                if (!this.state.dead && now >= (e.modeUntil || 0) && Math.abs(dx) < OWL.sight && dy > 10 && dy < 170) {
+                    // mira no pinguim
+                    const len = Math.hypot(dx, dy) || 1;
+                    e.dir = Math.sign(dx) || e.dir;
+                    e.mode = 'dive'; e.modeUntil = now + OWL.diveTime;
+                    b.setVelocity(dx / len * OWL.diveSpeed, dy / len * OWL.diveSpeed);
+                    play('dive');
+                }
+            } else if (e.mode === 'dive') {
+                const lowest = this.mapH - 40;
+                if (now >= e.modeUntil || e.y > lowest) { e.mode = 'climb'; play('walk'); }
+            } else if (e.mode === 'climb') {
+                const dy = e.homeY - e.y, dx = e.homeX - e.x;
+                if (Math.abs(dy) < 4) { e.mode = 'patrol'; e.modeUntil = now + OWL.rest; b.setVelocity(0, 0); }
+                else b.setVelocity(Math.sign(dx) * Math.min(Math.abs(dx) * 2, OWL.climbSpeed * 0.6), Math.sign(dy) * OWL.climbSpeed);
+                if (Math.abs(dx) > 4) e.dir = Math.sign(dx);
+            }
+            e.setFlipX(e.facesRight ? e.dir < 0 : e.dir > 0);
+        }
+
+        defeatOwl(e) {
+            if (e.dead) return;
+            e.dead = true;
+            e.body.setAllowGravity(true);
+            e.body.setVelocity(0, -60);
+            if (e.custom) {
+                e.play('en-owl-hurt');
+                e.once('animationcomplete', () => e.play('en-owl-die'));
+            }
+            this.puff(e.x, e.y - 8);
+            this.addScore(SCORE.owl, e.x, e.y - 30);
+            this.tweens.add({ targets: e, alpha: 0, delay: 1200, duration: 300, onComplete: () => e.destroy() });
+        }
+
         // urso: anda devagar; pinguim perto na frente -> patada
         updateBear(e) {
             const b = e.body, now = this.time.now, p = this.player;
-            const play = (anim) => { if (e.custom) e.play(`en-bear-${anim}`, true); };
+            const play = (anim) => { if (e.custom) e.play(`en-${e.kind}-${anim}`, true); };
             if (e.mode === 'walk') {
                 if (b.blocked.left) e.dir = 1;
                 else if (b.blocked.right) e.dir = -1;
@@ -2092,15 +2458,15 @@
                 e.dead = true;
                 e.body.setVelocity(0, 0);
                 e.body.enable = false;
-                if (e.custom) e.play('en-bear-die');
-                this.addScore(SCORE.bear, e.x, e.y - 34);
+                if (e.custom) e.play(`en-${e.kind}-die`);
+                this.addScore(SCORE[e.kind] || SCORE.bear, e.x, e.y - 34);
                 this.tweens.add({ targets: e, alpha: 0, delay: 1000, duration: 300, onComplete: () => e.destroy() });
                 return;
             }
             e.mode = 'hurt';
             e.modeUntil = now + 450;
             e.body.setVelocityX(0);
-            if (e.custom) e.play('en-bear-hurt', false);
+            if (e.custom) e.play(`en-${e.kind}-hurt`, false);
             e.setTintFill(0xffffff);
             this.time.delayedCall(80, () => e.clearTint());
         }
@@ -2273,10 +2639,11 @@
                 if (o === e || o.dead || !o.body.enable) continue;
                 if (Phaser.Math.Distance.Between(cx, cy, o.x, o.y - 6) > r + 4) continue;
                 if (o.kind === 'pinecone') this.time.delayedCall(120, () => this.explodePinecone(o));   // explode em cadeia
-                else if (o.kind === 'reindeer') this.defeatReindeer(o);
+                else if (o.kind === 'reindeer' || o.kind === 'ox') this.defeatReindeer(o);
                 else if (o.kind === 'bigsnow') this.hitBigSnow(o);
                 else if (o.kind === 'snowman') this.defeatSnowman(o);
-                else if (o.kind === 'bear') this.hitBear(o);
+                else if (o.kind === 'bear' || o.kind === 'seal' || o.kind === 'rat') this.hitBear(o);
+                else if (o.kind === 'owl') this.defeatOwl(o);
                 else this.knockEnemy(o, Math.sign(o.x - cx) || 1);
             }
             this.time.delayedCall(600, () => e.destroy());
@@ -2305,19 +2672,29 @@
             e.body.allowGravity = false;
             e.body.enable = false;
             if (e.custom) {
-                e.play('en-reindeer-hurt');
-                e.once('animationcomplete', () => e.play('en-reindeer-die'));
+                e.play(`en-${e.kind}-hurt`);
+                e.once('animationcomplete', () => e.play(`en-${e.kind}-die`));
             }
             this.tweens.add({ targets: e, alpha: 0, delay: 1300, duration: 400, onComplete: () => e.destroy() });
             this.puff(e.x, e.y - 4);
-            this.addScore(SCORE.reindeer, e.x, e.y - 30);
+            this.addScore(SCORE[e.kind] || SCORE.reindeer, e.x, e.y - 30);
         }
 
         onEnemy(player, e) {
             const st = this.state;
             if (st.dead || st.won || e.dead) return;
             const pb = player.body, eb = e.body;
-            if (e.kind === 'bear') {
+            if (e.kind === 'owl') {
+                // pular em cima derruba; encostar de outro jeito machuca
+                if (pb.velocity.y > 20 && pb.bottom - eb.top < 12) {
+                    this.defeatOwl(e);
+                    pb.setVelocityY(-(this.readInput().jump ? PHYS.stompHeld : PHYS.stomp));
+                    st.jumpCut = false;
+                    return;
+                }
+                return this.hurt();
+            }
+            if (e.kind === 'bear' || e.kind === 'seal' || e.kind === 'rat') {
                 const stomp = pb.velocity.y > 30 && pb.bottom - eb.top < 10;
                 const away = Math.sign(player.x - e.x) || -st.facing;
                 if (stomp) {
@@ -2363,7 +2740,7 @@
                 }
                 return this.explodePinecone(e);
             }
-            if (e.kind === 'reindeer') {
+            if (e.kind === 'reindeer' || e.kind === 'ox') {
                 // em cima machuca; por tras (lado oposto ao que ela olha) derruba; pela frente machuca
                 const above = pb.bottom - eb.top < 9 && pb.velocity.y >= 0;
                 if (!above && Math.sign(player.x - e.x) === -e.dir) return this.defeatReindeer(e);

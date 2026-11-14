@@ -1,0 +1,5 @@
+SNOW RAT - RATO DAS NEVES (olhando para a direita)
+
+idle 4, walk 6, attack_bite 6, charge_run 6, hurt 3, defeat 6
+Quadros recortados da folha original (originais/folha.png) pelo contorno de cada pose.
+No jogo: mesma mecanica do urso (2 pisoes, mordida de perto, escorregao empurra).
