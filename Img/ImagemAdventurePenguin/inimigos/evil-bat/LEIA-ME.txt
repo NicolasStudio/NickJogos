@@ -1,0 +1,5 @@
+EVIL BAT - MORCEGO (olhando para a direita)
+
+idle 4, fly 6, attack_shadow_blade 6, dive_charge 6, hurt 3, defeat 6
+Quadros recortados da folha original (originais/folha.png); o rastro roxo do ataque fica junto do morcego.
+No jogo: como a coruja (voa e mergulha; pular nele derruba), mais rapido.

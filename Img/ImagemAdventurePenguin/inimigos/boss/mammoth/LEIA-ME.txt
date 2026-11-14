@@ -1,0 +1,5 @@
+MAMMOTH - CHEFE MAMUTE (5-5)
+
+idle 4, walk 6, attack_charge 6, attack_trunk_slam 6, hurt 3, defeat 6
+Quadros recortados da folha original (originais/folha.png) pelo contorno de cada pose.
+Na luta: mesma do Yeti (golpe de tromba solta ondas; investida bate na parede e ele fica atordoado), 7 pisoes.

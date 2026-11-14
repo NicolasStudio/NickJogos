@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Painel de Cenários</title>
+<style>
+    :root { --bg: #0f1730; --panel: #16213f; --line: #2a3a66; --text: #e8eeff; --muted: #9fb0d8; --accent: #ffd23f; --boss: #c49bff; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 20px 16px 40px; background: var(--bg); color: var(--text); font: 15px/1.5 system-ui, "Segoe UI", sans-serif; }
+    main { max-width: 1100px; margin: 0 auto; }
+    h1 { margin: 0 0 4px; font-size: 22px; }
+    .sub { margin: 0 0 18px; color: var(--muted); }
+    .nav { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 12px; }
+    .nav button { font: 600 22px system-ui; width: 48px; height: 48px; border-radius: 10px; border: 1px solid var(--line); background: var(--panel); color: var(--text); cursor: pointer; }
+    .nav button:hover { border-color: var(--accent); color: var(--accent); }
+    .title { text-align: center; min-width: 260px; }
+    .title b { display: block; font-size: 22px; color: var(--accent); }
+    .title span { color: var(--muted); }
+    .title .tag { display: inline-block; margin-top: 4px; padding: 1px 10px; border-radius: 99px; background: #3a2a5c; color: var(--boss); font-size: 12px; }
+    .stage { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 12px; }
+    .stage img { display: block; width: 100%; height: auto; border-radius: 6px; image-rendering: pixelated; }
+    .extra { margin-top: 12px; }
+    .extra p { margin: 0 0 6px; color: var(--muted); font-size: 13px; }
+    .extra img { max-height: 120px; width: auto; }
+    .file { margin-top: 10px; color: var(--muted); font-size: 13px; }
+    code { background: #22305a; padding: 1px 6px; border-radius: 4px; }
+    .thumbs { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-top: 22px; }
+    .thumb { background: var(--panel); border: 2px solid transparent; border-radius: 8px; padding: 6px; cursor: pointer; text-align: center; font-size: 12px; color: var(--muted); }
+    .thumb img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 4px; display: block; margin-bottom: 4px; }
+    .thumb.on { border-color: var(--accent); color: var(--text); }
+    .thumb b { color: var(--text); }
+    .err { background: #5a2330; padding: 12px 16px; border-radius: 10px; }
+</style>
+</head>
+<body>
+<main>
+    <h1>Adventure Penguin · cenários</h1>
+    <p class="sub">Imagem original de cada cenário, na ordem do jogo. Use as setas (ou ← →) para navegar.</p>
+    <div id="app"></div>
+</main>
+
+<script src="levels.js"></script>
+<script>
+(function () {
+    const DIR = '../../Img/ImagemAdventurePenguin/cenario/originais/';
+    // cenario (campo "cenario" das fases) -> imagens originais enviadas
+    const SCENES = {
+        floresta: { nome: 'Floresta com o castelo ao longe', files: ['fundo.png'], extra: ['meio.png'] },
+        lago: { nome: 'Lago congelado', files: ['fundo-lago.png'] },
+        castelo: { nome: 'Chegada ao castelo', files: ['fundo-castelo.png'] },
+        portao: { nome: 'Portão do castelo', files: ['fundo-portao.png'] },
+        arena: { nome: 'Sala do trono', files: ['arena-rei.png'], extra: ['entrada-castelo.png'], extraNome: 'tela de entrada (antes da luta)' },
+        planicie: { nome: 'Planície nevada', files: ['fundo-planicie.png'] },
+        pinheiros: { nome: 'Montanhas com neblina', files: ['fundo-montanhas.png'], extra: ['meio.png'] },
+        pinhal: { nome: 'Pinhal', files: ['fundo-pinhal.png'] },
+        clareira: { nome: 'Clareira entre pinheiros', files: ['fundo-clareira.png'] },
+        cabana: { nome: 'Cabana na floresta', files: ['fundo-cabana.png'] },
+        rio: { nome: 'Rio com ponte', files: ['fundo-rio.png'] },
+        ponte: { nome: 'Em cima da ponte', files: ['fundo-ponte.png'] },
+        pontenoite: { nome: 'Ponte à noite', files: ['fundo-ponte-noite.png'] },
+        cascata: { nome: 'Cânion com cascata', files: ['fundo-cascata.png'] },
+        cascatachefe: { nome: 'Cascata com tronco', files: ['fundo-cascata-chefe.png'] },
+        estrada: { nome: 'Estrada nevada', files: ['fundo-estrada.png'] },
+        estrada2: { nome: 'Estrada ao pé da montanha', files: ['fundo-estrada-2.png'] },
+        montanhacastelo: { nome: 'Castelo no alto da montanha', files: ['fundo-montanha-castelo.png'] },
+        montanhanoite: { nome: 'Montanha à noite', files: ['fundo-montanha-noite.png'] },
+        valenoite: { nome: 'Vale à noite', files: ['fundo-vale-noite.png'] },
+        caverna: { nome: 'Caverna de gelo', files: ['fundo-caverna.png'] },
+        caverna2: { nome: 'Caverna com cascata', files: ['fundo-caverna-2.png'] },
+        caverna3: { nome: 'Caverna com duas cascatas', files: ['fundo-caverna-3.png'] },
+        abismo: { nome: 'Abismo da caverna', files: ['fundo-abismo.png'] },
+        saidacaverna: { nome: 'Saída da caverna', files: ['fundo-saida-caverna.png'] },
+        fundoscastelo: { nome: 'Fundos do castelo', files: ['fundo-fundos-castelo.png'] },
+        patiocastelo: { nome: 'Pátio interno do castelo', files: ['fundo-patio-castelo.png'] },
+        entradacastelo: { nome: 'Entrada do castelo', files: ['fundo-entrada-castelo.png'] },
+    };
+    const BOSSES = { king: 'Rei do Gelo', snowman: 'Boneco de Neve', snowflake: 'Floco de Neve', yeti: 'Yeti', mammoth: 'Mamute' };
+    const app = document.getElementById('app');
+    if (typeof LEVELS === 'undefined') { app.innerHTML = '<p class="err">Não consegui ler <code>levels.js</code>. Abra este arquivo de dentro da pasta <code>Js/JsAdventurePenguin</code>.</p>'; return; }
+
+    // uma cena por fase, na ordem do jogo
+    const slides = LEVELS.map((l, i) => {
+        const key = l.cenario || 'floresta', sc = SCENES[key] || { nome: key, files: [] };
+        const fase = l.name === 'REI' ? 'Chefe (depois da ' + LEVELS[i - 1].name + ')' : (l.boss ? 'Fase ' + l.name + ' (chefe)' : 'Fase ' + l.name);
+        return { key, sc, fase, boss: l.boss ? (BOSSES[l.boss] || l.boss) : '' };
+    });
+    let cur = 0;
+    try { cur = Math.min(slides.length - 1, +localStorage.getItem('apCenaAtual') || 0); } catch (e) { /* sem armazenamento */ }
+
+    const img = f => `<img src="${DIR}${f}" alt="${f}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('p'),{className:'err',textContent:'imagem não encontrada: ${f}'}))">`;
+    function render() {
+        const s = slides[cur];
+        app.innerHTML = `
+            <div class="nav">
+                <button id="prev" aria-label="Cena anterior">&lt;</button>
+                <div class="title"><b>Cena ${cur + 1}</b><span>${s.fase} · ${s.sc.nome}</span>${s.boss ? `<br><span class="tag">${s.boss}</span>` : ''}</div>
+                <button id="next" aria-label="Próxima cena">&gt;</button>
+            </div>
+            <div class="stage">
+                ${s.sc.files.map(img).join('')}
+                ${s.sc.extra ? `<div class="extra"><p>${s.sc.extraNome || 'camada da frente (pinheiros)'}</p>${s.sc.extra.map(img).join('')}</div>` : ''}
+                <div class="file">Arquivo: ${s.sc.files.map(f => '<code>cenario/originais/' + f + '</code>').join(' ')} · cenário <code>${s.key}</code></div>
+            </div>
+            <div class="thumbs">${slides.map((t, i) => `<div class="thumb ${i === cur ? 'on' : ''}" data-i="${i}">${t.sc.files[0] ? `<img src="${DIR}${t.sc.files[0]}" alt="" loading="lazy">` : ''}<b>Cena ${i + 1}</b><br>${t.fase.replace('Fase ', '')}</div>`).join('')}</div>`;
+        document.getElementById('prev').onclick = () => go(-1);
+        document.getElementById('next').onclick = () => go(1);
+        app.querySelectorAll('.thumb').forEach(el => el.onclick = () => { cur = +el.dataset.i; save(); render(); });
+    }
+    const save = () => { try { localStorage.setItem('apCenaAtual', cur); } catch (e) { /* sem armazenamento */ } };
+    const go = d => { cur = (cur + d + slides.length) % slides.length; save(); render(); window.scrollTo({ top: 0 }); };
+    document.addEventListener('keydown', e => { if (e.key === 'ArrowLeft') go(-1); if (e.key === 'ArrowRight') go(1); });
+    render();
+})();
+</script>
+</body>
+</html>

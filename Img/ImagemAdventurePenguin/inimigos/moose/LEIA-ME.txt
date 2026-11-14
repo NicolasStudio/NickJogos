@@ -1,0 +1,5 @@
+MOOSE - ALCE (olhando para a direita)
+
+idle 4, walk 6, attack_charge 6, attack_antler 6, hurt 3, defeat 6
+Quadros recortados da folha original (originais/folha.png) pelo contorno de cada pose.
+No jogo: mecanica da rena (ve o pinguim na frente e investe; so morre por tras).

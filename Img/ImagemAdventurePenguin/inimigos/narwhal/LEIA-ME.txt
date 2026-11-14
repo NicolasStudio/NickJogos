@@ -1,0 +1,5 @@
+NARWHAL - NARVAL (olhando para a direita)
+
+idle 4, swim 6, attack_charge 6, attack_horn_strike 6, hurt 3, defeat 6
+Quadros recortados da folha original (originais/folha.png) pelo contorno de cada pose.
+No jogo: mecanica do urso (golpe de chifre de perto, 2 pisoes, escorregao empurra).
