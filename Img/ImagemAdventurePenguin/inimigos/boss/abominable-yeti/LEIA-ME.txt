@@ -1,0 +1,5 @@
+ABOMINABLE YETI - CHEFE YETI (4-5)
+
+idle 4, walk 6, attack_slam 6, charge_run 6, hurt 3, defeat 6
+Quadros recortados da folha original (originais/folha.png) pelo contorno de cada pose.
+Na luta: pancada solta ondas de gelo; investida bate na parede e ele fica atordoado (pisar na cabeca).
