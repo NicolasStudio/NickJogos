@@ -346,6 +346,7 @@
     const enemyFile = (cfg, a, i) => `${cfg.pasta}${a.arquivo}/${a.arquivo}_${String(i).padStart(2, '0')}.png`;
     // caixa de colisao de cada inimigo (em pixels do quadro HD), definida no Boot
     const enemyBoxes = {};
+    const MAX_TEX = 4096;     // largura maxima das folhas montadas no jogo (limite seguro de placa de video)
 
     // Limpa a arte que veio de fundo magenta:
     // 1) sombra roxa (meio-tom) embaixo dos pes - so na faixa de baixo da figura, para nao
@@ -761,6 +762,8 @@
 
         preload() {
             this.load.on('loaderror', () => { /* sprites definitivos ainda nao existem */ });
+            // o botao JOGAR so libera quando tudo estiver pronto (jogar antes abria a fase sem as artes)
+            this.load.on('progress', v => { $('apPlayBtn').textContent = 'CARREGANDO ' + Math.round(v * 100) + '%'; });
             this.load.image('pz_probe', spritePath(PLAYER_SPRITES.anims.idle, 1));
             for (const file of new Set(Object.values(BLOCK_ART).map(b => b.file))) this.load.image('blk_' + file, BLOCK_DIR + file + '.png');
             for (const l of BG_LAYERS) this.load.image('bg_' + l.key, 'Img/ImagemAdventurePenguin/' + l.file + '.png');
@@ -858,18 +861,22 @@
             const ref = list.find(f => f.anim === 'walk');
             if (!ref) return;
             const sc = cfg.altura * RES / ref.m.h;
+            // quadros em grade de no maximo 4096 px de largura: muitas placas de video nao aceitam
+            // texturas mais largas que isso (passando, a textura falha e aparece o quadrado verde)
+            const cols = Math.max(1, Math.min(list.length, Math.floor(MAX_TEX / size)));
+            const cell = i => [(i % cols) * size, Math.floor(i / cols) * size];
             const sheet = document.createElement('canvas');
-            sheet.width = size * list.length;
-            sheet.height = size;
-            const ctx = sheet.getContext('2d');
+            sheet.width = size * cols;
+            sheet.height = size * Math.ceil(list.length / cols);
+            const ctx = sheet.getContext('2d', { willReadFrequently: true });
             ctx.imageSmoothingEnabled = true;
             ctx.imageSmoothingQuality = 'high';
             list.forEach((f, i) => {
                 const m = f.m, k = Math.min(sc * (cfg.anims[f.anim].escala || 1), (size - 2) / m.w, (size - 1) / m.h);
-                const w = m.w * k, h = m.h * k;
-                ctx.drawImage(m.canvas, m.x0, m.y0, m.w, m.h, i * size + Math.round((size - w) / 2), Math.round(size - 1 - h), Math.round(w), Math.round(h));
+                const w = m.w * k, h = m.h * k, [ox, oy] = cell(i);
+                ctx.drawImage(m.canvas, m.x0, m.y0, m.w, m.h, ox + Math.round((size - w) / 2), oy + Math.round(size - 1 - h), Math.round(w), Math.round(h));
             });
-            const img = ctx.getImageData(0, 0, sheet.width, size), d = img.data;
+            const img = ctx.getImageData(0, 0, sheet.width, sheet.height), d = img.data;
             for (let p = 3; p < d.length; p += 4) d[p] = d[p] >= 110 ? 255 : 0;
             ctx.putImageData(img, 0, 0);
 
@@ -878,7 +885,7 @@
 
             const texKey = 'enemy_' + id;
             const tex = this.textures.addCanvas(texKey, sheet);
-            list.forEach((f, i) => tex.add(f.name, 0, i * size, 0, size, size));
+            list.forEach((f, i) => { const [ox, oy] = cell(i); tex.add(f.name, 0, ox, oy, size, size); });
             for (const [anim, a] of Object.entries(cfg.anims)) {
                 const frames = list.filter(f => f.anim === anim).map(f => ({ key: texKey, frame: f.name }));
                 if (frames.length) this.anims.create({ key: `en-${id}-${anim}`, frames, frameRate: a.fps, repeat: a.repetir ? -1 : 0 });
@@ -1085,6 +1092,9 @@
             renderTalents();
             $('apMenuPenguin').src = ART.frameToDataURL(this, 'penguin', idleFrame, custom ? 2 : 8);
             $('apRecord').textContent = pad(loadRecord(), 6);
+            gameReady = true;
+            $('apPlayBtn').disabled = false;
+            $('apPlayBtn').textContent = 'JOGAR';
             showScreen('apMenu');
         }
     }
@@ -2568,6 +2578,7 @@
 
     // ==================== JOGO ====================
     let game = null;
+    let gameReady = false;     // texturas e animacoes montadas (fim do BootScene)
 
     function startLevel(index) {
         S.level = index;
@@ -2595,6 +2606,7 @@
     }
 
     function newGame() {
+        if (!gameReady) return;      // ainda carregando
         resetRun();
         S.story = START_LEVEL === 0;
         startLevel(START_LEVEL);
