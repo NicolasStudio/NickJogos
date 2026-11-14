@@ -47,6 +47,10 @@ function abrirJogoInfect(){
     window.location.href = "jogoInfect.html";
 }
 
+function abrirJogoAdventurePenguin(){
+    window.location.href = "jogoAdventurePenguin.html";
+}
+
 // Estado atual dos filtros (categoria + busca)
 let categoriaAtual = 'Todos';
 let termoBusca = '';

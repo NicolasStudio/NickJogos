@@ -1,0 +1,9 @@
+EVIL SNOWMAN - SPRITES DO INIMIGO BONECO DE NEVE (olhando para a direita)
+
+idle: 4 quadros          walk: 6 quadros
+attack_slash: 6 quadros  throw_snowball: 6 quadros
+hurt: 3 quadros          defeat: 6 quadros
+
+Quadros recortados automaticamente da folha original (originais/folha.png) pelo
+contorno de cada pose, em telas de 240x240 px, apoiados na mesma base.
+A bola de neve em voo do arremesso ficou de fora: o jogo lanca a propria bola.

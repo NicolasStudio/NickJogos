@@ -1,0 +1,5 @@
+SPRITES DO PINGUIM - VERSAO COM FUNDO VERDE REMOVIDO
+
+34 PNGs individuais com transparência.
+Pastas: parado (4), correr (7), pular (7), queda (4), escorregar (4), dano (3), morrer (5).
+Todos os arquivos foram centralizados em telas de 160x160 px.

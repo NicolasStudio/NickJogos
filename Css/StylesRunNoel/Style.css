@@ -17,6 +17,14 @@
 
 canvas {
     display: block;
+    /* o canvas interno e maior em telas de alta resolucao; aqui fica o tamanho na tela */
+    /* grande, mas sem passar da altura da tela (proporcao 2:1; ~330px = header + placar + margens) */
+    width: min(1200px, calc(100vw - 80px), calc((100vh - 330px) * 2));
+    width: min(1200px, calc(100vw - 80px), calc((100dvh - 330px) * 2));
+    min-width: min(600px, 100%);
+    max-width: 100%;
+    height: auto;
+    touch-action: manipulation;
     margin: 0 auto;
     border-radius: 10px;
     border: 1px solid #444;
@@ -95,4 +103,14 @@ canvas {
     0% { transform: scale(1); }
     50% { transform: scale(1.1); }
     100% { transform: scale(1); }
+}
+
+/* celular: menos margem para o jogo caber na largura da tela */
+@media (max-width: 600px) {
+    .game-container { padding: 8px; }
+    .game-wrapper { padding: 10px; max-width: 100%; }
+    canvas { width: 100%; min-width: 0; }
+    .game-info { flex-wrap: wrap; gap: 8px; padding: 10px; }
+    .score-box, .highscore-box { font-size: 18px; padding: 8px 12px; }
+    .score-box span, .highscore-box span { font-size: 14px; }
 }

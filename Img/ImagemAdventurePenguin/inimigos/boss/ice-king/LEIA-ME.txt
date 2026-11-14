@@ -1,0 +1,10 @@
+ICE KING - SPRITES DO CHEFE (olhando para a direita)
+
+idle: 4 quadros          walk: 6 quadros
+scepter_slam: 6 quadros  charge_run: 6 quadros
+summon: 4 quadros        laugh_taunt: 4 quadros
+hurt: 3 quadros          defeat: 6 quadros
+
+Quadros recortados automaticamente da folha original (originais/folha.png) pelo
+contorno de cada pose, em telas de 220x220 px, apoiados na mesma base.
+Os efeitos do cetro (estilhacos e brilhos) que encostam na figura foram mantidos.

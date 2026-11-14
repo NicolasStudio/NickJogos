@@ -1,0 +1,8 @@
+EVIL SNOWBALL - SPRITES
+
+rolar: 6 quadros
+morrer: 5 quadros
+
+Arquivos PNG individuais com fundo transparente.
+Cada arquivo usa uma tela de 160x160 px.
+Os quadros foram extraídos da spritesheet em células aproximadas de 362x362 px; revise a animação antes de integrar ao jogo.
