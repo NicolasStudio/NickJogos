@@ -168,6 +168,7 @@
 }
 .ap-title span { display: block; color: #fff; font-size: .6em; letter-spacing: .1em; text-shadow: .15em .15em 0 var(--ap-shadow); }
 .ap-menu-penguin { height: 9cqw; image-rendering: pixelated; animation: ap-bob 1.2s ease-in-out infinite; }
+.ap-menu-penguin:not([src]) { visibility: hidden; }   /* enquanto carrega: sem o texto alternativo */
 @keyframes ap-bob { 50% { transform: translateY(-.8cqw); } }
 
 .ap-btn {
