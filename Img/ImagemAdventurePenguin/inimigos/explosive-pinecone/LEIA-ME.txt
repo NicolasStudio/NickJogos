@@ -1,0 +1,8 @@
+EXPLOSIVE PINECONE - SPRITES DO INIMIGO PINHA EXPLOSIVA (olhando para a direita)
+
+idle: 4 quadros       walk: 6 quadros       alert_prepare: 4 quadros
+explode: 6 quadros    hurt: 3 quadros       defeat: 4 quadros
+
+Quadros recortados automaticamente da folha original (originais/folha.png):
+cada pose junta todos os pedacos proximos (inclusive os estilhacos da explosao),
+em telas de 220x220 px, apoiados na mesma base.

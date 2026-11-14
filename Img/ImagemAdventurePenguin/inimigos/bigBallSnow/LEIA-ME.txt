@@ -1,0 +1,8 @@
+BIG BALL SNOW - INIMIGO GIGANTE (olhando para a direita)
+
+idle: 4 quadros       roll_move: 6 quadros     attack_charge: 6 quadros
+hurt: 3 quadros       defeat: 6 quadros
+
+Quadros recortados automaticamente da folha original (originais/folha.png) pelo
+contorno de cada pose, em telas de 240x240 px, apoiados na mesma base.
+Precisa de 3 acertos (pisao ou escorregao) para ser derrotado.

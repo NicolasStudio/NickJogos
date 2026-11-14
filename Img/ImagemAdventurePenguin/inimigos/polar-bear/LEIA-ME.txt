@@ -1,0 +1,8 @@
+POLAR BEAR - SPRITES DO INIMIGO URSO POLAR (olhando para a direita)
+
+idle: 4 quadros          walk: 6 quadros         attack_claw: 6 quadros
+charge_run: 6 quadros    hurt: 3 quadros         defeat: 6 quadros
+
+Quadros recortados automaticamente da folha original (originais/folha.png) pelo
+contorno de cada pose, em telas de 260x260 px, apoiados na mesma base.
+No jogo: 2 pisoes derrubam; patada de perto; escorregar nele empurra de volta.

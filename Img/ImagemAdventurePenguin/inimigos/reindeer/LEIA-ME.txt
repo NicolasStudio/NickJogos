@@ -1,0 +1,13 @@
+REINDEER - SPRITES DO INIMIGO RENA (olhando para a direita)
+
+idle: 4 quadros
+andar: 8 quadros
+correr: 8 quadros (usado na investida)
+ataque: 6 quadros (usado quando abaixa a cabeca antes de investir)
+dano: 4 quadros
+derrota: 6 quadros
+
+Quadros recortados automaticamente da folha original (originais/folha.png) pelo
+contorno de cada pose, em telas de 160x160 px, apoiados na mesma base.
+Os riscos rosa do ataque ficaram de fora. A sombra roxa embaixo dos pes e
+removida pelo jogo ao carregar.

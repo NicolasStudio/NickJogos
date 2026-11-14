@@ -1,0 +1,280 @@
+/* ===================== Adventure Penguin ===================== */
+:root {
+    --ap-font: 'Press Start 2P', monospace;
+    --ap-shadow: #13213f;
+    --ap-yellow: #ffd23f;
+    --ap-red: #ff5a5a;
+}
+
+.ap-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    padding: 16px;
+}
+
+/* palco 16:9: o maior possivel sem passar da altura da tela */
+.ap-stage {
+    position: relative;
+    width: min(1200px, calc(100vw - 32px), calc((100vh - 170px) * 16 / 9));
+    width: min(1200px, calc(100vw - 32px), calc((100dvh - 170px) * 16 / 9));
+    min-width: min(320px, calc(100vw - 32px));
+    aspect-ratio: 16 / 9;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #2f6fd6;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, .35);
+    border: 3px solid #0d1630;
+    container-type: inline-size;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: none;
+}
+
+.ap-game,
+.ap-game canvas {
+    position: absolute;
+    inset: 0;
+    width: 100% !important;
+    height: 100% !important;
+    image-rendering: pixelated;
+}
+
+/* ---------- HUD ---------- */
+.ap-hud {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1cqw;
+    padding: 1.6cqw 2cqw;
+    font-family: var(--ap-font);
+    font-size: clamp(9px, 2.1cqw, 26px);
+    color: #fff;
+    text-shadow: .2em .2em 0 var(--ap-shadow);
+    pointer-events: none;
+    z-index: 2;
+}
+
+.ap-stage.in-menu .ap-hud,
+.ap-stage.in-menu .ap-touch { display: none; }
+
+.ap-hud-item { display: flex; align-items: center; gap: .5em; white-space: nowrap; }
+.ap-hud-item i { font-size: 1.1em; }
+.ap-score { flex-direction: column; gap: .25em; line-height: 1; }
+.ap-score small { font-size: .8em; }
+.ap-life-icon { height: 2.2em; image-rendering: pixelated; filter: drop-shadow(.15em .15em 0 var(--ap-shadow)); }
+.ap-coin-icon { height: 1.9em; image-rendering: pixelated; filter: drop-shadow(.15em .15em 0 var(--ap-shadow)); }
+#apTimeBox.low { color: var(--ap-red); animation: ap-blink 1s steps(2) infinite; }
+
+@keyframes ap-blink { 50% { opacity: .55; } }
+
+.ap-pause {
+    pointer-events: auto;
+    width: 2.4em;
+    height: 2.4em;
+    font-size: 1em;
+    color: #fff;
+    background: rgba(19, 33, 63, .55);
+    border: .18em solid #fff;
+    border-radius: .45em;
+    cursor: pointer;
+    box-shadow: .15em .15em 0 var(--ap-shadow);
+}
+.ap-pause:hover { background: rgba(19, 33, 63, .8); }
+
+/* ---------- controles de toque (so em telas de toque) ---------- */
+.ap-touch {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    display: none;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 2.5cqw 3cqw;
+    z-index: 2;
+    pointer-events: none;
+}
+.ap-touch > div { display: flex; gap: 2cqw; align-items: flex-end; }
+.ap-touch button {
+    pointer-events: auto;
+    width: 11cqw;
+    height: 8cqw;
+    min-width: 54px;
+    min-height: 44px;
+    font-size: clamp(18px, 4cqw, 40px);
+    color: rgba(255, 255, 255, .9);
+    background: rgba(40, 50, 70, .45);
+    border: 3px solid rgba(255, 255, 255, .55);
+    border-radius: 14px;
+    touch-action: none;
+}
+.ap-touch button.down { background: rgba(255, 255, 255, .35); }
+.ap-touch .ap-round { width: 10cqw; height: 10cqw; min-height: 54px; border-radius: 50%; }
+.ap-touch .ap-small { width: 7cqw; height: 7cqw; min-width: 44px; border-radius: 50%; font-size: clamp(14px, 2.6cqw, 28px); }
+
+@media (hover: none) and (pointer: coarse) {
+    .ap-touch { display: flex; }
+    /* celular: o jogo usa a altura toda da tela (role a pagina para esconder o header) */
+    .ap-wrap { padding: 8px; }
+    .ap-stage {
+        width: min(1200px, calc(100vw - 16px), calc((100vh - 16px) * 16 / 9));
+        width: min(1200px, calc(100vw - 16px), calc((100dvh - 16px) * 16 / 9));
+        border-width: 2px;
+    }
+    .ap-touch button { width: 9cqw; height: 7cqw; border-width: 2px; background: rgba(40, 50, 70, .3); }
+    .ap-touch .ap-round { width: 9cqw; height: 9cqw; }
+    .ap-touch .ap-small { width: 6cqw; height: 6cqw; }
+}
+
+/* ---------- telas (menu, pausa, fim) ---------- */
+.ap-screen {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10, 20, 45, .6);
+    z-index: 3;
+    font-family: var(--ap-font);
+    color: #fff;
+    text-align: center;
+}
+#apMenu { background: linear-gradient(180deg, rgba(20, 50, 120, .35), rgba(10, 20, 45, .75)); }
+.ap-screen.hidden { display: none; }
+
+.ap-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2cqw;
+    padding: 3cqw 5cqw;
+    background: rgba(13, 22, 48, .85);
+    border: .5cqw solid #fff;
+    border-radius: 2cqw;
+    box-shadow: .6cqw .6cqw 0 var(--ap-shadow);
+    font-size: clamp(9px, 1.8cqw, 22px);
+    max-width: 90%;
+}
+.ap-panel h2 { font-size: 1.6em; line-height: 1.3; text-shadow: .15em .15em 0 var(--ap-shadow); }
+.ap-red { color: var(--ap-red); }
+
+.ap-title {
+    font-size: clamp(16px, 5cqw, 60px);
+    line-height: 1.25;
+    color: var(--ap-yellow);
+    text-shadow: .1em .1em 0 #b4501e, .2em .2em 0 var(--ap-shadow);
+}
+.ap-title span { display: block; color: #fff; font-size: .6em; letter-spacing: .1em; text-shadow: .15em .15em 0 var(--ap-shadow); }
+.ap-menu-penguin { height: 9cqw; image-rendering: pixelated; animation: ap-bob 1.2s ease-in-out infinite; }
+@keyframes ap-bob { 50% { transform: translateY(-.8cqw); } }
+
+.ap-btn {
+    font-family: var(--ap-font);
+    font-size: 1em;
+    padding: .9em 1.6em;
+    min-width: 12em;
+    color: #13213f;
+    background: var(--ap-yellow);
+    border: .2em solid #fff;
+    border-radius: .5em;
+    box-shadow: .25em .25em 0 var(--ap-shadow);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+}
+.ap-btn:hover, .ap-btn:focus-visible { filter: brightness(1.08); transform: translateY(-1px); outline: none; }
+.ap-btn:active { transform: translate(.15em, .15em); box-shadow: .1em .1em 0 var(--ap-shadow); }
+.ap-btn-ghost { background: transparent; color: #fff; }
+
+.ap-small-text { font-size: .85em; color: #cfe0ff; line-height: 1.9; }
+.ap-small-text b { color: var(--ap-yellow); }
+
+.ap-stats {
+    display: grid;
+    grid-template-columns: auto auto;
+    gap: .9em 2em;
+    text-align: left;
+    font-size: .9em;
+}
+.ap-stats span { color: #cfe0ff; }
+.ap-stats b { color: var(--ap-yellow); text-align: right; }
+
+/* ---------- historia ---------- */
+.ap-story { align-items: flex-end; padding-bottom: 3cqw; background: rgba(10, 20, 45, .35); }
+.ap-story-panel { width: 86%; max-width: 86%; flex-direction: row; flex-wrap: wrap; align-items: center; gap: 1.5cqw 2.5cqw; padding: 2.2cqw 3cqw; text-align: left; }
+.ap-story-img { height: 10cqw; image-rendering: pixelated; flex: none; }
+.ap-story-text { flex: 1; min-width: 50%; min-height: 5.4em; font-size: .9em; line-height: 1.9; color: #fff; }
+.ap-story-actions { width: 100%; display: flex; align-items: center; justify-content: flex-end; gap: 1em; }
+.ap-story-actions .ap-small-text { margin-right: auto; }
+.ap-story-actions .ap-btn { min-width: 8em; padding: .7em 1.2em; }
+
+/* ---------- chefao ---------- */
+.ap-boss { display: none; flex-direction: column; align-items: center; gap: .35em; font-size: .7em; }
+.ap-stage.boss-mode .ap-boss { display: flex; }
+.ap-stage.boss-mode #apTimeBox, .ap-stage.boss-mode #apLevel { display: none; }
+.ap-boss-bar { width: 22cqw; height: 1.1em; border: .2em solid #fff; background: #3a1020; box-shadow: .2em .2em 0 var(--ap-shadow); }
+.ap-boss-bar i { display: block; height: 100%; width: 100%; background: linear-gradient(180deg, #ff8a8a, #e23b3b); transition: width .25s; }
+.ap-gate {
+    background: url('../../Img/ImagemAdventurePenguin/cenario/entrada-castelo.png') center / cover no-repeat;
+    align-items: flex-end;
+    padding-bottom: 4cqw;
+}
+.ap-gate .ap-panel { background: rgba(13, 22, 48, .78); }
+.ap-banish-king { height: 11cqw; image-rendering: pixelated; }
+#apBanish .ap-panel { gap: 1.1cqw; padding: 2cqw 4cqw; }
+#apBanish .ap-small-text { line-height: 1.6; }
+
+/* ---------- arvore de talentos ---------- */
+.ap-btn:disabled { filter: grayscale(.8) brightness(.75); cursor: default; transform: none; }
+.ap-coin-mini { height: 1em; vertical-align: -.1em; margin-right: .35em; image-rendering: pixelated; }
+.ap-talents-panel { gap: 1.4cqw; padding: 2.2cqw 3cqw; }
+.ap-talent-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1.6cqw; }
+.ap-talent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .8em;
+    padding: 1.1em .9em;
+    background: rgba(255, 255, 255, .07);
+    border: .2em solid #5b7bc4;
+    border-radius: .6em;
+}
+.ap-talent.max { border-color: var(--ap-yellow); }
+.ap-talent-icon { font-size: 2.2em; color: var(--ap-yellow); text-shadow: .1em .1em 0 var(--ap-shadow); }
+.ap-talent-name { font-size: .8em; line-height: 1.4; }
+.ap-talent-pips { display: flex; gap: .4em; }
+.ap-talent-pips i { width: 1.1em; height: 1.1em; border: .15em solid #fff; background: transparent; }
+.ap-talent-pips i.on { background: var(--ap-yellow); }
+.ap-talent-info { font-size: .62em; line-height: 1.7; color: #cfe0ff; min-height: 3.4em; }
+.ap-talent-info em { font-style: normal; color: #7dff8a; }
+.ap-talent-buy { min-width: 0; width: 100%; padding: .7em .5em; margin-top: auto; }   /* botoes sempre alinhados embaixo */
+.ap-talent-actions { display: flex; gap: 1em; flex-wrap: wrap; justify-content: center; }
+.ap-talent-actions .ap-btn { min-width: 9em; }
+
+/* ---------- ajuda abaixo do jogo ---------- */
+.ap-help {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px 22px;
+    color: rgba(255, 255, 255, .75);
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    font-size: 14px;
+}
+.ap-help kbd {
+    display: inline-block;
+    min-width: 1.8em;
+    padding: 1px 6px;
+    border: 1px solid rgba(255, 255, 255, .35);
+    border-bottom-width: 3px;
+    border-radius: 5px;
+    background: rgba(255, 255, 255, .08);
+    font-family: inherit;
+    text-align: center;
+}
+
+@media (hover: none) and (pointer: coarse) {
+    .ap-help { display: none; }
+}

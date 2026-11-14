@@ -1,0 +1,13 @@
+BLOCOS E CENARIO - ADVENTURE PENGUIN
+
+Recortados das folhas "Tileset Pixel Art de Plataforma" e "Atlas de Tileset do
+Reino Gelado" (fundo transparente),
+cada peca rente ao desenho. Em uso no jogo: terra com neve, tijolo-laranja, presente-neve, metal, gelo, plataforma de gelo e espinhos.
+
+terreno/      chao com neve, grama e gelo
+blocos/       tijolo, tijolo-laranja, presente, presente-neve, metal, caixote, gelo, pedra, blocos lisos
+plataformas/  plataformas, ilhas flutuantes, troncos, plataforma suspensa, mola
+decoracao/    cercas, ponte, placa, postes, arco, muro, escadas, tocos
+armadilhas/   espinhos (da folha "Atlas de Tileset do Reino Gelado")
+
+Ficaram de fora por serem marcas do Super Mario: bloco "?" e canos verdes.

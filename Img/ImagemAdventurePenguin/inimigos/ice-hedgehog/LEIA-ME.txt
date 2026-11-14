@@ -1,0 +1,7 @@
+ICE HEDGEHOG - SPRITES
+
+andar: 6 quadros
+morrer: 4 quadros
+
+Arquivos PNG individuais com fundo transparente, em telas de 160x160 px.
+A folha original foi dividida em células de 362x362 px e redimensionada proporcionalmente. Confira o alinhamento da animação no jogo.

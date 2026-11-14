@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Nicolas de Almeida Sousa">
+    <title>NickJogos - Adventure Penguin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap">
+    <link rel="stylesheet" href="Css/header.css">
+    <link rel="stylesheet" href="Css/footer.css">
+    <link rel="stylesheet" href="Css/StylesAdventurePenguin/style.css">
+
+    <!-- Phaser LOCAL (sem CDN em runtime) -->
+    <script src="Js/JsAdventurePenguin/phaser.min.js"></script>
+    <script src="Js/JsAdventurePenguin/art.js" defer></script>
+    <script src="Js/JsAdventurePenguin/levels.js" defer></script>
+    <script src="Js/JsAdventurePenguin/game.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-gamepad"></i>
+                    NickJogos
+                </a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="ap-wrap">
+        <div class="ap-stage in-menu" id="apStage">
+            <div class="ap-game" id="apGame"></div>
+
+            <!-- HUD -->
+            <div class="ap-hud">
+                <div class="ap-hud-item"><img id="apLifeIcon" class="ap-life-icon" alt=""><span id="apLives">× 03</span></div>
+                <div class="ap-hud-item"><img id="apCoinIcon" class="ap-coin-icon" alt=""><span id="apCoins">× 000</span></div>
+                <div class="ap-hud-item" id="apLevel">FASE 1-1</div>
+                <div class="ap-hud-item ap-score"><small>PONTOS</small><span id="apScore">000000</span></div>
+                <div class="ap-hud-item" id="apTimeBox"><i class="fas fa-stopwatch"></i><span id="apTime">300</span></div>
+                <div class="ap-boss" id="apBoss"><span id="apBossName">REI DO GELO</span><div class="ap-boss-bar"><i id="apBossFill"></i></div></div>
+                <button class="ap-pause" id="apPauseBtn" aria-label="Pausar" title="Pausar (P)"><i class="fas fa-pause"></i></button>
+            </div>
+
+            <!-- CONTROLES DE TOQUE -->
+            <div class="ap-touch">
+                <div class="ap-touch-left">
+                    <button id="apLeft" aria-label="Esquerda"><i class="fas fa-caret-left"></i></button>
+                    <button id="apRight" aria-label="Direita"><i class="fas fa-caret-right"></i></button>
+                </div>
+                <div class="ap-touch-right">
+                    <button id="apSlide" class="ap-small" aria-label="Escorregar"><i class="fas fa-arrow-down"></i></button>
+                    <button id="apJump" class="ap-round" aria-label="Pular"><i class="fas fa-arrow-up"></i></button>
+                </div>
+            </div>
+
+            <!-- MENU INICIAL -->
+            <div class="ap-screen" id="apMenu">
+                <div class="ap-panel">
+                    <h1 class="ap-title"><span>ADVENTURE</span>PENGUIN</h1>
+                    <img id="apMenuPenguin" class="ap-menu-penguin" alt="Pinguim de cachecol vermelho">
+                    <button class="ap-btn" id="apPlayBtn" data-primary>JOGAR</button>
+                    <p class="ap-small-text">RECORDE <b id="apRecord">000000</b></p>
+                </div>
+            </div>
+
+            <!-- PAUSA -->
+            <div class="ap-screen hidden" id="apPause">
+                <div class="ap-panel">
+                    <h2>PAUSADO</h2>
+                    <button class="ap-btn" id="apResumeBtn" data-primary>CONTINUAR</button>
+                    <button class="ap-btn ap-btn-ghost" id="apTalentsPauseBtn"><i class="fas fa-star"></i> TALENTOS</button>
+                    <button class="ap-btn ap-btn-ghost" id="apRestartBtn">REINICIAR FASE</button>
+                    <a class="ap-btn ap-btn-ghost" href="index.html">SAIR</a>
+                </div>
+            </div>
+
+            <!-- FASE COMPLETA / VITORIA -->
+            <div class="ap-screen hidden" id="apClear">
+                <div class="ap-panel">
+                    <h2 id="apClearTitle">FASE COMPLETA!</h2>
+                    <div class="ap-stats">
+                        <span id="apClearHeightLabel">ALTURA NA BANDEIRA</span><b id="apClearHeight">+0</b>
+                        <span id="apClearTimeLabel">TEMPO RESTANTE</span><b id="apClearTime">0</b>
+                        <span>PONTOS</span><b id="apClearScore">000000</b>
+                    </div>
+                    <button class="ap-btn" id="apNextBtn" data-primary>PRÓXIMA FASE</button>
+                    <button class="ap-btn ap-btn-ghost" id="apTalentsClearBtn"><i class="fas fa-star"></i> TALENTOS</button>
+                </div>
+            </div>
+
+            <!-- FIM DE JOGO -->
+            <div class="ap-screen hidden" id="apOver">
+                <div class="ap-panel">
+                    <h2 class="ap-red">FIM DE JOGO</h2>
+                    <div class="ap-stats">
+                        <span>PONTOS</span><b id="apOverScore">000000</b>
+                        <span>RECORDE</span><b id="apOverRecord">000000</b>
+                    </div>
+                    <button class="ap-btn" id="apAgainBtn" data-primary>JOGAR DE NOVO</button>
+                    <button class="ap-btn ap-btn-ghost" id="apTalentsOverBtn"><i class="fas fa-star"></i> TALENTOS</button>
+                    <a class="ap-btn ap-btn-ghost" href="index.html">SAIR</a>
+                </div>
+            </div>
+
+            <!-- HISTORIA (abertura do jogo) -->
+            <div class="ap-screen hidden ap-story" id="apStory">
+                <div class="ap-panel ap-story-panel">
+                    <img id="apStoryImg" class="ap-story-img" alt="" hidden>
+                    <p class="ap-story-text" id="apStoryText"></p>
+                    <div class="ap-story-actions">
+                        <span class="ap-small-text" id="apStoryCount">1/4</span>
+                        <button class="ap-btn ap-btn-ghost" id="apStorySkip">PULAR</button>
+                        <button class="ap-btn" id="apStoryNext" data-primary>CONTINUAR</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PORTAO DO CASTELO (antes do chefao) -->
+            <div class="ap-screen hidden ap-gate" id="apGate">
+                <div class="ap-panel">
+                    <h2>O REI DO GELO<br>TE ESPERA...</h2>
+                    <p class="ap-small-text">ACERTE O REI SO POR TRAS</p>
+                    <button class="ap-btn" id="apGateBtn" data-primary>ENFRENTAR O REI</button>
+                </div>
+            </div>
+
+            <!-- BANIDO (perdeu todas as vidas para o rei) -->
+            <div class="ap-screen hidden" id="apBanish">
+                <div class="ap-panel">
+                    <img id="apBanishKing" class="ap-banish-king" alt="Rei do Gelo rindo">
+                    <h2 class="ap-red">VOCE FOI BANIDO!</h2>
+                    <p class="ap-small-text">O REI DO GELO EXPULSOU VOCE DO REINO.<br>FIQUE MAIS FORTE E VOLTE PARA A REVANCHE!</p>
+                    <div class="ap-stats"><span>PONTOS</span><b id="apBanishScore">000000</b></div>
+                    <button class="ap-btn" id="apBanishGoBtn" data-primary>SEGUIR PARA O MUNDO 2</button>
+                    <button class="ap-btn ap-btn-ghost" id="apBanishTalentsBtn"><i class="fas fa-star"></i> TALENTOS</button>
+                </div>
+            </div>
+
+            <!-- VITORIA SOBRE O REI (final secreto) -->
+            <div class="ap-screen hidden" id="apWin">
+                <div class="ap-panel">
+                    <h1 class="ap-title"><span>INCRIVEL!</span>VOCE DERROTOU O REI!</h1>
+                    <p class="ap-small-text">FINAL SECRETO: SO QUEM NAO ERRA NADA CHEGA AQUI.</p>
+                    <div class="ap-stats"><span>PONTOS</span><b id="apWinScore">000000</b></div>
+                    <button class="ap-btn" id="apWinAgainBtn" data-primary>JOGAR DE NOVO</button>
+                    <a class="ap-btn ap-btn-ghost" href="index.html">SAIR</a>
+                </div>
+            </div>
+
+            <!-- ARVORE DE TALENTOS -->
+            <div class="ap-screen hidden" id="apTalents">
+                <div class="ap-panel ap-talents-panel">
+                    <h2>TALENTOS</h2>
+                    <p class="ap-small-text">MOEDAS GUARDADAS <b id="apBank">000</b></p>
+                    <div class="ap-talent-list" id="apTalentList"></div>
+                    <div class="ap-talent-actions">
+                        <button class="ap-btn" id="apTalentBack" data-primary>VOLTAR</button>
+                        <button class="ap-btn ap-btn-ghost" id="apRefundBtn" title="Devolve todas as moedas gastas">REEMBOLSAR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p class="ap-help">
+            <span><kbd>←</kbd> <kbd>→</kbd> andar</span>
+            <span><kbd>Espaço</kbd> / <kbd>↑</kbd> pular (segure para ir mais alto)</span>
+            <span><kbd>↓</kbd> escorregar correndo</span>
+            <span><kbd>P</kbd> pausar</span>
+            <span><kbd>T</kbd> talentos</span>
+        </p>
+    </main>
+
+    <footer class="game-footer">
+        <div class="footer-content">
+            <p>© 2026 - Projeto desenvolvido por Nicolas de Almeida Sousa</p>
+            <p>Projeto acadêmico sem fins lucrativos</p>
+        </div>
+    </footer>
+</body>
+</html>
