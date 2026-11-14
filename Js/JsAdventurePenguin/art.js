@@ -194,7 +194,8 @@ const ART = (() => {
         DIRT_L: 13, DIRT_R: 14, PLAT_L: 15, PLAT_M: 16, PLAT_R: 17,
         WOOD: 18, WOOD_L: 19, WOOD_M: 20, WOOD_R: 21,
         DECK: 22, DECK_L: 23, DECK_M: 24, DECK_R: 25, CRATE: 26,
-        CLOUD: 27, CLOUD_L: 28, CLOUD_M: 29, CLOUD_R: 30
+        CLOUD: 27, CLOUD_L: 28, CLOUD_M: 29, CLOUD_R: 30,
+        ROAD: 31
     };
 
     function dirt(ctx, x, y) {
@@ -322,6 +323,7 @@ const ART = (() => {
             platform, platform, platform, platform,     // plataforma de madeira (arte provisoria)
             usedBlock, usedBlock, usedBlock, usedBlock, brick,   // piso da ponte e caixote (arte provisoria)
             platform, platform, platform, platform,             // nuvem (arte provisoria)
+            () => {},                                           // estrada: chao invisivel (o desenho e o do fundo)
         ];
         const cols = 8, rows = Math.ceil(order.length / cols);
         canvasTexture(scene, 'tiles', cols * 16, rows * 16, ctx => {
