@@ -191,7 +191,10 @@ const ART = (() => {
     const TILE_INDEX = {
         SNOW: 0, DIRT: 1, BRICK: 2, GIFT: 3, USED: 4, ICE: 5, PLAT: 6, SPIKE: 7,
         WATER_TOP: 8, WATER: 9, SNOW_L: 10, SNOW_R: 11, ICE_TOP: 12,
-        DIRT_L: 13, DIRT_R: 14, PLAT_L: 15, PLAT_M: 16, PLAT_R: 17
+        DIRT_L: 13, DIRT_R: 14, PLAT_L: 15, PLAT_M: 16, PLAT_R: 17,
+        WOOD: 18, WOOD_L: 19, WOOD_M: 20, WOOD_R: 21,
+        DECK: 22, DECK_L: 23, DECK_M: 24, DECK_R: 25, CRATE: 26,
+        CLOUD: 27, CLOUD_L: 28, CLOUD_M: 29, CLOUD_R: 30
     };
 
     function dirt(ctx, x, y) {
@@ -316,6 +319,9 @@ const ART = (() => {
             (c, x, y) => { dirt(c, x, y); snowCap(c, x, y, false, true); },
             (c, x, y) => ice(c, x, y, true),
             dirt, dirt, platform, platform, platform,   // bordas da terra e partes da plataforma
+            platform, platform, platform, platform,     // plataforma de madeira (arte provisoria)
+            usedBlock, usedBlock, usedBlock, usedBlock, brick,   // piso da ponte e caixote (arte provisoria)
+            platform, platform, platform, platform,             // nuvem (arte provisoria)
         ];
         const cols = 8, rows = Math.ceil(order.length / cols);
         canvasTexture(scene, 'tiles', cols * 16, rows * 16, ctx => {

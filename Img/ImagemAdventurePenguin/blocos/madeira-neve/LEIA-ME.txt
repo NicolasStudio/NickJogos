@@ -1,0 +1,8 @@
+MADEIRA COM NEVE - pecas da folha de plataformas de madeira (originais/folha-madeira.png)
+
+ponte-tabua.png   tabua com neve e pingentes: piso da ponte ('D' no mapa)
+caixote-x.png     caixote com X: bloco solido ('X' no mapa)
+
+A folha original tem fundo ruidoso; as pecas foram separadas pela cor (madeira,
+neve, metal e contorno) a partir das bordas do recorte. Outras pecas da folha
+(cercas, escada, barris, rampas) podem ser recortadas do mesmo jeito.

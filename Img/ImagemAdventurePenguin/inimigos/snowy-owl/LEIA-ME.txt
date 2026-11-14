@@ -1,0 +1,7 @@
+SNOWY OWL - SPRITES DO INIMIGO CORUJA (olhando para a direita)
+
+idle: 4   fly: 6   attack_claw: 6   dive_charge: 6   hurt: 3   defeat: 6
+
+Quadros recortados automaticamente da folha original (originais/folha.png):
+cada corpo vira uma pose e os pedacos pequenos vao para o corpo mais proximo.
+No jogo: voa patrulhando, mergulha no pinguim que passa embaixo; pular nela derruba.

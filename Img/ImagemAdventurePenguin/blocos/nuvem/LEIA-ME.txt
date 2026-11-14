@@ -1,0 +1,4 @@
+NUVEM - plataforma de nuvem desenhada para o jogo (pixel art 4x)
+
+nuvem.png  256x56: ponta esquerda, meio (emenda a cada 64 px) e ponta direita.
+No mapa: letra c (pisa em cima; atravessa por baixo).
