@@ -106,8 +106,8 @@
 
     // ---------------------------------------------------------------
     // Sprites definitivos do pinguim: PNGs com fundo transparente, um por
-    // quadro, em Img/ImagemAdventurePenguin/pinguim/<animacao>/<animacao>_01.png ...
-    // Se parado_01.png nao existir, o jogo usa a arte provisoria de art.js.
+    // quadro, em Img/ImagemAdventurePenguin/pinguim/<animacao>/<animacao>_01.webp ...
+    // Se parado_01.webp nao existir, o jogo usa a arte provisoria de art.js.
     // ---------------------------------------------------------------
     const PLAYER_SPRITES = {
         pasta: 'Img/ImagemAdventurePenguin/pinguim/',
@@ -124,7 +124,7 @@
             die:   { arquivo: 'morrer',     quadros: 5, fps: 8,  repetir: false },
         },
     };
-    const spritePath = (a, i) => `${PLAYER_SPRITES.pasta}${a.arquivo}/${a.arquivo}_${String(i).padStart(2, '0')}.png`;
+    const spritePath = (a, i) => `${PLAYER_SPRITES.pasta}${a.arquivo}/${a.arquivo}_${String(i).padStart(2, '0')}.webp`;
 
     // Inimigos com arte em alta resolucao (mesmo esquema do pinguim). A chave e o tipo
     // usado nas fases: 'snow' = 'e' (bola de neve), 'urchin' = 'u' (ourico), 'reindeer' = 'r' (rena).
@@ -657,7 +657,7 @@
         chargeTime: 1100,
         rest: 1000,          // parada depois da investida (hora de pegar por tras)
     };
-    const enemyFile = (cfg, a, i) => `${cfg.pasta}${a.arquivo}/${a.arquivo}_${String(i).padStart(2, '0')}.png`;
+    const enemyFile = (cfg, a, i) => `${cfg.pasta}${a.arquivo}/${a.arquivo}_${String(i).padStart(2, '0')}.webp`;
     // caixa de colisao de cada inimigo (em pixels do quadro HD), definida no Boot
     const enemyBoxes = {};
     const MAX_TEX = 4096;     // largura maxima das folhas montadas no jogo (limite seguro de placa de video)
@@ -1232,10 +1232,10 @@
             // o botao JOGAR so libera quando tudo estiver pronto (jogar antes abria a fase sem as artes)
             this.load.on('progress', v => { $('apPlayBtn').textContent = 'CARREGANDO ' + Math.round(v * 100) + '%'; });
             this.load.image('pz_probe', spritePath(PLAYER_SPRITES.anims.idle, 1));
-            for (const file of new Set(Object.values(BLOCK_ART).map(b => b.file))) this.load.image('blk_' + file, BLOCK_DIR + file + '.png');
-            for (const l of BG_LAYERS) this.load.image('bg_' + l.key, 'Img/ImagemAdventurePenguin/' + l.file + '.png');
+            for (const file of new Set(Object.values(BLOCK_ART).map(b => b.file))) this.load.image('blk_' + file, BLOCK_DIR + file + '.webp');
+            for (const l of BG_LAYERS) this.load.image('bg_' + l.key, 'Img/ImagemAdventurePenguin/' + l.file + '.webp');
             for (const [id, it] of Object.entries(ITEM_ART)) {
-                for (let i = 1; i <= it.quadros; i++) this.load.image(`it_${id}${i}`, `${it.pasta}peixe_0${i}.png`);
+                for (let i = 1; i <= it.quadros; i++) this.load.image(`it_${id}${i}`, `${it.pasta}peixe_0${i}.webp`);
             }
             for (const [id, cfg] of Object.entries(ENEMY_ART)) {
                 for (const a of Object.values(cfg.anims)) {
