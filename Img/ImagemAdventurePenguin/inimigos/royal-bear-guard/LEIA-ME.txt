@@ -1,0 +1,16 @@
+ROYAL BEAR GUARD - SPRITES DO INIMIGO
+
+idle: 4 quadros
+walk: 6 quadros
+attack_charge: 6 quadros
+attack_paw: 6 quadros
+hurt: 3 quadros
+defeat: 6 quadros
+
+Total: 31 PNGs individuais.
+Fundo magenta removido por máscara conectada às bordas; PNGs transparentes.
+Cada quadro foi padronizado em 192x192 px.
+Recortes aproximados da spritesheet: confira alinhamento e efeitos antes de integrar ao Phaser 3.
+
+Quadros recortados de novo da folha original (originais/folha.png) pelo contorno de cada pose.
+No jogo (letra j): mecanica do urso (patada de perto, 3 pisoes, escorregao empurra) + investida quando ve o pinguim de longe.
