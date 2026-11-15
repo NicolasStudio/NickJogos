@@ -1,0 +1,14 @@
+SEAL GUARD - SPRITES DO INIMIGO
+
+idle: 4 quadros
+walk: 6 quadros
+attack_charge: 6 quadros
+attack_flipper: 6 quadros
+hurt: 3 quadros
+defeat: 6 quadros
+
+Total: 31 PNGs individuais.
+Fundo magenta removido; PNGs transparentes em 192x192 px.
+
+Quadros recortados de novo da folha original (originais/folha.png) pelo contorno de cada pose.
+No jogo (letra g): mecanica do urso (golpe de nadadeira de perto, 2 pisoes, escorregao empurra) + investida rapida quando ve o pinguim de longe.

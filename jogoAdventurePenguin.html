@@ -37,7 +37,7 @@
 
             <!-- HUD -->
             <div class="ap-hud">
-                <div class="ap-hud-item"><img id="apLifeIcon" class="ap-life-icon" alt=""><span id="apLives">× 03</span></div>
+                <div class="ap-hud-item"><img id="apLifeIcon" class="ap-life-icon" alt=""><span id="apLives">× 05</span></div>
                 <div class="ap-hud-item"><img id="apCoinIcon" class="ap-coin-icon" alt=""><span id="apCoins">× 000</span></div>
                 <div class="ap-hud-item" id="apLevel">FASE 1-1</div>
                 <div class="ap-hud-item ap-score"><small>PONTOS</small><span id="apScore">000000</span></div>
@@ -123,8 +123,7 @@
             <!-- PORTAO DO CASTELO (antes do chefao) -->
             <div class="ap-screen hidden ap-gate" id="apGate">
                 <div class="ap-panel">
-                    <h2>O REI DO GELO<br>TE ESPERA...</h2>
-                    <p class="ap-small-text">ACERTE O REI SO POR TRAS</p>
+                    <h2 id="apGateTitle">O REI DO GELO<br>TE ESPERA...</h2>
                     <button class="ap-btn" id="apGateBtn" data-primary>ENFRENTAR O REI</button>
                 </div>
             </div>
@@ -145,7 +144,7 @@
             <div class="ap-screen hidden" id="apWin">
                 <div class="ap-panel">
                     <h1 class="ap-title"><span>INCRIVEL!</span>VOCE DERROTOU O REI!</h1>
-                    <p class="ap-small-text">FINAL SECRETO: SO QUEM NAO ERRA NADA CHEGA AQUI.</p>
+                    <p class="ap-small-text" id="apWinNote">FINAL SECRETO: SO QUEM NAO ERRA NADA CHEGA AQUI.</p>
                     <div class="ap-stats"><span>PONTOS</span><b id="apWinScore">000000</b></div>
                     <button class="ap-btn" id="apWinAgainBtn" data-primary>JOGAR DE NOVO</button>
                     <a class="ap-btn ap-btn-ghost" href="index.html">SAIR</a>

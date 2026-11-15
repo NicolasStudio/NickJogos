@@ -41,14 +41,16 @@
         slideHoldSpeed: 90,  // segurando para baixo, o escorregao continua com pelo menos esta velocidade
     };
 
-    const SCORE = { coin: 10, stomp: 100, knock: 200, brick: 50, fish: 1000, timeBonus: 10, coinsForLife: 100, reindeer: 500, pinecone: 300, bear: 600, seal: 400, owl: 400, bat: 450, ox: 600, moose: 600, rat: 400, beaver: 700, narwhal: 500, bigsnow: 800, bigsnowHit: 100 };
+    const SCORE = { coin: 10, stomp: 100, knock: 200, brick: 50, fish: 1000, timeBonus: 10, coinsForLife: 100, reindeer: 500, pinecone: 300, bear: 600, seal: 400, owl: 400, bat: 450, ox: 600, moose: 600, rat: 400, beaver: 700, narwhal: 500, bearguard: 900, sealguard: 700, royalowl: 600, royalmoose: 700, bigsnow: 800, bigsnowHit: 100 };
 
     // ---------------------------------------------------------------
     // Arvore de talentos. Toda moeda pega tambem vai para um cofre salvo no navegador
     // (nao zera ao perder); os talentos sao comprados com ele e valem em todas as partidas.
     // apply(p, nivel) recebe uma copia da fisica base e aplica o bonus do nivel.
     const TALENT_KEY = 'adventurePenguinTalentos';
-    const TALENT_COSTS = [40, 80, 120];              // preco do nivel 1, 2 e 3
+    const TALENT_COSTS = [60, 100, 140];             // preco do nivel 1, 2 e 3
+    // talento especial: so aparece com os 3 talentos no nivel 3; o pinguim comeca com o cachecol dourado
+    const GOLD_TALENT = { id: 'gold', name: 'CACHECOL DOURADO', icon: 'fa-crown', cost: 400 };
     const BASE_PHYS = { ...PHYS };
     const fmt1 = n => n.toFixed(1).replace('.', ',');
     const TALENTS = [
@@ -68,14 +70,23 @@
             info: p => '+' + Math.round((p.maxSpeed / BASE_PHYS.maxSpeed - 1) * 100) + '% de velocidade',
         },
     ];
+    // ?zerar=1 no endereco: apaga tudo que o jogo salvou no navegador (moedas, talentos, recorde, trofeu)
+    // e recarrega sem o parametro
+    if (new URLSearchParams(location.search).has('zerar')) {
+        try { Object.keys(localStorage).filter(k => k.startsWith('adventurePenguin')).forEach(k => localStorage.removeItem(k)); } catch (e) { /* sem armazenamento */ }
+        const u = new URL(location.href);
+        u.searchParams.delete('zerar');
+        history.replaceState(null, '', u);
+    }
     const talents = loadTalents();
 
     function loadTalents() {
-        const t = { bank: 0, lv: { slide: 0, jump: 0, speed: 0 } };
+        const t = { bank: 0, lv: { slide: 0, jump: 0, speed: 0 }, gold: false };
         try {
             const saved = JSON.parse(localStorage.getItem(TALENT_KEY));
             if (saved) {
                 t.bank = Math.max(0, +saved.bank || 0);
+                t.gold = !!saved.gold;
                 for (const k of Object.keys(t.lv)) t.lv[k] = Math.min(TALENT_COSTS.length, Math.max(0, +(saved.lv && saved.lv[k]) || 0));
             }
         } catch (e) { /* sem armazenamento: comeca do zero */ }
@@ -140,6 +151,36 @@
             anims: {
                 walk: { arquivo: 'andar',  quadros: 6, fps: 8,  repetir: true },
                 die:  { arquivo: 'morrer', quadros: 4, fps: 10, repetir: false },
+            },
+        },
+        // ourico da guarda: o ourico com armadura (maior); so morre com o escorregao pela frente
+        urchinguard: {
+            pasta: 'Img/ImagemAdventurePenguin/inimigos/ice_guard-hedgehog/',
+            tamanho: 36,
+            altura: 20,
+            olhaDireita: true,
+            semFranja: true,
+            sombraRoxa: true,
+            anims: {
+                walk: { arquivo: 'walk',   quadros: 6, fps: 8,  repetir: true },
+                idle: { arquivo: 'idle',   quadros: 4, fps: 5,  repetir: true },
+                die:  { arquivo: 'defeat', quadros: 6, fps: 10, repetir: false },
+            },
+        },
+        // alce real (montaria da guarda): mecanica do alce/rena
+        royalmoose: {
+            pasta: 'Img/ImagemAdventurePenguin/inimigos/royal-moose/',
+            tamanho: 60,
+            altura: 36,
+            olhaDireita: true,
+            semFranja: true,
+            anims: {
+                walk:   { arquivo: 'walk',          quadros: 6, fps: 8,  repetir: true },
+                idle:   { arquivo: 'idle',          quadros: 4, fps: 5,  repetir: true },
+                attack: { arquivo: 'attack_antler', quadros: 6, fps: 14, repetir: false },
+                charge: { arquivo: 'attack_charge', quadros: 6, fps: 14, repetir: true },
+                hurt:   { arquivo: 'hurt',          quadros: 3, fps: 12, repetir: false },
+                die:    { arquivo: 'defeat',        quadros: 6, fps: 10, repetir: false },
             },
         },
         // urso polar: anda devagar, patada de perto; 2 pisoes derrubam; escorregao empurra de volta
@@ -267,6 +308,53 @@
                 claw: { arquivo: 'attack_horn_strike', quadros: 6, fps: 14, repetir: false },
                 hurt: { arquivo: 'hurt',               quadros: 3, fps: 12, repetir: false },
                 die:  { arquivo: 'defeat',             quadros: 6, fps: 10, repetir: false },
+            },
+        },
+        // guardas do castelo: mecanica do urso + investida quando ve o pinguim de longe
+        bearguard: {
+            pasta: 'Img/ImagemAdventurePenguin/inimigos/royal-bear-guard/',
+            tamanho: 60,
+            altura: 30,
+            olhaDireita: true,
+            semFranja: true,
+            anims: {
+                walk:   { arquivo: 'walk', quadros: 6, fps: 7, repetir: true },
+                idle:   { arquivo: 'idle', quadros: 4, fps: 5, repetir: true },
+                claw:   { arquivo: 'attack_paw', quadros: 6, fps: 12, repetir: false },
+                charge: { arquivo: 'attack_charge', quadros: 6, fps: 12, repetir: true },
+                hurt:   { arquivo: 'hurt', quadros: 3, fps: 12, repetir: false },
+                die:    { arquivo: 'defeat', quadros: 6, fps: 10, repetir: false },
+            },
+        },
+        sealguard: {
+            pasta: 'Img/ImagemAdventurePenguin/inimigos/seal-guard/',
+            tamanho: 54,
+            altura: 22,
+            olhaDireita: true,
+            semFranja: true,
+            anims: {
+                walk:   { arquivo: 'walk', quadros: 6, fps: 7, repetir: true },
+                idle:   { arquivo: 'idle', quadros: 4, fps: 5, repetir: true },
+                claw:   { arquivo: 'attack_flipper', quadros: 6, fps: 12, repetir: false },
+                charge: { arquivo: 'attack_charge', quadros: 6, fps: 12, repetir: true },
+                hurt:   { arquivo: 'hurt', quadros: 3, fps: 12, repetir: false },
+                die:    { arquivo: 'defeat', quadros: 6, fps: 10, repetir: false },
+            },
+        },
+        // coruja mensageira real: mecanica da coruja, aguenta 2 pisoes
+        royalowl: {
+            pasta: 'Img/ImagemAdventurePenguin/inimigos/royal-messenger-owl/',
+            tamanho: 54,
+            altura: 20,
+            olhaDireita: true,
+            semFranja: true,
+            anims: {
+                walk:   { arquivo: 'fly', quadros: 6, fps: 10, repetir: true },
+                idle:   { arquivo: 'idle', quadros: 4, fps: 5, repetir: true },
+                claw:   { arquivo: 'attack_claw', quadros: 6, fps: 14, repetir: false },
+                dive: { arquivo: 'attack_charge', quadros: 6, fps: 12, repetir: true },
+                hurt:   { arquivo: 'hurt', quadros: 3, fps: 12, repetir: false },
+                die:    { arquivo: 'defeat', quadros: 6, fps: 10, repetir: false },
             },
         },
         // castor: mecanica do urso, mas com 3 de vida
@@ -432,6 +520,20 @@
         pace: [1, 0.8, 0.6],           // duracao das pausas por fase
         icicles: [4, 6, 8],
     };
+    // Revanche (6-5): o mesmo Rei, mas possivel de vencer: menos vida, nao se cura,
+    // mais lento e fica mais tempo parado (de costas) depois de cada ataque.
+    const KING2 = {
+        ...KING,
+        hp: 10,
+        heal: 0,
+        walkSpeed: 40,
+        chargeSpeed: 200,
+        shockSpeed: 130,
+        think: 1100,
+        speed: [0.9, 1.05, 1.2],
+        pace: [1.2, 1.05, 0.9],
+        icicles: [3, 4, 6],
+    };
     // Chefe Boneco de Neve (2-5): pode ser vencido. So toma dano por tras; arremessa bolas de neve
     // (1, 2 ou 3 seguidas conforme perde vida) e da garradas de perto. Depois de atacar fica parado.
     const SNOWBOSS = {
@@ -500,6 +602,15 @@
 
     // morcego: a mecanica da coruja, mais rapido
     const BAT = { ...OWL_BASE, patrol: 70, flySpeed: 62, sight: 130, diveSpeed: 220, diveTime: 750, climbSpeed: 95, rest: 700 };
+
+    // coruja mensageira real: a coruja, mais esperta (2 pisoes)
+    const ROYALOWL = { ...OWL_BASE, patrol: 64, flySpeed: 50, sight: 140, diveSpeed: 200, diveTime: 850, climbSpeed: 85, rest: 900, hp: 2 };
+
+    // guardas do castelo: o urso + investida (ve o pinguim de longe, prepara, corre e descansa)
+    const GUARDS = {
+        bearguard: { hp: 3, sight: 120, windup: 500, chargeSpeed: 150, chargeTime: 1000, rest: 1100, cooldown: 1500 },
+        sealguard: { hp: 2, sight: 130, windup: 380, chargeSpeed: 180, chargeTime: 850, rest: 900, cooldown: 1200 },
+    };
 
     // urso polar (px do mundo, ms)
     const BEAR = {
@@ -612,6 +723,10 @@
         ],
         // portao do castelo: imagem simetrica do tamanho da tela, fica parada (o castelo sempre a frente)
         // encaixe: estica a largura para fechar exatamente a tela (sem repetir a borda)
+        // Mundo 6: corredor do castelo (parado; leva a sala do chefe final)
+        corredorcastelo: [
+            { key: 'corredorcastelo', file: 'cenario/fundo-corredor-castelo', altura: VIEW_H, base: VIEW_H, fator: 0, encaixe: true },
+        ],
         // Mundo 6: entrada do castelo (parado; o piso de pedra da imagem e o chao)
         entradacastelo: [
             { key: 'entradacastelo', file: 'cenario/fundo-entrada-castelo', altura: VIEW_H, base: VIEW_H, fator: 0, encaixe: true },
@@ -784,11 +899,13 @@
     // taken: o que ja foi pego nesta tentativa da fase (chaves "x,y" do mapa). Morrer nao devolve;
     // so zera em fase nova, "reiniciar fase" ou jogo novo.
     // story: mostrar a historia na proxima vez que a fase comecar (so no jogo novo)
-    const S = { story: false, level: 0, lives: 3, coins: 0, score: 0, time: 0, powered: false, playing: false, checkpoint: null, taken: null };
+    const START_LIVES = 5;       // vidas ao comecar o jogo
+    const BANISH_LIVES = 5;      // vidas ao voltar no Mundo 2 depois de perder para o rei
+    const S = { story: false, level: 0, lives: START_LIVES, coins: 0, score: 0, time: 0, powered: false, playing: false, checkpoint: null, taken: null };
     const newTaken = () => ({ coins: new Set(), gifts: new Set(), bricks: new Set() });
 
     function resetRun() {
-        Object.assign(S, { level: 0, lives: 3, coins: 0, score: 0, time: 0, powered: false, checkpoint: null, taken: null });
+        Object.assign(S, { level: 0, lives: START_LIVES, coins: 0, score: 0, time: 0, powered: false, checkpoint: null, taken: null });
     }
 
     function loadRecord() {
@@ -924,10 +1041,33 @@
         { quem: '', texto: 'Expulso para as Planícies Nevadas, longe do castelo, o pinguim precisa ficar mais forte...' },
         { quem: 'penguin', texto: '...e um dia voltar para a revanche! O reino ainda conta com você.' },
     ];
+    // revanche (6-5): o pinguim volta para a sala do trono
+    const STORY_REMATCH = [
+        { quem: '', texto: 'Planícies, florestas, cavernas, muralhas e corredores... Depois de atravessar o reino inteiro, o pinguim empurra as portas da sala do trono.' },
+        { quem: 'king', quadro: 'hurt1', texto: 'O QUÊ?! Como conseguiu retornar? Eu te expulsei para o fim do mundo!' },
+        { quem: 'penguin', texto: 'Eu não vou deixar você acabar com os peixes!' },
+        { quem: 'king', quadro: 'idle1', texto: 'Meus ursos de armadura... minhas focas, minhas corujas, o Yeti, até o Mamute! Como um pinguim desse tamanho passou por todos eles?' },
+        { quem: 'penguin', texto: 'Cada pulo, cada escorregão e cada moeda me deixaram mais forte. E dessa vez eu sei que você não gosta de ser pego pelas costas.' },
+        { quem: 'king', quadro: 'laugh2', texto: 'HA HA HA! Eu sou o Rei do Gelo! Cada peixe, cada lago e cada floco de neve deste reino são MEUS!' },
+        { quem: 'penguin', texto: 'Lá fora tem filhote passando frio e fome enquanto você guarda mais peixe do que consegue comer em mil invernos.' },
+        { quem: 'king', quadro: 'summon2', texto: 'Silêncio! Da última vez você não durou nem um minuto. Hoje vou te transformar numa estátua de gelo para enfeitar o meu salão!' },
+        { quem: 'penguin', texto: 'Então vem, Majestade. O reino inteiro está torcendo por mim.' },
+        { quem: '', texto: 'O Rei ergue o cetro, as paredes tremem e o gelo estala no teto. Começa a batalha final pelo Reino Gelado!' },
+    ];
+    // depois de vencer a revanche
+    const STORY_VICTORY = [
+        { quem: 'king', quadro: 'hurt2', texto: 'Não... não pode ser... derrotado por um pinguim de cachecol...' },
+        { quem: 'penguin', texto: 'Acabou, Majestade. Os peixes voltam para os lagos de todo mundo.' },
+        { quem: 'king', quadro: 'idle1', texto: 'Eu... eu só tinha medo de passar fome de novo. Por isso guardei tudo só para mim.' },
+        { quem: 'penguin', texto: 'Ninguém passa fome quando a gente divide. Tem peixe para você também... é só pescar com a gente.' },
+        { quem: '', texto: 'Os lagos descongelaram, os peixes voltaram a nadar e o Reino Gelado fez o maior banquete da sua história... com uma morsa de coroa sentada à mesa.' },
+    ];
+    let storyLast = 'COMEÇAR!';
     let storyPage = 0, storyTimer = null, storyTyping = false, storyDone = null, storyPages = STORY;
 
-    function openStory(onDone, pages = STORY) {
+    function openStory(onDone, pages = STORY, last = 'COMEÇAR!') {
         storyPages = pages;
+        storyLast = last;
         storyDone = onDone;
         storyPage = 0;
         showScreen('apStory');
@@ -938,12 +1078,12 @@
         const page = storyPages[storyPage];
         const img = $('apStoryImg');
         const scene = game.scene.getScene('Boot');
-        const portrait = page.quem === 'king' && game.textures.exists('enemy_king') ? ['enemy_king', 'laugh2']
+        const portrait = page.quem === 'king' && game.textures.exists('enemy_king') ? ['enemy_king', page.quadro || 'laugh2']
             : page.quem === 'penguin' ? [game.textures.exists('penguin') ? 'penguin' : null, game.textures.get('penguin').has('idle1') ? 'idle1' : 'idle'] : null;
         if (portrait && portrait[0]) { img.src = ART.frameToDataURL(scene, portrait[0], portrait[1], 1); img.hidden = false; }
         else img.hidden = true;
         $('apStoryCount').textContent = (storyPage + 1) + '/' + storyPages.length;
-        $('apStoryNext').textContent = storyPage < storyPages.length - 1 ? 'CONTINUAR' : 'COMEÇAR!';
+        $('apStoryNext').textContent = storyPage < storyPages.length - 1 ? 'CONTINUAR' : storyLast;
         // texto aparecendo letra por letra
         const el = $('apStoryText'), full = page.texto;
         let n = 0;
@@ -1018,11 +1158,34 @@
                 ${btn}
             </div>`;
         }).join('');
-        const spent = TALENTS.some(t => talents.lv[t.id] > 0);
+        // especial: aparece quando os 3 estao no maximo (ou se ja foi comprado)
+        const allMax = TALENTS.every(t => talents.lv[t.id] >= TALENT_COSTS.length);
+        if (allMax || talents.gold) {
+            const g = GOLD_TALENT, own = talents.gold;
+            const btn = own
+                ? '<button class="ap-btn ap-talent-buy" disabled>COMPRADO</button>'
+                : `<button class="ap-btn ap-talent-buy" data-talent="${g.id}" ${talents.bank < g.cost ? 'disabled' : ''}>${coin}${g.cost}</button>`;
+            $('apTalentList').insertAdjacentHTML('beforeend', `<div class="ap-talent special${own ? ' max' : ''}">
+                <i class="fas ${g.icon} ap-talent-icon"></i>
+                <b class="ap-talent-name">${g.name}</b>
+                <span class="ap-talent-info">Começa cada vida com o cachecol dourado</span>
+                ${btn}
+            </div>`);
+        }
+        const spent = talents.gold || TALENTS.some(t => talents.lv[t.id] > 0);
         $('apRefundBtn').disabled = !spent;
     }
 
     function buyTalent(id) {
+        if (id === GOLD_TALENT.id) {
+            if (talents.gold || talents.bank < GOLD_TALENT.cost) return;
+            talents.bank -= GOLD_TALENT.cost;
+            talents.gold = true;
+            saveTalents();
+            renderTalents();
+            $('apTalentBack').focus({ preventScroll: true });
+            return;
+        }
         const n = talents.lv[id], cost = TALENT_COSTS[n];
         if (cost === undefined || talents.bank < cost) return;
         talents.bank -= cost;
@@ -1036,6 +1199,7 @@
 
     // devolve todas as moedas gastas (para experimentar outra combinacao)
     function refundTalents() {
+        if (talents.gold) { talents.bank += GOLD_TALENT.cost; talents.gold = false; }
         for (const t of TALENTS) {
             for (let i = 0; i < talents.lv[t.id]; i++) talents.bank += TALENT_COSTS[i];
             talents.lv[t.id] = 0;
@@ -1422,10 +1586,10 @@
             this.createInput();
 
             this.physics.add.collider(this.player, this.layer);
-            this.physics.add.collider(this.enemies, this.layer, null, (e) => (e.kind !== 'owl' && e.kind !== 'bat') || e.dead, this);
+            this.physics.add.collider(this.enemies, this.layer, null, (e) => (e.kind !== 'owl' && e.kind !== 'bat' && e.kind !== 'royalowl') || e.dead, this);
             this.physics.add.collider(this.enemies, this.enemies, (a, b) => {
                 a.dir *= -1; b.dir *= -1;
-                for (const r of [a, b]) if ((r.kind === 'reindeer' || r.kind === 'ox' || r.kind === 'moose') && r.mode === 'charge') r.modeUntil = 0;
+                for (const r of [a, b]) if ((r.kind === 'reindeer' || r.kind === 'ox' || r.kind === 'moose' || r.kind === 'royalmoose' || GUARDS[r.kind]) && r.mode === 'charge') r.modeUntil = 0;
             });
             this.physics.add.collider(this.items, this.layer);
             this.physics.add.overlap(this.player, this.enemies, this.onEnemy, null, this);
@@ -1466,12 +1630,13 @@
                 this.state.story = true;
                 this.physics.pause();
                 const pages = S.storyPages || STORY;
+                const lastLabel = pages === STORY_REMATCH ? 'LUTAR!' : 'COMEÇAR!';
                 S.storyPages = null;
                 this.time.delayedCall(450, () => openStory(() => {
                     this.state.story = false;
                     this.physics.resume();
                     showScreen(null);
-                }, pages));
+                }, pages, lastLabel));
             }
         }
 
@@ -1517,7 +1682,7 @@
                     else if (c === '^') t = T.SPIKE;
                     else if (c === '~') t = at(x, y - 1) === '~' ? T.WATER : T.WATER_TOP;
                     else if (c === 'o') this.spawns.coins.push({ x, y });
-                    else if ('eurpnyfabmkvlh'.includes(c)) this.spawns.enemies.push({ x, y, kind: { e: 'snow', u: 'urchin', r: 'reindeer', p: 'pinecone', n: 'bigsnow', y: 'bear', f: 'seal', a: 'owl', b: 'ox', m: 'rat', k: 'beaver', v: 'bat', l: 'moose', h: 'narwhal' }[c] });
+                    else if ('eurpnyfabmkvlhjgqtx'.includes(c)) this.spawns.enemies.push({ x, y, kind: { e: 'snow', u: 'urchin', r: 'reindeer', p: 'pinecone', n: 'bigsnow', y: 'bear', f: 'seal', a: 'owl', b: 'ox', m: 'rat', k: 'beaver', v: 'bat', l: 'moose', h: 'narwhal', j: 'bearguard', g: 'sealguard', q: 'royalowl', t: 'urchinguard', x: 'royalmoose' }[c] });
                     else if (c === 'P') this.spawns.start = { x: x * TILE + 8, y: (y + 1) * TILE };
                     else if (c === '>') this.spawns.signs.push({ x, y });
                     else if (c === '|') this.spawns.flag = { x, y };
@@ -1548,7 +1713,7 @@
                 layer(VIEW_H - 40 - 170, 170, 'bgFar', 0.22, 0);
                 layer(VIEW_H - 30 - 90, 90, 'bgTrees', 0.45, 0);
             }
-            if (LEVELS[S.level].boss === 'king' || /^caverna|abismo|saidacaverna/.test(LEVELS[S.level].cenario || '')) return;      // dentro do castelo e da caverna nao neva
+            if (LEVELS[S.level].boss === 'king' || LEVELS[S.level].boss === 'king2' || /^caverna|abismo|saidacaverna/.test(LEVELS[S.level].cenario || '')) return;      // dentro do castelo e da caverna nao neva
             this.add.particles(0, 0, 'flake', {
                 x: { min: FIX_X, max: FIX_X + VIEW_W }, y: FIX_Y - 4, lifespan: 9000,
                 speedY: { min: 12, max: 28 }, speedX: { min: -8, max: 8 },
@@ -1609,10 +1774,11 @@
                 s.custom = !!box;
                 s.kind = e.kind;
                 s.dir = -1;
-                s.speed = snow ? 32 : (e.kind === 'reindeer' || e.kind === 'ox' || e.kind === 'moose' || e.kind === 'moose') ? REINDEER.walkSpeed : e.kind === 'pinecone' ? PINECONE.walkSpeed : 22;
+                s.speed = snow ? 32 : (e.kind === 'reindeer' || e.kind === 'ox' || e.kind === 'moose' || e.kind === 'royalmoose' || e.kind === 'moose' || e.kind === 'royalmoose') ? REINDEER.walkSpeed : e.kind === 'pinecone' ? PINECONE.walkSpeed : 22;
                 s.facesRight = !!(ENEMY_ART[e.kind] && ENEMY_ART[e.kind].olhaDireita && box);
                 s.mode = 'walk';          // rena/gigante: walk | windup | charge | rest (| hurt)
-                s.hp = e.kind === 'bigsnow' ? BIGSNOW.hp : e.kind === 'beaver' ? 3 : (e.kind === 'bear' || e.kind === 'seal' || e.kind === 'rat' || e.kind === 'beaver' || e.kind === 'narwhal') ? BEAR.hp : 1;
+                s.guard = GUARDS[e.kind] || null;
+                s.hp = e.kind === 'bigsnow' ? BIGSNOW.hp : e.kind === 'beaver' ? 3 : GUARDS[e.kind] ? GUARDS[e.kind].hp : e.kind === 'royalowl' ? ROYALOWL.hp : (e.kind === 'bear' || e.kind === 'seal' || e.kind === 'rat' || e.kind === 'beaver' || e.kind === 'narwhal' || e.kind === 'bearguard' || e.kind === 'sealguard') ? BEAR.hp : 1;
                 s.nextThrow = 0;
                 s.invulnUntil = 0;
                 s.modeUntil = 0;
@@ -1623,7 +1789,7 @@
                 } else if (snow) s.body.setSize(12, 12).setOffset(2, 4);
                 else s.body.setSize(12, 9).setOffset(2, 4);
                 s.body.enable = false;  // acorda quando aparece na tela
-                if (e.kind === 'owl' || e.kind === 'bat') {
+                if (e.kind === 'owl' || e.kind === 'bat' || e.kind === 'royalowl') {
                     // voa: sem gravidade e sem colidir com o cenario
                     s.body.setAllowGravity(false);
                     s.homeX = px; s.homeY = bottom; s.mode = 'patrol'; s.dir = -1;
@@ -1660,6 +1826,7 @@
 
         createPlayer() {
             const st = S.checkpoint && S.checkpoint.level === S.level ? S.checkpoint : this.spawns.start;
+            if (talents.gold) S.powered = true;          // talento: comeca com o cachecol dourado
             this.skin = S.powered ? 'g' : 'n';
             this.player = this.physics.add.sprite(st.x, st.y, S.powered ? 'penguinGold' : 'penguin');
             this.player.setOrigin(0.5, 1).setDepth(20).setCollideWorldBounds(true).setScale(playerScale);
@@ -1819,6 +1986,18 @@
             this.state.headLatch = up;
         }
 
+        // true se cair nessa coluna (a partir de y) leva para fora do mapa ou para a agua
+        pitBelow(x, y) {
+            const tx = this.layer.worldToTileX(x);
+            for (let ty = this.layer.worldToTileY(y); ty < this.layer.layer.height; ty++) {
+                const t = this.layer.getTileAt(tx, ty);
+                if (!t) continue;
+                if (t.index === T.WATER || t.index === T.WATER_TOP) return true;
+                if (t.collides) return false;
+            }
+            return true;
+        }
+
         hitBlock(tile) {
             const cx = tile.getCenterX(), top = tile.getTop();
             if (tile.index === T.GIFT) {
@@ -1884,7 +2063,7 @@
 
         knockEnemiesOn(tile) {
             for (const e of this.enemies.getChildren()) {
-                if (e.dead || !e.body.enable || e.kind === 'reindeer' || e.kind === 'ox' || e.kind === 'moose' || e.kind === 'bear' || e.kind === 'seal' || e.kind === 'rat' || e.kind === 'beaver' || e.kind === 'narwhal') continue;
+                if (e.dead || !e.body.enable || e.kind === 'reindeer' || e.kind === 'ox' || e.kind === 'moose' || e.kind === 'royalmoose' || e.kind === 'bear' || e.kind === 'seal' || e.kind === 'rat' || e.kind === 'beaver' || e.kind === 'narwhal' || e.kind === 'bearguard' || e.kind === 'sealguard') continue;
                 if (e.kind === 'bigsnow') {
                     if (Math.abs(e.x - tile.getCenterX()) < 18 && Math.abs(e.body.bottom - tile.getTop()) < 4) this.hitBigSnow(e);
                     continue;
@@ -1922,10 +2101,10 @@
                 }
                 if (e.y > this.mapH + 40) { e.destroy(); continue; }
                 const b = e.body;
-                if (e.kind === 'reindeer' || e.kind === 'ox' || e.kind === 'moose' || e.kind === 'moose') { this.updateReindeer(e); continue; }
+                if (e.kind === 'reindeer' || e.kind === 'ox' || e.kind === 'moose' || e.kind === 'royalmoose' || e.kind === 'moose' || e.kind === 'royalmoose') { this.updateReindeer(e); continue; }
                 if (e.kind === 'bigsnow') { this.updateBigSnow(e); continue; }
-                if (e.kind === 'bear' || e.kind === 'seal' || e.kind === 'rat' || e.kind === 'beaver' || e.kind === 'narwhal') { this.updateBear(e); continue; }
-                if (e.kind === 'owl' || e.kind === 'bat') { this.updateOwl(e); continue; }
+                if (e.kind === 'bear' || e.kind === 'seal' || e.kind === 'rat' || e.kind === 'beaver' || e.kind === 'narwhal' || e.kind === 'bearguard' || e.kind === 'sealguard') { this.updateBear(e); continue; }
+                if (e.kind === 'owl' || e.kind === 'bat' || e.kind === 'royalowl') { this.updateOwl(e); continue; }
                 if (e.kind === 'pinecone' && e.mode !== 'walk') { this.updatePinecone(e); continue; }
                 if (e.kind === 'pinecone') this.updatePinecone(e);
                 if (b.blocked.left) e.dir = 1;
@@ -1942,6 +2121,11 @@
                 if (!f.body.enable) continue;
                 if (f.body.blocked.left) f.dir = 1;
                 if (f.body.blocked.right) f.dir = -1;
+                // na beirada: se embaixo for buraco ou agua, da meia-volta (o peixe nao se perde)
+                if (f.body.blocked.down) {
+                    const ax = f.x + f.dir * 7, ahead = this.layer.getTileAtWorldXY(ax, f.body.bottom + 4);
+                    if ((!ahead || !ahead.collides) && this.pitBelow(ax, f.body.bottom + 4)) f.dir *= -1;
+                }
                 f.setVelocityX(f.dir * 55);
                 f.setFlipX(f.art ? f.dir > 0 : f.dir < 0);   // a arte nova olha para a esquerda
                 if (f.y > this.mapH + 40) f.destroy();
@@ -2426,6 +2610,7 @@
             if (LEVELS[S.level].boss === 'snowflake') return this.createFlakeBoss();
             if (LEVELS[S.level].boss === 'yeti' || LEVELS[S.level].boss === 'mammoth') return this.createYetiBoss();
             const box = enemyBoxes.king;
+            const C = LEVELS[S.level].boss === 'king2' ? KING2 : KING;
             this.floorY = this.spawns.start.y;          // altura do piso (pes do pinguim)
             const k = box
                 ? this.physics.add.sprite(this.mapW - 110, this.floorY, 'enemy_king', 'walk1').setScale(1 / RES)
@@ -2434,17 +2619,17 @@
             if (box) k.body.setSize(box.w, box.h).setOffset(box.x, box.y);
             k.setCollideWorldBounds(true);
             k.custom = !!box;
-            Object.assign(k, { hp: KING.hp, dir: -1, mode: 'intro', until: this.time.now + 2400, dead: false, invulnUntil: 0, last: '' });
+            Object.assign(k, { cfg: C, hp: C.hp, dir: -1, mode: 'intro', until: this.time.now + 2400, dead: false, invulnUntil: 0, last: '' });
             this.boss = k;
             this.bossPlay('laugh');
             this.physics.add.collider(k, this.layer);
             this.physics.add.overlap(this.player, k, this.onBoss, null, this);
             this.hazards = this.physics.add.group({ allowGravity: false });
             this.physics.add.overlap(this.player, this.hazards, () => this.hurt(), null, this);
-            this.time.delayedCall(300, () => this.bossSay('HA HA HA! Ninguém entra no meu castelo!'));
+            this.time.delayedCall(300, () => this.bossSay(C === KING2 ? 'Dessa vez você não escapa!' : 'HA HA HA! Ninguém entra no meu castelo!'));
             $('apBossName').textContent = 'REI DO GELO';
             $('apStage').classList.add('boss-mode');
-            setBossBar(k.hp);
+            setBossBar(k.hp, k.cfg.hp);
             this.events.once('shutdown', () => $('apStage').classList.remove('boss-mode'));
         }
 
@@ -2462,13 +2647,13 @@
 
         bossPhase() {
             const k = this.boss;
-            return k.hp > KING.hp * 2 / 3 ? 0 : k.hp > KING.hp / 3 ? 1 : 2;
+            return k.hp > this.boss.cfg.hp * 2 / 3 ? 0 : k.hp > this.boss.cfg.hp / 3 ? 1 : 2;
         }
 
         healBoss(n) {
             const k = this.boss;
-            k.hp = Math.min(KING.hp, k.hp + n);
-            setBossBar(k.hp);
+            k.hp = Math.min(this.boss.cfg.hp, k.hp + n);
+            setBossBar(k.hp, k.cfg.hp);
             this.floatText('+' + n, k.x, k.y - 50, '#7dff8a');
         }
 
@@ -2483,7 +2668,7 @@
                 else if (h.kind === 'shock' && (h.x < -20 || h.x > this.mapW + 20)) h.destroy();
             }
             if (k.dead) return;
-            const ph = this.bossPhase(), spd = KING.speed[ph], pace = KING.pace[ph];
+            const ph = this.bossPhase(), spd = this.boss.cfg.speed[ph], pace = this.boss.cfg.pace[ph];
             const face = () => { if (Math.abs(p.x - k.x) > 6) k.dir = Math.sign(p.x - k.x); };
             const go = (mode, ms) => { k.mode = mode; k.until = now + ms; };
             if (this.state.dead) { b.setVelocityX(0); if (k.mode !== 'gloat') { k.mode = 'gloat'; this.bossPlay('laugh'); } k.setFlipX(k.dir < 0); return; }
@@ -2492,7 +2677,7 @@
                 case 'intro':
                     b.setVelocityX(0);
                     face();
-                    if (now >= k.until) { go('think', KING.think * pace); this.bossPlay('idle'); }
+                    if (now >= k.until) { go('think', this.boss.cfg.think * pace); this.bossPlay('idle'); }
                     break;
                 case 'think':
                     b.setVelocityX(0);
@@ -2502,7 +2687,7 @@
                     break;
                 case 'walk':                     // aproxima para a pancada
                     face();
-                    b.setVelocityX(k.dir * KING.walkSpeed * spd);
+                    b.setVelocityX(k.dir * this.boss.cfg.walkSpeed * spd);
                     this.bossPlay('walk');
                     if (Math.abs(p.x - k.x) < 70 || now >= k.until) {
                         b.setVelocityX(0);
@@ -2521,7 +2706,7 @@
                     break;
                 case 'recover':                  // depois da pancada: parado, de costas e vulneravel
                     b.setVelocityX(0);
-                    if (now >= k.until) go('think', KING.think * pace);
+                    if (now >= k.until) go('think', this.boss.cfg.think * pace);
                     break;
                 case 'chargeWind':               // mira e avisa
                     b.setVelocityX(0);
@@ -2529,7 +2714,7 @@
                     if (now >= k.until) { go('charge', 4000); this.bossPlay('charge', true); }
                     break;
                 case 'charge':
-                    b.setVelocityX(k.dir * KING.chargeSpeed * spd);
+                    b.setVelocityX(k.dir * this.boss.cfg.chargeSpeed * spd);
                     if (b.blocked.left || b.blocked.right || now >= k.until) {
                         b.setVelocityX(0);
                         this.cameras.main.flash(110, 180, 220, 255);
@@ -2540,12 +2725,12 @@
                     break;
                 case 'stun':
                     b.setVelocityX(0);
-                    if (now >= k.until) go('think', KING.think * pace * 0.6);
+                    if (now >= k.until) go('think', this.boss.cfg.think * pace * 0.6);
                     break;
                 case 'icicles':
                 case 'summon':
                     b.setVelocityX(0);
-                    if (now >= k.until) go('think', KING.think * pace);
+                    if (now >= k.until) go('think', this.boss.cfg.think * pace);
                     break;
                 case 'hurt':
                     b.setVelocityX(0);
@@ -2564,13 +2749,13 @@
             k.last = pick;
             if (pick === 'slam') { k.mode = 'walk'; k.until = now + 1200; }
             else if (pick === 'charge') {
-                k.mode = 'chargeWind'; k.until = now + 650 * KING.pace[ph];
+                k.mode = 'chargeWind'; k.until = now + 650 * this.boss.cfg.pace[ph];
                 this.bossPlay('idle');
                 this.floatText('!', k.x, k.y - 52, '#ff5a5a');
             } else if (pick === 'icicles') {
                 k.mode = 'icicles'; k.until = now + 1500;
                 this.bossPlay('summon', true);
-                this.time.delayedCall(350, () => { if (!k.dead && !this.state.dead) this.bossIcicles(KING.icicles[ph], true); });
+                this.time.delayedCall(350, () => { if (!k.dead && !this.state.dead) this.bossIcicles(this.boss.cfg.icicles[ph], true); });
             } else {
                 k.mode = 'summon'; k.until = now + 1200;
                 this.bossPlay('summon', true);
@@ -2589,7 +2774,7 @@
                 w.kind = 'shock';
                 w.setFlipX(dir < 0);
                 w.body.setSize(40, 32).setOffset(12, 24);
-                w.body.setVelocityX(dir * KING.shockSpeed * spd);
+                w.body.setVelocityX(dir * this.boss.cfg.shockSpeed * spd);
             }
         }
 
@@ -2625,7 +2810,7 @@
                 if (this.time.now < k.invulnUntil) return;
                 k.hp--;
                 k.invulnUntil = this.time.now + 900;
-                setBossBar(k.hp);
+                setBossBar(k.hp, k.cfg.hp);
                 this.addScore(500, k.x, k.y - 50);
                 this.puff(player.x, player.y - 6);
                 pb.setVelocity(-k.dir * 200, -230);      // empurra o pinguim para longe
@@ -2658,7 +2843,11 @@
                 saveRecord();
                 $('apWinScore').textContent = pad(S.score, 6);
                 refreshHud();
-                showScreen('apWin');
+                const rematch = k.cfg === KING2;
+                $('apWinNote').textContent = rematch ? 'OS PEIXES VOLTARAM PARA TODO O REINO GELADO!' : 'FINAL SECRETO: SO QUEM NAO ERRA NADA CHEGA AQUI.';
+                $('apWin').classList.toggle('ap-final', rematch);     // final: os pinguins comemorando
+                if (rematch) openStory(() => showScreen('apWin'), STORY_VICTORY, 'FIM');
+                else showScreen('apWin');
             });
         }
 
@@ -2708,7 +2897,7 @@
         // coruja: patrulha no alto; pinguim embaixo e perto -> mergulha nele; depois sobe de volta
         updateOwl(e) {
             const b = e.body, now = this.time.now, p = this.player;
-            const OWL = e.kind === 'bat' ? BAT : OWL_BASE;
+            const OWL = e.kind === 'bat' ? BAT : e.kind === 'royalowl' ? ROYALOWL : OWL_BASE;
             const play = (anim) => { if (e.custom) e.play(`en-${e.kind}-${anim}`, true); };
             e.homeY = e.homeY || e.y;
             if (e.mode === 'patrol') {
@@ -2739,6 +2928,19 @@
 
         defeatOwl(e) {
             if (e.dead) return;
+            const now = this.time.now;
+            if (now < (e.invulnUntil || 0)) return;
+            if (e.hp > 1) {
+                e.hp--;
+                e.invulnUntil = now + 700;
+                e.mode = 'climb';
+                e.body.setVelocity(0, -40);
+                if (e.custom) { e.play(`en-${e.kind}-hurt`); e.once('animationcomplete', () => { if (!e.dead) e.play(`en-${e.kind}-walk`); }); }
+                e.setTintFill(0xffffff);
+                this.time.delayedCall(80, () => e.clearTint());
+                this.puff(e.x, e.y - 8);
+                return;
+            }
             e.dead = true;
             e.body.setAllowGravity(true);
             e.body.setVelocity(0, -60);
@@ -2769,6 +2971,12 @@
                     e.mode = 'claw'; e.modeUntil = now + 520; e.hitFrom = now + 230; e.hitTo = now + 420; e.hitDone = false;
                     b.setVelocityX(0);
                     play('claw');
+                } else if (e.guard && !this.state.dead && now >= (e.chargeReady || 0) && ahead >= BEAR.clawRange && ahead < e.guard.sight &&
+                    Math.abs(p.body.bottom - b.bottom) < BEAR.sightY && b.blocked.down) {
+                    e.mode = 'windup'; e.modeUntil = now + e.guard.windup;
+                    b.setVelocityX(0);
+                    play('idle');
+                    this.floatText('!', e.x, e.y - 30, '#ff5a5a');
                 }
             } else if (e.mode === 'claw') {
                 b.setVelocityX(0);
@@ -2777,6 +2985,16 @@
                     if (ahead > -4 && ahead < BEAR.clawRange + 4 && Math.abs(p.body.bottom - b.bottom) < BEAR.sightY) { e.hitDone = true; this.hurt(); }
                 }
                 if (now >= e.modeUntil) { e.mode = 'rest'; e.modeUntil = now + 500; play('idle'); }
+            } else if (e.mode === 'windup') {
+                b.setVelocityX(0);
+                if (now >= e.modeUntil) { e.mode = 'charge'; e.modeUntil = now + e.guard.chargeTime; play('charge'); }
+            } else if (e.mode === 'charge') {
+                const tile = b.blocked.down && this.layer.getTileAtWorldXY(e.x + e.dir * 18, b.bottom + 4);
+                if (b.blocked.left || b.blocked.right || (b.blocked.down && (!tile || !tile.collides)) || now >= e.modeUntil) {
+                    e.mode = 'rest'; e.modeUntil = now + e.guard.rest; e.chargeReady = now + e.guard.rest + e.guard.cooldown;
+                    b.setVelocityX(0);
+                    play('idle');
+                } else b.setVelocityX(e.dir * e.guard.chargeSpeed);
             } else if (e.mode === 'rest' || e.mode === 'hurt') {
                 b.setVelocityX(0);
                 if (now >= e.modeUntil) e.mode = 'walk';
@@ -2910,10 +3128,10 @@
                 if (o === e || o.dead || !o.body.enable) continue;
                 if (Phaser.Math.Distance.Between(cx, cy, o.x, o.y - 6) > r + 4) continue;
                 if (o.kind === 'pinecone') this.time.delayedCall(120, () => this.explodePinecone(o));   // explode em cadeia
-                else if (o.kind === 'reindeer' || o.kind === 'ox' || o.kind === 'moose') this.defeatReindeer(o);
+                else if (o.kind === 'reindeer' || o.kind === 'ox' || o.kind === 'moose' || o.kind === 'royalmoose') this.defeatReindeer(o);
                 else if (o.kind === 'bigsnow') this.hitBigSnow(o);
-                else if (o.kind === 'bear' || o.kind === 'seal' || o.kind === 'rat' || o.kind === 'beaver' || o.kind === 'narwhal') this.hitBear(o);
-                else if (o.kind === 'owl' || o.kind === 'bat') this.defeatOwl(o);
+                else if (o.kind === 'bear' || o.kind === 'seal' || o.kind === 'rat' || o.kind === 'beaver' || o.kind === 'narwhal' || o.kind === 'bearguard' || o.kind === 'sealguard') this.hitBear(o);
+                else if (o.kind === 'owl' || o.kind === 'bat' || o.kind === 'royalowl') this.defeatOwl(o);
                 else this.knockEnemy(o, Math.sign(o.x - cx) || 1);
             }
             this.time.delayedCall(600, () => e.destroy());
@@ -2954,7 +3172,7 @@
             const st = this.state;
             if (st.dead || st.won || e.dead) return;
             const pb = player.body, eb = e.body;
-            if (e.kind === 'owl' || e.kind === 'bat') {
+            if (e.kind === 'owl' || e.kind === 'bat' || e.kind === 'royalowl') {
                 // pular em cima derruba; encostar de outro jeito machuca
                 if (pb.velocity.y > 20 && pb.bottom - eb.top < 12) {
                     this.defeatOwl(e);
@@ -2962,9 +3180,10 @@
                     st.jumpCut = false;
                     return;
                 }
+                if (this.time.now < (e.invulnUntil || 0)) return;      // acabou de levar um pisao
                 return this.hurt();
             }
-            if (e.kind === 'bear' || e.kind === 'seal' || e.kind === 'rat' || e.kind === 'beaver' || e.kind === 'narwhal') {
+            if (e.kind === 'bear' || e.kind === 'seal' || e.kind === 'rat' || e.kind === 'beaver' || e.kind === 'narwhal' || e.kind === 'bearguard' || e.kind === 'sealguard') {
                 const stomp = pb.velocity.y > 30 && pb.bottom - eb.top < 10;
                 const away = Math.sign(player.x - e.x) || -st.facing;
                 if (stomp) {
@@ -3004,7 +3223,7 @@
                 }
                 return this.explodePinecone(e);
             }
-            if (e.kind === 'reindeer' || e.kind === 'ox' || e.kind === 'moose' || e.kind === 'moose') {
+            if (e.kind === 'reindeer' || e.kind === 'ox' || e.kind === 'moose' || e.kind === 'royalmoose' || e.kind === 'moose' || e.kind === 'royalmoose') {
                 // em cima machuca; por tras (lado oposto ao que ela olha) derruba; pela frente machuca
                 const above = pb.bottom - eb.top < 9 && pb.velocity.y >= 0;
                 if (!above && Math.sign(player.x - e.x) === -e.dir) return this.defeatReindeer(e);
@@ -3013,7 +3232,7 @@
             if (st.sliding && e.kind === 'snow') return this.knockEnemy(e, st.facing);
             // ourico: so morre com o escorregao pela frente dele (o lado para onde anda);
             // escorregar por tras ou pular em cima machuca
-            if (st.sliding && e.kind === 'urchin' && Math.sign(player.x - e.x) === e.dir) return this.knockEnemy(e, st.facing);
+            if (st.sliding && (e.kind === 'urchin' || e.kind === 'urchinguard') && Math.sign(player.x - e.x) === e.dir) return this.knockEnemy(e, st.facing);
             const falling = pb.velocity.y > 30 && pb.bottom - eb.top < 9;
             if (falling && e.kind === 'snow') {
                 e.dead = true;
@@ -3058,8 +3277,7 @@
             talents.bank++;
             saveTalents();
             this.addScore(SCORE.coin);
-            if (S.coins >= SCORE.coinsForLife) {
-                S.coins -= SCORE.coinsForLife;
+            if (S.coins % SCORE.coinsForLife === 0) {      // a cada 100 moedas: +1 vida (o contador continua somando)
                 S.lives++;
                 this.floatText('1UP', x, y - 10, '#7dff8a');
             }
@@ -3118,7 +3336,7 @@
             if (S.powered) {
                 S.powered = false;
                 this.setSkin('n');
-                if (this.boss && !this.boss.dead && !this.boss.type) this.healBoss(KING.heal);   // so o Rei se cura
+                if (this.boss && !this.boss.dead && !this.boss.type && this.boss.cfg.heal) this.healBoss(this.boss.cfg.heal);   // so o Rei se cura
                 st.invulnUntil = now + 1500;
                 st.hurtUntil = now + 300;
                 this.player.body.setVelocity(-st.facing * 120, -160);
@@ -3206,8 +3424,9 @@
                 $('apClearHeight').textContent = '+' + heightBonus;
                 $('apClearTime').textContent = S.time + ' × ' + SCORE.timeBonus + ' = +' + timeBonus;
                 $('apClearScore').textContent = pad(S.score, 6);
-                const toBoss = !last && LEVELS[S.level + 1].boss === 'king';
-                $('apNextBtn').textContent = last ? 'JOGAR DE NOVO' : toBoss ? 'ENTRAR NO CASTELO' : 'PRÓXIMA FASE';
+                const nextBoss = !last && LEVELS[S.level + 1].boss;
+                const toBoss = nextBoss === 'king' || nextBoss === 'king2';
+                $('apNextBtn').textContent = last ? 'JOGAR DE NOVO' : nextBoss === 'king2' ? 'ENTRAR NA SALA DO TRONO' : toBoss ? 'ENTRAR NO CASTELO' : 'PRÓXIMA FASE';
                 $('apNextBtn').dataset.last = last ? '1' : '';
                 $('apNextBtn').dataset.gate = toBoss ? '1' : '';
                 if (last) saveRecord();
@@ -3238,9 +3457,9 @@
 
     const WORLD2 = LEVELS.findIndex(l => l.name === '2-1');
 
-    // banido pelo rei: a partida continua no Mundo 2 (pontos e moedas ficam, vidas voltam a 3)
+    // banido pelo rei: a partida continua no Mundo 2 (pontos e moedas ficam, vidas voltam a 5)
     function goWorld2(withStory) {
-        Object.assign(S, { lives: 3, powered: false, checkpoint: null });
+        Object.assign(S, { lives: BANISH_LIVES, powered: false, checkpoint: null });
         S.story = withStory;
         S.storyPages = withStory ? STORY_BANISH : null;
         startLevel(WORLD2);
@@ -3294,14 +3513,22 @@
             const b = e.target.closest('[data-talent]');
             if (b && !b.disabled) buyTalent(b.dataset.talent);
         });
-        $('apGateBtn').onclick = () => startLevel(S.level + 1);
+        $('apGateBtn').onclick = () => {
+            if (LEVELS[S.level + 1].boss === 'king2') { S.story = true; S.storyPages = STORY_REMATCH; }   // revanche: dialogo antes da luta
+            startLevel(S.level + 1);
+        };
         $('apStoryNext').onclick = nextStory;
         $('apStorySkip').onclick = closeStory;
         $('apBanishGoBtn').onclick = () => goWorld2(true);   // o Mundo 2 so abre depois de perder para o rei
         $('apBanishTalentsBtn').onclick = () => openTalents('apBanish');
         $('apWinAgainBtn').onclick = newGame;
         $('apNextBtn').onclick = () => {
-            if ($('apNextBtn').dataset.gate) { showScreen('apGate'); return; }
+            if ($('apNextBtn').dataset.gate) {
+                const rematch = LEVELS[S.level + 1].boss === 'king2';
+                $('apGateTitle').innerHTML = rematch ? 'A SALA DO TRONO<br>ESTA LOGO ALI...' : 'O REI DO GELO<br>TE ESPERA...';
+                $('apGateBtn').textContent = rematch ? 'ENFRENTAR O REI DE NOVO' : 'ENFRENTAR O REI';
+                showScreen('apGate'); return;
+            }
             if ($('apNextBtn').dataset.last) newGame();
             else startLevel(S.level + 1);
         };

@@ -21,6 +21,9 @@
 //   b boi-almiscarado (como a rena)                         m rato das neves (como o urso)
 //   v morcego (como a coruja, mais rapido)                 l alce (como a rena)
 //   h narval (como o urso: golpe de chifre)
+//   j urso da guarda real (urso + investida, 3 pisoes)     g foca guarda-costas (urso + investida, 2 pisoes)
+//   q coruja mensageira real (como a coruja, 2 pisoes)
+//   t ourico da guarda (como o ourico, maior)              x alce real (como o alce)
 //   k castor (como o urso, mas 3 de vida)                   _ chao invisivel (a estrada desenhada no fundo)
 //   K ponto de controle (recomeca aqui depois de tocar)
 //   P inicio do pinguim  > placa            | bandeira (fim da fase)
@@ -2522,6 +2525,57 @@ const LEVELS = [
             'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
             'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
             'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
+        ],
+    },
+    {
+        // Mundo 6: corredor do castelo (fundo parado; mais longa); urso da guarda, foca guarda-costas e coruja mensageira
+        name: '6-4',
+        time: 450,
+        cenario: 'corredorcastelo',
+        map: [
+            '                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ',
+            '                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ',
+            '                                                  q                                                                                                                                                                                                                       q                                                                                             q             q                                                                                     ',
+            '                                                                                                      q                                                                               q                                                                                                                                                                                                                                                                                     ',
+            '                                                                                                                                                                                                                                                                                                                                                                              ooo                                                                                           ',
+            '                                                                                                         oo                                                                                                   oo                                                                                                                                                                                                                                                            ',
+            '                                                     oo                                                                                                                                                                                ooo                                                                                                                                oo  ====                                                                   I                      ',
+            '                                                                                                   oo   ====                                                                                              oo  www oo                                                                                                         ooo                                                                                                                    II                      ',
+            '                                                oo  ====        ooooo                                                     oooooo                                                wwwwwwwwww                                            ======                                                             ooo                                 ooo                      oo  ===                   oooo                                               III                      ',
+            '                  F                                                                           oo   ===                                                                      oo              oo        oo  www     www oo                                                  oo                                                =====                                                                                                                 IIII                      ',
+            '                      ======              oo    II            wwwwwwwww                                           $     ==========                              V                                                                                         $                                 $   $       wwwwww                              wwwwww                    ===                     ========                        $                  IIIII                      ',
+            '              $                                 II                                            ===                                                                           II              II        www             www       ======                                    II                                                                                                                                                                    IIIIII                      ',
+            '        ooo                               II    II                                                                                                        ooo       ooo     II              II                                                                          IIIIII                                                                                    ===                                                             ooo          IIIIIII                      ',
+            '  P  >              t             g       II    II                              x                       g                           g                 K       t             II      j       II                                      t               j         g       IIIIIIIIII        t                             x               g                   j                         t                       x                       t         IIIIIIII      |               ',
+            'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
+            'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
+            'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
+        ],
+    },
+    {
+        // chefe final: revanche com o Rei do Gelo na sala do trono (agora da para vencer)
+        name: '6-5',
+        boss: 'king2',
+        time: 999,
+        cenario: 'arena',
+        map: [
+            '                              ',
+            '                              ',
+            '                              ',
+            '                              ',
+            '                              ',
+            '                              ',
+            '                              ',
+            '                              ',
+            '                              ',
+            '                              ',
+            '                              ',
+            '                              ',
+            '                              ',
+            '    P                         ',
+            'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
+            'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
+            'GGGGGGGGGGGGGGGGGGGGGGGGGGGGGG',
         ],
     },
 ];

@@ -1,0 +1,16 @@
+ROYAL MESSENGER OWL - SPRITES
+
+idle: 4 quadros
+fly: 6 quadros
+attack_charge: 6 quadros
+attack_claw: 6 quadros
+hurt: 3 quadros
+defeat: 6 quadros
+
+Total: 31 PNGs individuais.
+Fundo magenta removido por máscara conectada às bordas; PNGs transparentes.
+Cada quadro foi padronizado em 192x192 px.
+Os recortes são aproximados; confira o alinhamento e possíveis efeitos nas bordas antes de integrar ao Phaser 3.
+
+Quadros recortados de novo da folha original (originais/folha.png) pelo contorno de cada pose.
+No jogo (letra q): mecanica da coruja (patrulha no alto e mergulha), mais rapida, e aguenta 2 pisoes.
