@@ -218,7 +218,7 @@
 .ap-boss-bar { width: 22cqw; height: 1.1em; border: .2em solid #fff; background: #3a1020; box-shadow: .2em .2em 0 var(--ap-shadow); }
 .ap-boss-bar i { display: block; height: 100%; width: 100%; background: linear-gradient(180deg, #ff8a8a, #e23b3b); transition: width .25s; }
 .ap-gate {
-    background: url('../../Img/ImagemAdventurePenguin/cenario/entrada-castelo.png') center / cover no-repeat;
+    background: url('../../Img/ImagemAdventurePenguin/cenario/entrada-castelo.webp') center / cover no-repeat;
     align-items: flex-end;
     padding-bottom: 4cqw;
 }
