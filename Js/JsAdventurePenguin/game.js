@@ -901,11 +901,12 @@
     // story: mostrar a historia na proxima vez que a fase comecar (so no jogo novo)
     const START_LIVES = 5;       // vidas ao comecar o jogo
     const BANISH_LIVES = 5;      // vidas ao voltar no Mundo 2 depois de perder para o rei
-    const S = { story: false, level: 0, lives: START_LIVES, coins: 0, score: 0, time: 0, powered: false, playing: false, checkpoint: null, taken: null };
+    const CONTINUES = 3;         // continues por partida (game over -> recomeca a fase com 5 vidas)
+    const S = { story: false, level: 0, lives: START_LIVES, coins: 0, score: 0, time: 0, powered: false, playing: false, checkpoint: null, taken: null, continues: 3 };
     const newTaken = () => ({ coins: new Set(), gifts: new Set(), bricks: new Set() });
 
     function resetRun() {
-        Object.assign(S, { level: 0, lives: START_LIVES, coins: 0, score: 0, time: 0, powered: false, checkpoint: null, taken: null });
+        Object.assign(S, { level: 0, lives: START_LIVES, coins: 0, score: 0, time: 0, powered: false, checkpoint: null, taken: null, continues: CONTINUES });
     }
 
     function loadRecord() {
@@ -3371,6 +3372,15 @@
                     saveRecord();
                     $('apOverScore').textContent = pad(S.score, 6);
                     $('apOverRecord').textContent = pad(loadRecord(), 6);
+                    // continue: so aparece enquanto sobrar; o botao principal (Enter) muda junto
+                    const canGo = S.continues > 0;
+                    $('apContinueBtn').hidden = !canGo;
+                    $('apContinueBtn').textContent = 'CONTINUAR (' + S.continues + ')';
+                    $('apContinueBtn').toggleAttribute('data-primary', canGo);
+                    $('apAgainBtn').toggleAttribute('data-primary', !canGo);
+                    $('apAgainBtn').classList.toggle('ap-btn-ghost', canGo);
+                    $('apAgainBtn').textContent = canGo ? 'JOGAR DO INICIO' : 'JOGAR DE NOVO';
+                    $('apOverNote').textContent = canGo ? 'CONTINUAR: VOLTA PARA O COMEÇO DA FASE ' + LEVELS[S.level].name + ' COM ' + START_LIVES + ' VIDAS (OS PONTOS ZERAM)' : 'SEM CONTINUES: A AVENTURA RECOMEÇA DA FASE 1-1';
                     showScreen('apOver');
                 } else {
                     this.scene.restart();
@@ -3501,6 +3511,12 @@
         $('apResumeBtn').onclick = () => togglePause(false);
         $('apRestartBtn').onclick = () => { showScreen(null); startLevel(S.level); };
         $('apAgainBtn').onclick = newGame;
+        $('apContinueBtn').onclick = () => {
+            if (!(S.continues > 0)) return;
+            S.continues--;
+            Object.assign(S, { lives: START_LIVES, score: 0, powered: false });
+            startLevel(S.level);
+        };
         $('apTalentsClearBtn').onclick = () => openTalents('apClear');
         $('apTalentsOverBtn').onclick = () => openTalents('apOver');
         $('apTalentsPauseBtn').onclick = () => openTalents('apPause');

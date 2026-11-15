@@ -293,3 +293,4 @@
 }
 #apWin.ap-final .ap-panel { gap: 1cqw; padding: 1.4cqw 3cqw; background: rgba(13, 22, 48, .72); }
 #apWin.ap-final .ap-title { font-size: 1.5em; }
+.ap-btn[hidden] { display: none; }
